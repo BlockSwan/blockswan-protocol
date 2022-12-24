@@ -1,0 +1,5 @@
+1	-	initCategories();
+2	-	initBooleanDeliverables()
+3	-	initSelectableDeliberables()
+4	-	addBooleanDeliverables();
+5	-	addSelectableDeliverables();

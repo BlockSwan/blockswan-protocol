@@ -1,0 +1,117 @@
+2022/12/23-20:30:17.508701 7000088f5000 Recovering log #536
+2022/12/23-20:30:17.510991 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 127 bytes; Corruption: partial record without end(1)
+2022/12/23-20:30:17.511086 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 1162 bytes; Corruption: bad record length
+2022/12/23-20:30:17.511656 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.511988 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.512052 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.512077 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.512414 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.512471 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.512527 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.512579 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.512618 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.512660 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.512688 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513584 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513617 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513640 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.513670 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513701 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513780 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513858 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513914 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513951 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.513975 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.514027 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.514166 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.514211 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.514263 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515545 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515602 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515734 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515760 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515798 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515851 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515875 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515926 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.515984 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516007 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.516044 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516066 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.516089 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516115 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516142 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516178 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516199 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.516224 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516261 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516645 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516682 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516706 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516753 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516776 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.516799 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.516823 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.516859 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.516882 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517043 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517081 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517108 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517132 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517239 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517262 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.517318 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517350 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517405 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517451 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517492 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517565 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517603 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517639 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517667 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.517705 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517734 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517770 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517806 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517830 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.517881 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517904 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517930 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.517957 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518010 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518065 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518117 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518140 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518195 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518229 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518251 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518298 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518321 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.518428 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518474 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518510 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518568 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518599 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: bad record length
+2022/12/23-20:30:17.518635 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518665 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518724 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 32768 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518753 7000088f5000 (ignoring error) ./ipfs//datastore/000536.log: dropping 18604 bytes; Corruption: checksum mismatch
+2022/12/23-20:30:17.518778 7000088f5000 Level-0 table #540: started
+2022/12/23-20:30:17.520376 7000088f5000 Level-0 table #540: 28857 bytes OK
+2022/12/23-20:30:17.522634 7000088f5000 Delete type=3 #532
+2022/12/23-20:30:17.522795 7000088f5000 Delete type=0 #536
+2022/12/23-20:30:17.848080 70000a181000 Compacting 1@0 + 1@1 files
+2022/12/23-20:30:17.872576 70000a181000 Generated table #542@0: 3079 keys, 776109 bytes
+2022/12/23-20:30:17.872610 70000a181000 Compacted 1@0 + 1@1 files => 776109 bytes
+2022/12/23-20:30:17.872788 70000a181000 compacted to: files[ 0 1 0 0 0 0 0 ]
+2022/12/23-20:30:17.872961 70000a181000 Delete type=2 #538
+2022/12/23-20:30:17.904956 70000a181000 Delete type=2 #540
+2022/12/24-13:07:14.285418 70000a181000 Level-0 table #544: started
+2022/12/24-13:07:14.360232 70000a181000 Level-0 table #544: 1191169 bytes OK
+2022/12/24-13:07:14.476623 70000a181000 Delete type=0 #541
+2022/12/24-13:07:14.798362 70000a181000 Compacting 1@0 + 1@1 files
+2022/12/24-13:07:14.826825 70000a181000 Generated table #545@0: 3267 keys, 910522 bytes
+2022/12/24-13:07:14.826859 70000a181000 Compacted 1@0 + 1@1 files => 910522 bytes
+2022/12/24-13:07:14.827126 70000a181000 compacted to: files[ 0 1 0 0 0 0 0 ]
+2022/12/24-13:07:14.827298 70000a181000 Delete type=2 #544
+2022/12/24-13:07:14.827883 70000a181000 Delete type=2 #542

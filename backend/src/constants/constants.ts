@@ -1,0 +1,4 @@
+const MAX_FILE_SIZE = 3 * 1024 * 1024 // 3GB
+const FILE_FOLDER_NAME = 'images'
+const MAX_IPFS_FETCH = 10
+export { MAX_FILE_SIZE, FILE_FOLDER_NAME, MAX_IPFS_FETCH }
