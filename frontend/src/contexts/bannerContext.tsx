@@ -1,3 +1,4 @@
+import { Alert, Grow } from '@mui/material'
 import {
    createContext,
    ReactNode,
@@ -7,63 +8,77 @@ import {
 import { defaultGig } from '../constants/default'
 import { GigProps } from '../types/types'
 
-export const GigsContext = createContext<any>(null!)
+export const BannerContext = createContext<any>(null!)
 
-export const gigsReducer = (state: any, action: any) => {
-   switch (action.type) {
-      case 'SET_GIGS':
-         return {
-            categories: action.payload,
-         }
-      default:
-         return state
-   }
-}
 
-interface GigsContextProviderProps {
+
+interface BannerContextProviderProps {
    children?: ReactNode
 }
 
-export const GigsContextProvider = ({
+export const BannerContextProvider = ({
    children,
-}: GigsContextProviderProps) => {
-   const [state, dispatch] = useReducer(gigsReducer, {
-      categories: null,
-   })
-   const [gig, setGig] = useState<GigProps>(defaultGig)
+}: BannerContextProviderProps) => {
+   const [isVisible, setIsVisible] =
+      useState<boolean>(false)
 
-   const fetchGigs = async () => {
-      const response = await fetch(
-         'http://172.20.10.3:4000/api/gigs'
-      )
-      const json = await response.json()
-
-      if (response.ok) {
-         dispatch({ type: 'SET_GIGS', payload: json })
-      }
-   }
-
-   const editTitle = (title: string) => {
-      setGig({ ...gig, title: title })
-   }
-
-   const resetGig = () => {
-      setGig(defaultGig)
-   }
+   const handleVisible = () => setIsVisible((curr) => !curr)
 
    return (
-      <GigsContext.Provider
+      <BannerContext.Provider
          value={{
-            ...state,
-            dispatch,
-            gig,
-            setGig,
-            fetchGigs,
-            editTitle,
-            resetGig,
+            isVisible,
+            setIsVisible,
+            handleVisible,
          }}
       >
          {children}
-      </GigsContext.Provider>
+         <Grow in={isVisible} unmountOnExit>
+            <Alert
+               variant="filled"
+               severity="error"
+               action={
+                  <Stack
+                     direction={'row'}
+                     gap={2}
+                     alignItems="center"
+                  >
+                     <Button
+                        color="inherit"
+                        size="small"
+                        variant="text"
+                     >
+                        RESET
+                     </Button>
+                     <Button
+                        color="inherit"
+                        sx={{ color: 'primary.main' }}
+                        size="large"
+                        variant="contained"
+                        endIcon={<CheckIcon />}
+                     >
+                        SAVE
+                     </Button>
+                  </Stack>
+               }
+               sx={{
+                  position: 'fixed',
+                  right: 0,
+                  bottom: 0,
+                  zIndex: 50,
+                  width: `calc(100vw - 270px)`,
+                  boxShadow: (theme) => theme.shadows[1],
+               }}
+            >
+               <AlertTitle>
+                  Profile Modification!
+               </AlertTitle>
+               You are trying to modify your profile. Once
+               finish, make sure to <strong>confirm</strong>{' '}
+               your changes to share it with all the
+               blockswan nodes.
+            </Alert>
+         </Grow>
+      </BannerContext.Provider>
    )
 }

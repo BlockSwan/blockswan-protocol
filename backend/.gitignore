@@ -119,3 +119,5 @@ dist
 .idea
 build
 .env
+
+ipfs/
