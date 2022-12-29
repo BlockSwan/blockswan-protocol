@@ -37,6 +37,7 @@ export const CategoriesContextProvider = ({
    })
 
    const fetchCategories = async () => {
+      alert(API_ENDPOINT)
       const response = await fetch(
          `${API_ENDPOINT}/api/categories`
       )
