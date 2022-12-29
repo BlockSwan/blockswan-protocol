@@ -2782,3 +2782,5 @@ Date: 21:50:16 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.19.0.1, Met
 Date: 21:50:58 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.19.0.1, Method: OPTIONS, Path: /api/auth
 Date: 21:50:58 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.19.0.1, Method: POST, Path: /api/auth
 Date: 21:51:03 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.19.0.1, Method: GET, Path: /api/user/0x0Cf52DF11Ba16762AE94aA275d4e3776f9a4ebF2
+Date: 22:16:59 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.19.0.1, Method: GET, Path: /api/categories
+Date: 22:17:01 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.19.0.1, Method: GET, Path: /api/categories
