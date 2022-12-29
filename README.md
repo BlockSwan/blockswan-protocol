@@ -27,9 +27,9 @@ vim .env
 Setup the frontend environment variables:
 
 ```
-REACT_APP_IP=127.0.0.1
-REACT_APP_PORT=4000
-REACT_APP_HOST=http://
+REACT_APP_BACKEND_IP=127.0.0.1
+REACT_APP_BACKEND_PORT=4000
+REACT_APP_BACKEND_HOST=http://
 ```
 
 Go to the backend repository and repeat the process:
