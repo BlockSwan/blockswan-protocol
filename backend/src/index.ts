@@ -42,7 +42,7 @@ app.listen(PORT, async () => {
 	app.use('/gig/', gigRoute(node))
 	app.use('/api/ipfs/', ipfsRoute(node))
 
-	app.get('/', (req, res) => {
+	app.get('/api', (req, res) => {
 		return res.json({
 			message: 'Hello World!',
 		})
