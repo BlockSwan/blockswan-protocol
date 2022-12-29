@@ -76,11 +76,12 @@ export const SubCategoryLayout = () => {
 
    const [dirty, setDirty] = useState<boolean>(false)
    const [priceRange, setPriceRange] = useState<number[]>([
-      0, 1000000000000,
+      0, 2000,
    ])
 
    const handleToggle =
       (name: string, value: string) => () => {
+         setDirty(true)
          const current = checked.find(
             (c) => c?.name === name
          )
@@ -120,14 +121,16 @@ export const SubCategoryLayout = () => {
    }
    const [isLoading, setIsLoading] = useState<boolean>(true)
 
-   function fetchGigs({
+   async function fetchGigs({
       pRange,
       _sort,
       _page,
+      then = (data: any) => {},
    }: {
       pRange: number[] | null
       _sort?: string | null
       _page?: number | null
+      then?: (data: any) => void
    }) {
       if (selectedSubCategory !== undefined) {
          setIsLoading(true)
@@ -138,12 +141,13 @@ export const SubCategoryLayout = () => {
             _page || data?.page || 1,
             sort[0],
             sort[1],
-            [],
+            checked || [],
             pRange
-         ).then((data) => {
+         ).then((_data: any) => {
             setIsLoading(false)
-            setData(data)
-            console.log(data)
+            setData(_data)
+            console.log(_data)
+            then(_data)
          })
       }
    }
@@ -155,13 +159,21 @@ export const SubCategoryLayout = () => {
 
    const onPageChange = (newPage: number) => {
       setData({ ...data, page: newPage })
-      fetchGigs({ _page: newPage, pRange: priceRange })
+      fetchGigs({
+         _page: newPage,
+         pRange: priceRange,
+      })
    }
 
    useEffect(() => {
       fetchGigs({
-         pRange: [0, 1000000000000000000],
+         pRange: null,
          _page: 1,
+         then: (el: any) =>
+            setPriceRange([
+               el?.lowestPrice,
+               el?.highestPrice,
+            ]),
       })
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -350,7 +362,9 @@ export const SubCategoryLayout = () => {
                                     Price Range
                                  </Typography>
                                  <PriceSlider
-                                    value={priceRange}
+                                    value={
+                                       priceRange || [0, 0]
+                                    }
                                     min={data?.lowestPrice}
                                     max={data?.highestPrice}
                                     onChange={(

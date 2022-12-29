@@ -146,8 +146,6 @@ const gigsSchema = new Schema(
 		timestamps: true,
 		statics: {
 			async priceRange(subcategory: unknown) {
-				console.log("priceRRange");
-				console.log(subcategory);
 				return this.aggregate([
 					{
 						$match: {

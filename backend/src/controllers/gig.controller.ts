@@ -204,11 +204,20 @@ const getGigsPerSubCategory = async (req: Request, res: Response, node: IPFS) =>
 		// Add a stage to the pipeline to filter by selectable deliverables if specified in the request query
 		if (selectableDeliverables.length > 0) {
 			console.log("With fiilter")
-			pipeline.push({
-				$match: {
-					'gigs.selectableDeliverables.data': { $in: selectableDeliverables },
-				},
-			});
+			console.log(selectableDeliverables);
+			let arr = selectableDeliverables.reduce((acc: any, obj: any) => acc?.concat(obj?.data), [])
+			console.log(JSON.stringify(arr, null, 4));
+
+			// Push the $match stage to the pipeline
+			pipeline.push(
+				{
+					$match: {
+						'selectablesDeliverables.data': {
+							$in: arr
+						}
+					}
+				}
+			);
 		}
 		const prices = await Gig.priceRange(subCatID);
 		let minPrice, maxPrice;
@@ -242,7 +251,7 @@ const getGigsPerSubCategory = async (req: Request, res: Response, node: IPFS) =>
 
 
 
-		console.log(prices);
+
 		let object = {
 			page: page,
 			perPage: perPage,

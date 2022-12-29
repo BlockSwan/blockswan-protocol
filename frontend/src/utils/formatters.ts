@@ -84,5 +84,29 @@ function getTimeSince(date: Date): string {
 	}
 }
 
+const n6 = new Intl.NumberFormat("en-us", {
+	style: "decimal",
+	minimumFractionDigits: 0,
+	maximumFractionDigits: 6,
+});
+const n4 = new Intl.NumberFormat("en-us", {
+	style: "decimal",
+	minimumFractionDigits: 0,
+	maximumFractionDigits: 4,
+});
 
-export { formatString, convertToBase64, formatDate, getTimeSince }
+const c2 = new Intl.NumberFormat("en-us", {
+	style: "currency",
+	currency: "USD",
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2,
+});
+
+const tokenValue = (value: number, decimals: number) =>
+	decimals ? value / Math.pow(10, decimals) : value;
+
+const tokenValueTxt = (value: number, decimals: number, symbol: string) =>
+	`${ n4.format(tokenValue(value, decimals)) } ${ symbol }`;
+
+
+export { formatString, convertToBase64, formatDate, c2, getTimeSince, tokenValueTxt }

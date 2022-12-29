@@ -2,6 +2,7 @@ import * as React from 'react'
 import Stack from '@mui/material/Stack'
 import Slider from '@mui/material/Slider'
 import { Typography } from '@mui/material'
+import { c2, tokenValueTxt } from '../../utils/formatters'
 
 function valuetext(value: number) {
    return `${value}$`
@@ -78,10 +79,10 @@ export default function PriceSlider({
             justifyContent="space-between"
          >
             <Typography fontWeight={'bold'}>
-               {value[0]}$
+               {c2.format(value[0])}$
             </Typography>
             <Typography fontWeight={'bold'}>
-               {value[1]}$
+               {c2.format(value[1])}
             </Typography>
          </Stack>
       </>
