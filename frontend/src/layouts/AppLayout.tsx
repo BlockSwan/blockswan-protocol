@@ -16,6 +16,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       <ResponsiveDrawer categories={categories?.message}>
          <ScrollToTop />
          {children}
+
          <Footer />
       </ResponsiveDrawer>
    )

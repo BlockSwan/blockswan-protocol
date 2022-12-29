@@ -356,7 +356,6 @@ export default function EducationForm() {
                   )}
                   renderInput={(params: any) => (
                      <TextField
-                        onChange={onChange}
                         error={error}
                         variant="filled"
                         {...params}

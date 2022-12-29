@@ -57,7 +57,8 @@ const listSX = {
 }
 
 export const ResponsiveDrawer = (props: Props) => {
-   const { goToCategory, goToNewGig } = useAppNavigation()
+   const { goToCategory, goToNewGig, goToHome } =
+      useAppNavigation()
    const { evmAddress } = useWeb3Context()
    const { window, children, categories } = props
    const [mobileOpen, setMobileOpen] = React.useState(false)
@@ -105,9 +106,11 @@ export const ResponsiveDrawer = (props: Props) => {
             <Stack direction={'row'}>
                <img
                   style={{
+                     cursor: 'pointer',
                      width: '150px',
                      marginLeft: -10,
                   }}
+                  onClick={() => goToHome()}
                   src="svg/logo.svg"
                   alt="blockswan"
                />

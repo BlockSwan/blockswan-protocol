@@ -11,22 +11,30 @@ import GigCard from '../../../components/molecules/GigCard'
 import { useAppNavigation } from '../../../hooks/useAppNavigation'
 import { useGigsContext } from '../../../hooks/useGigsContext'
 import { useProtocolContext } from '../../../hooks/useProtocolContext'
+import { useUsersContext } from '../../../hooks/useUsersContext'
 import { useWeb3Context } from '../../../hooks/useWeb3Context'
 import { NewGigLayout } from '../../../layouts/NewGigLayout'
 import GigService from '../../../services/GigService'
 import { PackageProps } from '../../../types/types'
 
 const NewGigPublish = () => {
-   const { goToNewGigGallery } = useAppNavigation()
+   const { goToNewGigGallery, goToUser } =
+      useAppNavigation()
    const { calcEarningWithTrial, calcEarningNoTrial } =
       useProtocolContext()
-   const { gig } = useGigsContext()
+   const { user, setUser } = useUsersContext()
+   const { gig, isEditing } = useGigsContext()
    const { evmAddress } = useWeb3Context()
    const [checked, setChecked] = useState<boolean>(false)
    const handleChecked = () => setChecked((check) => !check)
 
    const onCreateGig = () => {
-      GigService.create(gig, evmAddress)
+      if (user) {
+         GigService.create(gig, evmAddress).then((data) => {
+            setUser(data)
+            goToUser(user.evmAddress)
+         })
+      }
    }
 
    return (
@@ -35,6 +43,9 @@ const NewGigPublish = () => {
          setStep={() => {}}
          onNext={() => onCreateGig()}
          isNextDisabled={!checked}
+         buttonNextText={
+            isEditing ? 'Edit this gig!' : 'Create this gig'
+         }
          onBack={() => goToNewGigGallery(evmAddress)}
          children={
             <>
@@ -145,18 +156,25 @@ const NewGigPublish = () => {
                         }}
                      >
                         <GigCard
+                           avatarSrc={
+                              user?.defaultProfileImg
+                           }
                            title={gig?.title}
-                           username={'Osc'}
-                           imgSrc={URL.createObjectURL(
-                              gig?.imgs[0]
-                           )}
+                           username={user?.username}
+                           imgSrc={
+                              typeof gig?.imgs[0] ===
+                              'string'
+                                 ? gig?.imgs[0]
+                                 : URL.createObjectURL(
+                                      gig?.imgs[0]
+                                   )
+                           }
                         />
                      </Paper>
                   </Grid>
                </Grid>
             </>
          }
-         buttonNextText={'Create this gig!'}
       />
    )
 }

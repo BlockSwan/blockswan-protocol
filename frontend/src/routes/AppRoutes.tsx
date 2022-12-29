@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom'
 import { pages } from './routes'
 import { AnimatePresence } from 'framer-motion'
+import { lazy, Suspense } from 'react'
 
 const AppRoutes = () => {
    const location = useLocation()
@@ -16,13 +17,17 @@ const AppRoutes = () => {
                key={location.pathname}
             >
                {pages.map((p) => {
-                  const Component = p?.import
+                  const LazyComponent = p?.import
                   return (
                      <>
                         <Route
                            key={p?.path}
                            path={p?.path}
-                           element={<Component />}
+                           element={
+                              <Suspense>
+                                 <LazyComponent />
+                              </Suspense>
+                           }
                         />
                      </>
                   )

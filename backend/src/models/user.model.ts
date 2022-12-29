@@ -1,6 +1,7 @@
 import { IPFS } from 'ipfs-core-types'
 import mongoose, { Schema, Model, Document, Error } from 'mongoose'
 import { readIpfsFile } from '../utils/ipfs'
+import { Category } from './category.model'
 import { GigDocument, Gig } from './gig.model'
 
 interface UserModel extends Model<UserDocument> {
@@ -159,21 +160,47 @@ const usersSchema = new Schema(
 			): Promise<UserDocument | null> {
 				return new Promise((resolve, reject) => {
 					this.findOne({ evmAddress: evmAddress })
-						.populate('gigs')
-						.exec(async (err: any, result: any) => {
-							if (err || !result || result === undefined)
+						.populate({
+							path: "gigs",
+							model: "Gig",
+							match: { isDeleted: false },
+							populate: {
+								path: "subcategory",
+								model: "SubCategory",
+								populate: {
+									path: "category",
+									model: "Category"
+								}
+							}
+						})
+						.exec(async (err: any, res: any) => {
+							if (err || !res || res === undefined)
 								return reject(err)
-							let res = result as UserDocument
+
+
 							if (res.gigs) {
 								for (let i = 0; i < res?.gigs?.length; i++) {
 									if (
 										!res?.gigs[i].imgs ||
-										!res?.gigs[i]?.imgs[0]
+										res?.gigs[i]?.imgs.length === 0
 									)
 										return resolve(res)
+
 									let hash = res?.gigs[i].imgs[0].toString()
 									res.gigs[i].imgs[0] =
 										(await readIpfsFile(node, hash)) || ''
+
+									if (res?.gigs[i]?.imgs[1]) {
+										let hash = res?.gigs[i].imgs[1].toString()
+										res.gigs[i].imgs[1] =
+											(await readIpfsFile(node, hash)) || ''
+									}
+
+									if (res?.gigs[i].imgs[2]) {
+										let hash = res?.gigs[i].imgs[2].toString()
+										res.gigs[i].imgs[2] =
+											(await readIpfsFile(node, hash)) || ''
+									}
 								}
 							}
 							return resolve(res)

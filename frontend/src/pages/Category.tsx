@@ -18,6 +18,7 @@ import Accordion from '../components/atoms/Accordion'
 import CategoryCard from '../components/molecules/CategoryCard'
 import { UpAndDown } from '../anim/Transitions'
 import { motion } from 'framer-motion'
+import { useAppNavigation } from '../hooks/useAppNavigation'
 
 const popularsSubCat = [
    'Dssign',
@@ -35,7 +36,7 @@ const Category = () => {
       useCategoriesContext()
 
    let params = useParams()
-
+   const { goToSubCategory } = useAppNavigation()
    const { category } = params
    const selectedCategory = useMemo(() => {
       let cat = getCategoryFromURL(category, categories)
@@ -58,8 +59,8 @@ const Category = () => {
                alignItems={'center'}
                alignContent="center"
                sx={{
-                  color: (theme) =>
-                     theme?.palette?.secondary?.main,
+                  //   color: (theme) =>
+                  //      theme?.palette?.secondary?.main,
                   pt: '50px',
                }}
             >
@@ -134,19 +135,20 @@ const Category = () => {
                         {popularsSubCat.map(
                            (p, index: number) => (
                               <Chip
-                                 color="secondary"
-                                 sx={{
-                                    color: (theme) =>
-                                       theme?.palette
-                                          ?.secondary?.main,
-                                    root: {
-                                       '& .MuiChip-deleteIcon':
-                                          {
-                                             color: 'red',
-                                          },
-                                    },
-                                 }}
-                                 variant="outlined"
+                                 sx={
+                                    {
+                                       // color: (theme) =>
+                                       //    theme?.palette
+                                       //       ?.secondary?.main,
+                                       // root: {
+                                       //    '& .MuiChip-deleteIcon':
+                                       //       {
+                                       //          color: 'red',
+                                       //       },
+                                       // },
+                                    }
+                                 }
+                                 variant="filled"
                                  label={p}
                                  onClick={() => {}}
                                  onDelete={() => {}}
@@ -186,6 +188,13 @@ const Category = () => {
                               isActionButton={false}
                               name={s?.name}
                               description={s?.description}
+                              onClick={() =>
+                                 goToSubCategory(
+                                    selectedCategory?.url ||
+                                       '',
+                                    s?.url || ''
+                                 )
+                              }
                            />
                         </Grid>
                      )

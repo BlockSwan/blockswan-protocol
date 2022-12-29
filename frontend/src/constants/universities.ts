@@ -35061,6 +35061,14 @@ export const universities: University[] = [
 		country: "Turkey",
 	},
 	{
+		name: "Koc University",
+		country: "Turkey",
+	},
+	{
+		name: "Orta Dogu University",
+		country: "Turkey",
+	},
+	{
 		name: "Sinop University",
 		country: "Turkey",
 	},

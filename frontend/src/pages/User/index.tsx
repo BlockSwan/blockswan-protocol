@@ -5,21 +5,76 @@ import {
    Tabs,
    Tab,
    Box,
+   Grow,
 } from '@mui/material'
-import GigCard from '../../components/molecules/GigCard'
 import { useWeb3Context } from '../../hooks/useWeb3Context'
 import React from 'react'
-import { UpAndDown } from '../../anim/Transitions'
-import { GigProps } from '../../types/types'
+import {
+   UpAndDown,
+   LeftAndRight,
+} from '../../anim/Transitions'
 import { useParams } from 'react-router-dom'
 import UserSide from './Side'
-import { useUsersContext } from '../../hooks/useUsersContext'
+import Gigs from './Main/Gigs'
+import Reviews from './Main/Reviews'
+import { useAppNavigation } from '../../hooks/useAppNavigation'
 
-const User = () => {
+interface TabPanelProps {
+   children?: React.ReactNode
+   index: number
+   value: number
+}
+
+function TabPanel(props: TabPanelProps) {
+   const { children, value, index, ...other } = props
+
+   return (
+      <div
+         role="tabpanel"
+         hidden={value !== index}
+         id={`simple-tabpanel-${index}`}
+         aria-labelledby={`simple-tab-${index}`}
+         {...other}
+      >
+         <Box height={'fit-content'} overflow="scroll">
+            <Grid
+               container
+               rowSpacing={1}
+               columnSpacing={1}
+               columns={12}
+               sx={{ p: 2 }}
+            >
+               {value === index && children}
+            </Grid>
+         </Box>
+      </div>
+   )
+}
+
+function a11yProps(index: number) {
+   return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+   }
+}
+
+interface UserPageProps {
+   page?: number
+}
+
+const User = ({ page }: UserPageProps) => {
    //const isSm = useMediaQuery('(max-width:600px)')
-   const { userData, evmAddress } = useWeb3Context()
-   const { user } = useUsersContext()
+   const { goToUser, goToUserReviews } = useAppNavigation()
+   const { evmAddress } = useWeb3Context()
    const params = useParams()
+   const [value, setValue] = React.useState(page ? page : 0)
+
+   const handleChange = (
+      event: React.SyntheticEvent,
+      newValue: number
+   ) => {
+      setValue(newValue)
+   }
 
    const isUserProfile = React.useMemo(() => {
       return params.user === evmAddress
@@ -34,122 +89,94 @@ const User = () => {
 
    return (
       <>
-         <UpAndDown>
-            <Toolbar
-               sx={{
-                  background: (theme) =>
-                     theme.palette.secondary.main,
-               }}
-            />
+         <Toolbar
+            sx={{
+               background: (theme) =>
+                  theme.palette.secondary.main,
+            }}
+         />
 
-            <Grid container columns={20}>
-               <Grid
-                  md={6}
-                  sm={20}
-                  position="relative"
-                  width="100%"
+         <Grid container columns={20}>
+            <Grid
+               md={6}
+               sm={20}
+               position="relative"
+               width="100%"
+            >
+               <Paper
+                  elevation={1}
+                  sx={{
+                     borderRadius: 0,
+                     height: '100%',
+                     borderRight: (theme) =>
+                        `1px solid ${theme.palette.divider}`,
+
+                     width: '100%',
+                  }}
                >
-                  <Paper
-                     elevation={0.2}
-                     sx={{
-                        borderRadius: 0,
-                        height: '100%',
-                        borderRight: (theme) =>
-                           `1px solid ${theme.palette.divider}`,
-
-                        width: '100%',
-                     }}
-                  >
-                     <Box
-                        height={'fit-content'}
-                        overflow="scroll"
-                     >
-                        <UserSide />
-                     </Box>
-                  </Paper>
-               </Grid>
-               <Grid md={14} sm={20} width="100%">
-                  <Toolbar
-                     sx={{
-                        width: '100%',
-                        height: '64px',
-                        borderRadius: 0,
-                        borderBottom: (theme) =>
-                           `1px solid ${theme.palette.divider}`,
-
-                        background: (theme) =>
-                           theme.palette.secondary.main,
-                     }}
-                     style={{
-                        paddingTop: 0,
-                        paddingBottom: 0,
-                     }}
-                  >
-                     <Tabs
-                        value={1}
-                        onChange={() => {}}
-                        aria-label="disabled tabs example"
-                     >
-                        <Tab label="Active" value={1} />
-                        <Tab label="Disabled" disabled />
-                     </Tabs>
-                  </Toolbar>
                   <Box
                      height={'fit-content'}
                      overflow="scroll"
                   >
-                     <Grid
-                        container
-                        rowSpacing={1}
-                        columnSpacing={1}
-                        columns={12}
-                        sx={{ p: 2 }}
-                     >
-                        {user?.gigs?.map(
-                           (
-                              gig: GigProps,
-                              index: number
-                           ) => (
-                              <Grid
-                                 item
-                                 key={gig?._id}
-                                 xs={12}
-                                 sm={6}
-                                 md={4}
-                                 display="flex"
-                              >
-                                 {' '}
-                                 <GigCard
-                                    isUser={true}
-                                    avatarSrc={
-                                       userData?.defaultProfileImg
-                                    }
-                                    imgSrc={
-                                       gig?.imgs &&
-                                       typeof gig
-                                          ?.imgs[0] ===
-                                          'string'
-                                          ? gig?.imgs[0]
-                                          : undefined
-                                    }
-                                    title={gig?.title}
-                                    username={
-                                       userData?.username
-                                    }
-                                    date={gig?._createdAt}
-                                    price={
-                                       gig?.packages[0]
-                                          ?.price
-                                    }
-                                 />{' '}
-                              </Grid>
-                           )
-                        )}
-                     </Grid>
+                     <UserSide />
                   </Box>
-               </Grid>
+               </Paper>
             </Grid>
-         </UpAndDown>
+            <Grid md={14} sm={20} width="100%">
+               <Toolbar
+                  sx={{
+                     width: '100%',
+                     height: '64px',
+                     borderRadius: 0,
+                     borderBottom: (theme) =>
+                        `1px solid ${theme.palette.divider}`,
+
+                     background: (theme) =>
+                        theme.palette.secondary.main,
+                  }}
+                  style={{
+                     paddingTop: 0,
+                     paddingBottom: 0,
+                  }}
+               >
+                  <Tabs
+                     value={value}
+                     onChange={handleChange}
+                     aria-label="basic tabs example"
+                     sx={{
+                        '& .MuiTabs-indicator': {
+                           backgroundImage: (theme) =>
+                              theme.blockswan.rainbows,
+                        },
+                        '& .MuiTabs-flexContainer': {
+                           height: '100%',
+                        },
+                        height: '100%',
+                     }}
+                  >
+                     <Tab label="Gigs" {...a11yProps(0)} />
+                     <Tab
+                        label="Offers"
+                        {...a11yProps(1)}
+                     />
+                     <Tab
+                        label="Reviews"
+                        {...a11yProps(2)}
+                     />
+                     <Tab
+                        label="Gallery"
+                        {...a11yProps(2)}
+                     />
+                  </Tabs>
+               </Toolbar>
+               <TabPanel value={value} index={0}>
+                  <Gigs />
+               </TabPanel>
+               <TabPanel value={value} index={1}>
+                  <Reviews />
+               </TabPanel>
+            </Grid>
+         </Grid>
       </>
    )
 }

@@ -16,6 +16,8 @@ import { Stepper } from '../components/atoms/Stepper'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { LeftAndRight } from '../anim/Transitions'
+import { useGigsContext } from '../hooks/useGigsContext'
+import { useCategoriesContext } from '../hooks/useCategoriesContext'
 
 const steps = [
    'Overview',
@@ -31,19 +33,33 @@ const steps = [
    'Publish',
 ]
 
-const descriptions = [
-   "Let's create a gig",
+const descriptions = (isEditing: boolean) =>
+   !isEditing
+      ? [
+           "Let's create a gig",
 
-   'Scope & Pricing',
+           'Scope & Pricing',
 
-   'Description',
+           'Description',
 
-   'Requirements',
+           'Requirements',
 
-   'Showcase Your Services In A Gig Gallery',
+           'Showcase Your Services In A Gig Gallery',
 
-   'Almost ready, watch out!',
-]
+           'Almost ready, watch out!',
+        ]
+      : [
+           "Let's edit the gig",
+           'Scope & Pricing',
+
+           'Description',
+
+           'Requirements',
+
+           'Showcase Your Services In A Gig Gallery',
+
+           'Almost ready, watch out!',
+        ]
 
 interface NewGigLayoutProps {
    children?: ReactNode
@@ -73,7 +89,8 @@ export const NewGigLayout = ({
    secondChildrenHeaderText = '',
 }: NewGigLayoutProps) => {
    const isSm = useMediaQuery('(max-width:600px)')
-
+   const { isEditing, gig } = useGigsContext()
+   const { getCategoryById } = useCategoriesContext()
    const onClickContinue = () => {
       setStep(step + 1)
       onNext()
@@ -124,7 +141,7 @@ export const NewGigLayout = ({
                         variant="h5"
                         fontWeight="bold"
                      >
-                        {descriptions[step]}
+                        {descriptions(isEditing)[step]}
                      </Typography>
                   }
                   action={action}
@@ -207,6 +224,14 @@ export const NewGigLayout = ({
                ></Stack>
             </Card>
          </LeftAndRight>
+         <pre>{JSON.stringify(gig, null, 4)}</pre>
+         <pre>
+            {JSON.stringify(
+               getCategoryById(
+                  gig?.subcategory?.category?.name
+               )
+            )}
+         </pre>
       </>
    )
 }

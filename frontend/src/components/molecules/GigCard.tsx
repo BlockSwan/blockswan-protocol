@@ -54,6 +54,12 @@ interface GigCardProps {
    date?: Date
    isUser?: boolean
    isPaused?: boolean
+   onEdit: () => void
+   onDelete: () => void
+   onActivate: () => void
+   onPause: () => void
+   isNew: boolean
+   onClickNew: () => void
 }
 
 GigCard.defaultProps = {
@@ -66,6 +72,12 @@ GigCard.defaultProps = {
    price: 0,
    isUser: false,
    isPaused: false,
+   onEdit: () => {},
+   onDelete: () => {},
+   onActivate: () => {},
+   onPause: () => {},
+   isNew: false,
+   onClickNew: () => {},
 }
 
 export default function GigCard(props: GigCardProps) {
@@ -91,17 +103,45 @@ export default function GigCard(props: GigCardProps) {
       return menu
    }, [props?.isPaused])
 
+   function handleOption(elem: string) {
+      switch (elem) {
+         case 'Pause':
+            props?.onPause()
+            break
+         case 'Edit':
+            props?.onEdit()
+            break
+         case 'Delete':
+            props?.onDelete()
+            break
+         case 'Activate':
+            props.onActivate()
+            break
+         default:
+            break
+      }
+   }
+
    return (
       <Card
          sx={{
-            minWidth: 250,
+            minWidth: 300,
             width: '100%',
             maxWidth: 300,
             minHeight: '260px',
          }}
       >
          <Collapse in={!isEditing} unmountOnExit>
-            <CardActionArea onClick={() => alert('acctin')}>
+            <CardActionArea
+               sx={{ position: 'relative' }}
+               onClick={() => {
+                  if (!props.isUser && !props.isNew) {
+                     alert('acctin')
+                  } else if (!props.isNew) {
+                     handleIsEditing()
+                  } else props.onClickNew()
+               }}
+            >
                <CardMedia
                   component="img"
                   alt="green iguana"
@@ -146,16 +186,18 @@ export default function GigCard(props: GigCardProps) {
                   </Typography>
                </CardContent>
                <CardActions sx={{ alignItems: 'center' }}>
-                  <Icon
-                     name="menu-horizon"
-                     sizing="small"
-                     iconColor="primary.main"
-                     onClick={(_e) => {
-                        _e.stopPropagation()
-                        _e.preventDefault()
-                        handleIsEditing()
-                     }}
-                  />
+                  {props?.isUser && (
+                     <Icon
+                        name="menu-horizon"
+                        sizing="small"
+                        iconColor="primary.main"
+                        onClick={(_e) => {
+                           _e.stopPropagation()
+                           _e.preventDefault()
+                           handleIsEditing()
+                        }}
+                     />
+                  )}
                   <Box flexGrow={1} />
                   <Stack
                      direction="column"
@@ -178,9 +220,35 @@ export default function GigCard(props: GigCardProps) {
                      </Typography>
                   </Stack>
                </CardActions>
+               {props?.isNew && (
+                  <Box
+                     sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        background: (theme) =>
+                           theme.palette.secondary.dark,
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 2,
+                     }}
+                  >
+                     <Icon sizing="medium" name="add" />
+                     <Typography variant="h6">
+                        Create a gig
+                     </Typography>
+                  </Box>
+               )}
             </CardActionArea>
          </Collapse>
-         <Collapse in={isEditing} unmountOnExit>
+         <Collapse
+            in={isEditing && props.isUser}
+            unmountOnExit
+         >
             <CardContent
                sx={{
                   p: 0,
@@ -197,7 +265,9 @@ export default function GigCard(props: GigCardProps) {
                         key={`menucard-${i}`}
                         disablePadding
                      >
-                        <ListItemButton>
+                        <ListItemButton
+                           onClick={() => handleOption(_e)}
+                        >
                            <ListItemIcon>
                               {getIcon(_e)}
                            </ListItemIcon>

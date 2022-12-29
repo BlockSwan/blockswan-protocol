@@ -1,3 +1,4 @@
+
 import { TextFieldProps } from '@mui/material';
 
 export const possibleRequirementType = ['free-text', 'multiple-choice', 'file-attachment', ""] as const;
@@ -53,7 +54,7 @@ export interface BoooleanDeliverablesProps {
 	name?: string
 }
 
-export interface CategoryProps {
+export type CategoryProps = DBDocument & {
 	name: string
 	description: string
 	emoji: string
@@ -62,11 +63,12 @@ export interface CategoryProps {
 	subCategories: SubCategoryProps[]
 }
 
-export interface SubCategoryProps {
+export type SubCategoryProps = DBDocument & {
 	name: string
 	description: string
 	url: string
 	selectableDeliverables: SelectableDeliverablesProps[]
+	booleanDeliverables: BoooleanDeliverablesProps[]
 }
 
 export interface DescriptionProps {
@@ -86,6 +88,9 @@ export type GigProps = DBDocument & {
 	faqs?: FaqProps[]
 	requirements?: RequirementProps[]
 	imgs?: (File | string)[]
+	isPaused?: boolean,
+	isDeleted?: boolean
+	metadataHash?: string
 }
 
 export type FormInputProps = TextFieldProps & {
@@ -133,4 +138,5 @@ export type UserProps = DBDocument & {
 	skills: (string | undefined | null)[],
 	educations: EducationProps[],
 	certifications: CertificationProps[],
+	defaultProfileImg?: string
 }

@@ -6,6 +6,7 @@ import { GigsContextProvider } from './contexts/gigContext'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ProtocolContextProvider } from './contexts/protocolContext'
 import { UsersContextProvider } from './contexts/userContext'
+import { BannerContextProvider } from './contexts/bannerContext'
 interface AppProvidersProps {
    children?: ReactNode
 }
@@ -18,7 +19,9 @@ const AppProviders = ({ children }: AppProvidersProps) => {
                <CategoriesContextProvider>
                   <UsersContextProvider>
                      <GigsContextProvider>
-                        {children}
+                        <BannerContextProvider>
+                           {children}
+                        </BannerContextProvider>
                      </GigsContextProvider>
                   </UsersContextProvider>
                </CategoriesContextProvider>

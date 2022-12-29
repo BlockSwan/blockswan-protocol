@@ -24,6 +24,8 @@ const defaultGig: GigProps = {
 	faqs: [],
 	requirements: [],
 	imgs: [],
+	isPaused: false,
+	isDeleted: false
 }
 
 const defaultCountry: CountryProps = {

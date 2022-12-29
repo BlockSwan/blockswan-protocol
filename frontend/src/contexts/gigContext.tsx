@@ -31,6 +31,16 @@ export const GigsContextProvider = ({
       categories: null,
    })
    const [gig, setGig] = useState<GigProps>(defaultGig)
+   const [isEditing, setIsEditing] =
+      useState<boolean>(false)
+
+   const handleEditing = (value?: boolean) => {
+      if (value !== undefined) {
+         setIsEditing(value)
+      } else {
+         setIsEditing((val) => !val)
+      }
+   }
 
    const fetchGigs = async () => {
       const response = await fetch(
@@ -61,6 +71,9 @@ export const GigsContextProvider = ({
             fetchGigs,
             editTitle,
             resetGig,
+            isEditing,
+            handleEditing,
+            setIsEditing,
          }}
       >
          {children}

@@ -29,9 +29,9 @@ export const ParticleBackground = ({
    const theme = useTheme()
 
    let config = ParticlesConfig
-   config.particles.color = theme?.palette?.secondary?.main
+   config.particles.color = theme?.palette?.primary?.main
    config.particles.shape.stroke.color =
-      theme?.palette?.secondary?.light
+      theme?.palette?.primary?.main
    return (
       <ParticleBox
          style={{
@@ -55,7 +55,7 @@ const ParticleBox = styled.div`
    top: 0px;
    left: 0px;
    background-color: ${({ theme }) =>
-      theme?.palette?.primary?.main};
+      theme?.palette?.secondary?.main};
    #tsparticles {
       position: relative;
       width: 100%;
@@ -69,5 +69,8 @@ const ParticleBox = styled.div`
          top: 0;
          left: 0;
       }
+   }
+   * {
+      color: 'red';
    }
 `

@@ -3,6 +3,7 @@ import React, {
    ReactNode,
    useReducer,
 } from 'react'
+import { API_ENDPOINT } from '../constants/config'
 import {
    CategoryProps,
    SubCategoryProps,
@@ -37,7 +38,7 @@ export const CategoriesContextProvider = ({
 
    const fetchCategories = async () => {
       const response = await fetch(
-         'http://172.20.10.3:4000/api/categories'
+         `${API_ENDPOINT}/api/categories`
       )
       const json = await response.json()
 
@@ -64,6 +65,15 @@ export const CategoriesContextProvider = ({
    ): CategoryProps | undefined => {
       let cat = state?.categories?.message?.find(
          (c: any) => c?.name === name
+      )
+      return cat
+   }
+
+   const getCategoryById = (
+      id: string
+   ): CategoryProps | undefined => {
+      let cat = state?.categories?.message?.find(
+         (c: CategoryProps) => c?._id === id
       )
       return cat
    }
@@ -95,6 +105,7 @@ export const CategoriesContextProvider = ({
             getCategoryFromURL,
             getCategoryFromName,
             getSubCategoryFromNames,
+            getCategoryById,
          }}
       >
          {children}

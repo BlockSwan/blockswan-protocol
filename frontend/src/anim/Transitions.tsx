@@ -8,35 +8,51 @@ import { CategoryProps } from '../types/types'
 interface UpAndDownProps {
    children: any
    isUp?: boolean
+   desanimate?: boolean
 }
 
-const UpAndDown = ({ children, isUp }: UpAndDownProps) => {
+const UpAndDown = ({
+   children,
+   isUp,
+   desanimate,
+}: UpAndDownProps) => {
    let height = 100
    const y = isUp ? height : -height
 
+   const animation = {
+      initial: {
+         opacity: 0,
+         y: y,
+      },
+      animate: {
+         opacity: 1,
+         y: 0,
+      },
+      transition: {
+         duration: 0.4,
+         ease: 'easeOut',
+         delayChildren: 0.5,
+         staggerChildren: 0.2,
+      },
+      exit: {
+         opacity: 0,
+         y: -y,
+      },
+   }
+
    return (
       <>
-         <motion.div
-            initial={{
-               opacity: 0,
-               y: y,
-            }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-               duration: 0.4,
-               ease: 'easeOut',
-               delayChildren: 0.5,
-               staggerChildren: 0.2,
-            }}
-            exit={{
-               opacity: 0,
-               y: -y,
-            }}
-         >
+         <motion.div {...(desanimate ? {} : animation)}>
             <Box width={'100%'}>{children}</Box>
          </motion.div>
       </>
    )
+}
+
+UpAndDown.defaultProps = {
+   children: <></>,
+   isUp: true,
+   desanimate: false,
 }
 
 interface LeftAndRightProps {

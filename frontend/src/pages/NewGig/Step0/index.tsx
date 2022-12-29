@@ -33,7 +33,7 @@ const schema = yup.object().shape({
 })
 
 const NewGigOverview = () => {
-   const { gig, setGig } = useGigsContext()
+   const { gig, setGig, isEditing } = useGigsContext()
    const {
       categories,
       getCategoryFromName,

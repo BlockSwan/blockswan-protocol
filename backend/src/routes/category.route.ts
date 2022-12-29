@@ -1,12 +1,13 @@
-import { Router } from 'express'
+import { Router, Request, Response } from 'express'
+import { IPFS } from 'ipfs-core-types'
 import { getAllCategories } from '../controllers/category.controller'
 
-const categoryRoute = () => {
-    const router = Router()
+const categoryRoute = (node: IPFS) => {
+	const router = Router()
 
-    router.get('/categories', getAllCategories)
+	router.get('/categories', (req: Request, res: Response) => getAllCategories(req, res, node))
 
-    return router
+	return router
 }
 
 export { categoryRoute }

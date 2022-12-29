@@ -133,9 +133,15 @@ const NewGigGallery = () => {
                                     height: '100%',
                                  }}
                                  alt={`img-${index}`}
-                                 src={URL.createObjectURL(
-                                    gig?.imgs[index]
-                                 )}
+                                 src={
+                                    typeof gig?.imgs[
+                                       index
+                                    ] === 'string'
+                                       ? gig?.imgs[index]
+                                       : URL.createObjectURL(
+                                            gig?.imgs[index]
+                                         )
+                                 }
                               />
                               <Grow in={hovered === index}>
                                  <Stack

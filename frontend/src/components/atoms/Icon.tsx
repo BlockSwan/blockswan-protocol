@@ -13,6 +13,7 @@ import AbcIcon from '@mui/icons-material/Abc'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import FilterListIcon from '@mui/icons-material/FilterList'
 
 import { MouseEventHandler, ReactNode } from 'react'
 
@@ -114,6 +115,11 @@ function getIcon(name: string, sx: any): any {
          return {
             icon: <ArrowBackIosNewIcon />,
             color: 'secondary.light',
+         }
+      case 'filter':
+         return {
+            icon: <FilterListIcon />,
+            color: 'primary.main',
          }
 
       default:
