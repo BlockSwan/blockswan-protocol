@@ -1,14 +1,14 @@
 import { useContext } from 'react'
-import { BannerContext } from '../contexts/bannerContext';
+import { BannerContext } from '../contexts/bannerContext'
 
 export const useBannerContext = () => {
-	const context = useContext(BannerContext)
+   const context = useContext(BannerContext)
 
-	if (!context) {
-		throw Error(
-			'useUsersContext must be used inside an BannerContextProvider'
-		)
-	}
+   if (!context) {
+      throw Error(
+         'useUsersContext must be used inside an BannerContextProvider'
+      )
+   }
 
-	return context
+   return context
 }

@@ -40,33 +40,27 @@ interface Props {
    categories?: CategoryProps[]
 }
 
-const StyledListButton = styled(ListItemButton)(
-   ({ theme }) => ({
-      '&.Mui-selected': {
-         borderRight: '2px solid',
-         borderImageSlice: 1,
-         borderWidth: '2px',
-         borderImageSource:
-            theme.blockswan.rainbowsVertical,
-      },
-   })
-)
+const StyledListButton = styled(ListItemButton)(({ theme }) => ({
+   '&.Mui-selected': {
+      borderRight: '2px solid',
+      borderImageSlice: 1,
+      borderWidth: '2px',
+      borderImageSource: theme.blockswan.rainbowsVertical,
+   },
+}))
 
 const listSX = {
    root: {},
 }
 
 export const ResponsiveDrawer = (props: Props) => {
-   const { goToCategory, goToNewGig, goToHome } =
-      useAppNavigation()
+   const { goToCategory, goToNewGig, goToHome } = useAppNavigation()
    const { evmAddress } = useWeb3Context()
    const { window, children, categories } = props
    const [mobileOpen, setMobileOpen] = React.useState(false)
    const [catOpen, setCatOpen] = React.useState(false)
    const { provider } = useWeb3Context()
-   const [selected, setSelected] = React.useState<
-      string | null
-   >('')
+   const [selected, setSelected] = React.useState<string | null>('')
    const isSm = useMediaQuery('(max-width:600px)')
 
    const handleDrawerToggle = () => {
@@ -115,19 +109,11 @@ export const ResponsiveDrawer = (props: Props) => {
                   alt="blockswan"
                />
 
-               <Chip
-                  sx={{ ml: 1 }}
-                  label="TESTNET"
-                  size="small"
-               />
+               <Chip sx={{ ml: 1 }} label="TESTNET" size="small" />
             </Stack>
          </Toolbar>
          <Divider />
-         <List
-            sx={{ pt: 2 }}
-            disablePadding
-            component={'div'}
-         >
+         <List sx={{ pt: 2 }} disablePadding component={'div'}>
             <ListItem disablePadding>
                <ListItemButton sx={listSX}>
                   <ListItemIcon>
@@ -151,19 +137,13 @@ export const ResponsiveDrawer = (props: Props) => {
                </ListItemButton>
             </ListItem>
          </List>
-         <ListItemButton
-            sx={listSX}
-            onClick={() => setCatOpen(!catOpen)}
-         >
+         <ListItemButton sx={listSX} onClick={() => setCatOpen(!catOpen)}>
             <ListItemIcon>
                <Avatar sx={avatarSX}>
                   <CategoryIcon fontSize="small" />
                </Avatar>
             </ListItemIcon>
-            <ListItemText
-               sx={{ ml: 0 }}
-               primary="Categories"
-            />
+            <ListItemText sx={{ ml: 0 }} primary="Categories" />
             {catOpen ? <ExpandLess /> : <ExpandMore />}
          </ListItemButton>
          <Collapse
@@ -196,9 +176,7 @@ export const ResponsiveDrawer = (props: Props) => {
                                  bgcolor: 'secondary.light',
                               }}
                            >
-                              <Typography variant="h6">
-                                 {c?.emoji}
-                              </Typography>
+                              <Typography variant="h6">{c?.emoji}</Typography>
                            </Avatar>
                         </ListItemIcon>
                         <ListItemText primary={c?.name} />
@@ -210,10 +188,7 @@ export const ResponsiveDrawer = (props: Props) => {
          <Divider sx={{ pt: 2 }} />
          <List
             subheader={
-               <ListSubheader
-                  component="div"
-                  id="nested-list-subheader"
-               >
+               <ListSubheader component="div" id="nested-list-subheader">
                   Selling
                </ListSubheader>
             }
@@ -235,25 +210,18 @@ export const ResponsiveDrawer = (props: Props) => {
          <Divider />
          <List
             subheader={
-               <ListSubheader
-                  component="div"
-                  id="nested-list-subheader"
-               >
+               <ListSubheader component="div" id="nested-list-subheader">
                   Buying
                </ListSubheader>
             }
          >
-            {['Manage orders', 'Create an order'].map(
-               (text, index) => (
-                  <ListItem key={text} disablePadding>
-                     <ListItemButton
-                        sx={{ pl: 2, ...listSX }}
-                     >
-                        <ListItemText primary={text} />
-                     </ListItemButton>
-                  </ListItem>
-               )
-            )}
+            {['Manage orders', 'Create an order'].map((text, index) => (
+               <ListItem key={text} disablePadding>
+                  <ListItemButton sx={{ pl: 2, ...listSX }}>
+                     <ListItemText primary={text} />
+                  </ListItemButton>
+               </ListItem>
+            ))}
          </List>{' '}
          <Divider />
          <ListItem disablePadding>
@@ -275,9 +243,7 @@ export const ResponsiveDrawer = (props: Props) => {
    )
 
    const container =
-      window !== undefined
-         ? () => window().document.body
-         : undefined
+      window !== undefined ? () => window().document.body : undefined
 
    return (
       <Box sx={{ display: 'flex' }}>
@@ -345,10 +311,10 @@ export const ResponsiveDrawer = (props: Props) => {
                flexGrow: 1,
                p: 0,
                width: {
-                  md: `calc(100% - 270px)`,
+                  md: `calc(100vw - 270px)`,
+                  sm: `100vw`,
                },
-
-               overflow: 'hidden',
+               position: 'relative',
             }}
          >
             {children}

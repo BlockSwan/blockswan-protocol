@@ -42,7 +42,7 @@ export const AppStyles = createGlobalStyle`
 			opacity: 1;
 				transition: 200ms cubic-bezier(0.25, 0.8, 0.25, 1);
 				transform-origin: center center;
-			border: 1px solid ${ ({ theme }) => theme.palette.divider };
+			border: 1px solid ${({ theme }) => theme.palette.divider};
 				::-webkit-scrollbar {
 				width:0px !important;
 		

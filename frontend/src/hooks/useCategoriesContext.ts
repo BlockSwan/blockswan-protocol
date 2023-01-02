@@ -3,13 +3,13 @@ import { CategoriesContext } from '../contexts/categoryContext'
 import { useContext } from 'react'
 
 export const useCategoriesContext = () => {
-    const context = useContext(CategoriesContext)
+   const context = useContext(CategoriesContext)
 
-    if (!context) {
-        throw Error(
-            'useCategoriesContext must be used inside an CategoriesContextProvider'
-        )
-    }
+   if (!context) {
+      throw Error(
+         'useCategoriesContext must be used inside an CategoriesContextProvider'
+      )
+   }
 
-    return context
+   return context
 }

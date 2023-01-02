@@ -1,17 +1,24 @@
-import mongoose, { Schema, Model, Document, ObjectId } from 'mongoose'
+import mongoose, { Schema, Model, Document, ObjectId, Error } from 'mongoose'
 import { User, UserDocument } from './user.model'
 import { SubCategory, SubCategoryDocument } from './subcategory.model'
+import { readIpfsFile } from '../utils/ipfs';
+import { IPFS } from 'ipfs-core-types';
 
 interface GigModel extends Model<GigDocument> {
 	priceRange(
 		subcategory: unknown
-	): Promise<[{ highestPrice: number, lowestPrice: number }] | null>
+	): Promise<[{ highestPrice: number; lowestPrice: number }] | null>
+	perHash(
+		ipfsHash: string,
+		node: IPFS
+	): Promise<GigDocument | null>
+
 }
 
 type GigDocument = Document & {
 	title: string
 	subcategory: SubCategoryDocument
-	selectablesDeliverables: [
+	selectableDeliverables: [
 		{
 			name: string
 			data: [string]
@@ -51,14 +58,14 @@ type GigDocument = Document & {
 	seller?: UserDocument
 	metadataHash?: string
 	creator?: UserDocument
-	isPaused?: boolean,
-	isDeleted?: boolean,
+	isPaused?: boolean
+	isDeleted?: boolean
 }
 
 type GigInput = {
 	title?: GigDocument['title']
 	subcategory?: GigDocument['subcategory']
-	selectableDeliverables?: GigDocument['selectablesDeliverables']
+	selectableDeliverables?: GigDocument['selectableDeliverables']
 	tags?: GigDocument['tags']
 	packages?: GigDocument['packages']
 	description?: GigDocument['description']
@@ -134,12 +141,12 @@ const gigsSchema = new Schema(
 		},
 		isPaused: {
 			type: Schema.Types.Boolean,
-			default: false
+			default: false,
 		},
 		isDeleted: {
 			type: Schema.Types.Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	{
 		collection: 'gigs',
@@ -156,22 +163,49 @@ const gigsSchema = new Schema(
 					},
 					{
 						$project: {
-							prices: '$packages.price'
-						}
+							prices: '$packages.price',
+						},
 					},
 					{
-						$unwind: '$prices'
+						$unwind: '$prices',
 					},
 					{
 						$group: {
 							_id: null,
 							highestPrice: { $max: '$prices' },
-							lowestPrice: { $min: '$prices' }
-						}
-					}
-
+							lowestPrice: { $min: '$prices' },
+						},
+					},
 				])
-			}
+			},
+			async perHash(ipfsHash: string, node: IPFS): Promise<UserDocument | null> {
+				return new Promise((resolve, reject) => {
+
+					this.findOne({ metadataHash: ipfsHash }).populate("seller").populate({
+						path: 'subcategory',
+						model: 'SubCategory',
+
+						populate: {
+							path: 'category',
+							model: 'Category',
+						},
+
+					}).exec(async (err: any, data: any) => {
+						if (err || !data || data === undefined)
+							return reject(err)
+
+
+						for (let j = 0; j < data.imgs?.length; j++) {
+
+							let hash = await readIpfsFile(node, data.imgs[j]?.toString())
+							data.imgs[j] = hash || ''
+						}
+						return resolve(data)
+
+					})
+
+				})
+			},
 		}
 	}
 )

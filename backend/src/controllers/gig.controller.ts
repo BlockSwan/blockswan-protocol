@@ -12,7 +12,7 @@ import {
 	FAILED_EDIT_GIG,
 	FAILED_QUERY_USER,
 } from '../constants/errors'
-import { addIpfsFile } from '../utils/ipfs'
+import { addIpfsFile, readIpfsFile } from '../utils/ipfs'
 import { User, UserDocument } from '../models/user.model'
 import mongoose, { isObjectIdOrHexString, mongo } from 'mongoose'
 import { getUser } from './user.controller'
@@ -53,7 +53,7 @@ const saveGig = async (req: Request, res: Response, node: IPFS) => {
 				if (!metadataHash)
 					return res.status(400).json({ name: FAILED_ADD_IPFS })
 
-				newGig.metadataHash = JSON.stringify(metadataHash)
+				newGig.metadataHash = metadataHash?.toString()
 				let imgs = []
 				for (let i = 0; i < req.body.files?.length; i++) {
 					//let img64 = req.body.files[i].split(',')[1];
@@ -64,8 +64,6 @@ const saveGig = async (req: Request, res: Response, node: IPFS) => {
 				}
 				newGig.imgs = imgs as string[]
 				if (!req?.body._id) {
-
-
 					let gig: GigDocument = new Gig({
 						_id: new mongoose.Types.ObjectId(),
 						seller: seller._id,
@@ -85,30 +83,58 @@ const saveGig = async (req: Request, res: Response, node: IPFS) => {
 							{ $push: { gigs: newGig?._id } }
 						)
 						if (rel) {
-							User.getByEvmAddress(seller.evmAddress || "", node).then((data) => {
-								if (!data || data === undefined)
-									return res.status(400).json({ message: FAILED_QUERY_USER })
-								return res.status(200).json({ message: data })
+							User.getByEvmAddress(
+								seller.evmAddress || '',
+								node
+							).then((data) => {
+								if (!data || data === undefined) {
+									return res
+										.status(400)
+										.json({ message: FAILED_QUERY_USER })
+								} else {
+									console.log(data);
+									return res.status(200).json({ message: data })
+								}
+
 							})
+						} else {
+							return res
+								.status(500)
+								.json({ name: FAILED_GIG_CREATION })
 						}
-						return res.status(500).json({ name: FAILED_GIG_CREATION })
+
 					})
 				} else {
-					Gig.updateOne({ _id: req?.body._id }, {
-						seller: seller._id,
+					Gig.updateOne(
+						{ _id: req?.body._id },
+						{
+							seller: seller._id,
 
-						...newGig
-					}).then(() => {
-						User.getByEvmAddress(seller.evmAddress || "", node).then((data) => {
-							if (!data || data === undefined)
-								return res.status(400).json({ message: FAILED_QUERY_USER })
-							return res.status(200).json({ message: data })
+							...newGig,
+						}
+					)
+						.then(() => {
+							User.getByEvmAddress(
+								seller.evmAddress || '',
+								node
+							).then((data) => {
+								if (!data || data === undefined) {
+									return res
+										.status(400)
+										.json({ message: FAILED_QUERY_USER })
+								}
+								else {
+									return res.status(200).json({ message: data })
+
+								}
+							})
 						})
-
-					}).catch((err) => {
-						console.error(err);
-						return res.status(500).json({ name: "Failed to edit the gig" })
-					})
+						.catch((err) => {
+							console.error(err)
+							return res
+								.status(500)
+								.json({ name: 'Failed to edit the gig' })
+						})
 				}
 			}
 		)
@@ -121,10 +147,16 @@ const saveGig = async (req: Request, res: Response, node: IPFS) => {
 const pauseGig = async (req: Request, res: Response, node: IPFS) => {
 	try {
 		const { gigId, isPaused, evmAddress } = req?.body
-		if (!gigId || isPaused === undefined || !evmAddress) return res.status(400).json({ name: "Missing gigId, isPaused and evmAddress" })
-		await Gig.updateOne({
-			_id: gigId,
-		}, { isPaused: isPaused })
+		if (!gigId || isPaused === undefined || !evmAddress)
+			return res
+				.status(400)
+				.json({ name: 'Missing gigId, isPaused and evmAddress' })
+		await Gig.updateOne(
+			{
+				_id: gigId,
+			},
+			{ isPaused: isPaused }
+		)
 		User.getByEvmAddress(evmAddress, node).then((data) => {
 			if (!data || data === undefined)
 				return res.status(400).json({ message: FAILED_QUERY_USER })
@@ -139,41 +171,52 @@ const pauseGig = async (req: Request, res: Response, node: IPFS) => {
 const deleteGig = async (req: Request, res: Response, node: IPFS) => {
 	try {
 		const { gigId, isDeleted, evmAddress } = req?.body
-		if (!gigId || isDeleted === undefined || !evmAddress) return res.status(400).json({ name: "Missing gigId, isDeleted and evmAddress" })
-		await Gig.updateOne({
-			_id: gigId,
-		}, { isDeleted: isDeleted })
+		if (!gigId || isDeleted === undefined || !evmAddress)
+			return res
+				.status(400)
+				.json({ name: 'Missing gigId, isDeleted and evmAddress' })
+		await Gig.updateOne(
+			{
+				_id: gigId,
+			},
+			{ isDeleted: isDeleted }
+		)
 		User.getByEvmAddress(evmAddress, node).then((data) => {
 			if (!data || data === undefined)
 				return res.status(400).json({ message: FAILED_QUERY_USER })
 			return res.status(200).json({ message: data })
 		})
-
 	} catch (err) {
 		console.error(err)
 		return res.status(400).json({ name: FAILED_EDIT_GIG })
 	}
 }
 
-
-const getGigsPerSubCategory = async (req: Request, res: Response, node: IPFS) => {
-
+const getGigsPerSubCategory = async (
+	req: Request,
+	res: Response,
+	node: IPFS
+) => {
 	try {
-
-		const page = req.body.page ? parseInt(req?.body?.page, 10) : 1;
+		const page = req.body.page ? parseInt(req?.body?.page, 10) : 1
 		const perPage = 9
 
-		const sortField = req.body.sortField || 'price';
-		const sortOrder = req.body.sortOrder || 'asc';
-		const subcategoryURL = req.body.subcategory;
-		if (!subcategoryURL) return res.status(400).json({ name: "Missing subcategory" })
+		const sortField = req.body.sortField || 'price'
+		const sortOrder = req.body.sortOrder || 'asc'
+		const subcategoryURL = req.body.subcategory
+		if (!subcategoryURL)
+			return res.status(400).json({ name: 'Missing subcategory' })
 
 		const selectableDeliverables = req.body.selectableDeliverables
 			? req.body.selectableDeliverables
-			: [];
+			: []
 
-		const skip = (page - 1) * perPage;
-		const limit = perPage;
+		const timeDelivery = req.body.timeDelivery
+			? req.body.timeDelivery
+			: null
+
+		const skip = (page - 1) * perPage
+		const limit = perPage
 		const subCatID = new mongoose.Types.ObjectId(subcategoryURL)
 		const pipeline: any[] = [
 			{
@@ -197,79 +240,123 @@ const getGigsPerSubCategory = async (req: Request, res: Response, node: IPFS) =>
 			// {
 			// 	$sort: { 'packages.price': 1 }
 			// }
-		];
+		]
 
+		const countSearch: any = {
+			subcategory: subCatID,
+			isPaused: false,
+			isDeleted: false,
 
-
+		}
 		// Add a stage to the pipeline to filter by selectable deliverables if specified in the request query
 		if (selectableDeliverables.length > 0) {
-			console.log("With fiilter")
-			console.log(selectableDeliverables);
-			let arr = selectableDeliverables.reduce((acc: any, obj: any) => acc?.concat(obj?.data), [])
-			console.log(JSON.stringify(arr, null, 4));
+			console.log('With fiilter')
+			console.log(selectableDeliverables)
+			let arr = selectableDeliverables.reduce(
+				(acc: any, obj: any) => acc?.concat(obj?.data),
+				[]
+			)
+			console.log(JSON.stringify(arr, null, 4))
+			countSearch['$or'] = [
+				{ 'selectableDeliverables.data': { $in: arr } },
+				{ 'packages.includes.name': { $in: arr } }
+			],
 
-			// Push the $match stage to the pipeline
-			pipeline.push(
-				{
+				// Push the $match stage to the pipeline
+				pipeline.push({
 					$match: {
-						'selectablesDeliverables.data': {
-							$in: arr
-						}
+						$or: [
+							{ 'selectableDeliverables.data': { $in: arr } },
+							{ 'packages.includes.name': { $in: arr } }
+						]
 					}
-				}
-			);
+				})
 		}
-		const prices = await Gig.priceRange(subCatID);
-		let minPrice, maxPrice;
+		if (timeDelivery !== null) {
+			let timeDeliveryFilter: any = {};
+			let _f = { $gte: 0, $lte: timeDelivery };
+			countSearch['packages.delivery'] = _f
+			timeDeliveryFilter['packages.delivery'] = _f
+			pipeline.push({ $match: timeDeliveryFilter })
+		}
+
+		const prices = await Gig.priceRange(subCatID)
+		let minPrice, maxPrice
 		if (req?.body?.priceRange !== null) {
-			minPrice = req?.body?.priceRange[0];
-			maxPrice = req?.body?.priceRange[1];
+			minPrice = req?.body?.priceRange[0]
+			maxPrice = req?.body?.priceRange[1]
+			countSearch['packages.price'] = { $gte: minPrice, $lte: maxPrice }
 		} else {
 			minPrice = prices ? prices[0]?.lowestPrice : null
 			maxPrice = prices ? prices[0]?.highestPrice : null
 		}
 
-		const priceFilter: any = {};
+		const priceFilter: any = {}
 
 		priceFilter['packages.price'] = { $gte: minPrice, $lte: maxPrice }
 		pipeline.push({ $match: priceFilter })
 
-
 		// Add a stage to the pipeline to sort the results by the specified field and order
-		const sort: any = {};
-		sort[sortField] = sortOrder === 'asc' ? 1 : -1;
-		pipeline.push({ $sort: sort });
+		const sort: any = {}
+		sort[sortField] = sortOrder === 'asc' ? 1 : -1
+		pipeline.push({ $sort: sort })
 
 		// Add a stage to the pipeline to skip and limit the results based on the pagination parameters
-		pipeline.push({ $skip: skip });
-		pipeline.push({ $limit: limit });
+		pipeline.push({ $skip: skip })
+		pipeline.push({ $limit: limit })
 		// Execute the aggregate query using the pipeline
 
-		const gigsPerSubcategory: any = await Gig.aggregate(pipeline);
-		const count = await Gig.count({ subcategory: subCatID });
+		const gigsPerSubcategory: any = await Gig.aggregate(pipeline)
 
+		const count = await Gig.countDocuments(countSearch);
 
-
-
-
+		for (let i = 0; i < gigsPerSubcategory?.length; i++) {
+			for (let j = 0; j < gigsPerSubcategory[i].imgs.length; j++) {
+				if (j === 0) {
+					let hash = await readIpfsFile(node, gigsPerSubcategory[i]?.imgs[j]?.toString())
+					gigsPerSubcategory[i].imgs[j] = hash || ''
+				}
+			}
+		}
 		let object = {
 			page: page,
 			perPage: perPage,
 			total: count,
 			gigs: gigsPerSubcategory,
 			highestPrice: prices ? prices[0]?.highestPrice : null,
-			lowestPrice: prices ? prices[0]?.lowestPrice : null
+			lowestPrice: prices ? prices[0]?.lowestPrice : null,
 		}
 
 		// Return the paginated and filtered results to the client
-		return res.json(object);
-
-
+		return res.json(object)
 	} catch (err) {
-		console.error(err);
-		return res.status(400).json({ name: "Failed to get gigs" })
+		console.error(err)
+		return res.status(400).json({ name: 'Failed to get gigs' })
 	}
 }
 
 
-export { saveGig, pauseGig, deleteGig, getGigsPerSubCategory }
+const getGigPerHash = async (
+	req: Request,
+	res: Response,
+	node: IPFS
+) => {
+	try {
+		const hash = req.body?.hash
+		if (!hash)
+			return res.status(400).json({ name: 'Missing hash' })
+
+		let gig = await Gig.perHash(hash, node);
+		if (!gig)
+			return res.status(400).json({ name: 'Failed to get gig' })
+		console.log(gig);
+		return res.status(200).json({ message: gig })
+
+
+	} catch (err) {
+		console.error(err)
+		return res.status(400).json({ name: 'Failed to get gig per hash' })
+	}
+}
+
+export { saveGig, pauseGig, deleteGig, getGigsPerSubCategory, getGigPerHash }

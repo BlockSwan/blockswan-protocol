@@ -36,9 +36,7 @@ const getIcon = (elem: string) => {
       case 'Delete':
          return <DeleteForeverIcon className="icon-menu" />
       case 'Activate':
-         return (
-            <PlayCircleFilledWhiteIcon className="icon-menu" />
-         )
+         return <PlayCircleFilledWhiteIcon className="icon-menu" />
       default:
          return null
    }
@@ -50,7 +48,7 @@ interface GigCardProps {
    username?: string
    title?: string
    price?: number
-   onClick?: Function
+   onClick: Function
    date?: Date
    isUser?: boolean
    isPaused?: boolean
@@ -78,15 +76,14 @@ GigCard.defaultProps = {
    onPause: () => {},
    isNew: false,
    onClickNew: () => {},
+   onClick: () => {},
 }
 
 export default function GigCard(props: GigCardProps) {
    const now: any = Date.now()
-   const [isEditing, setIsEditing] =
-      React.useState<boolean>(false)
+   const [isEditing, setIsEditing] = React.useState<boolean>(false)
 
-   const handleIsEditing = () =>
-      setIsEditing((curr) => !curr)
+   const handleIsEditing = () => setIsEditing((curr) => !curr)
 
    let menus = React.useMemo(() => {
       let menu: any
@@ -136,7 +133,7 @@ export default function GigCard(props: GigCardProps) {
                sx={{ position: 'relative' }}
                onClick={() => {
                   if (!props.isUser && !props.isNew) {
-                     alert('acctin')
+                     props.onClick()
                   } else if (!props.isNew) {
                      handleIsEditing()
                   } else props.onClickNew()
@@ -151,15 +148,10 @@ export default function GigCard(props: GigCardProps) {
 
                <CardHeader
                   sx={{
-                     display: props.isUser
-                        ? 'none'
-                        : 'flex',
+                     display: props.isUser ? 'none' : 'flex',
                   }}
                   avatar={
-                     <Avatar
-                        aria-label="recipe"
-                        src={props.avatarSrc || url}
-                     >
+                     <Avatar aria-label="recipe" src={props.avatarSrc || url}>
                         {props.username?.charAt(0)}
                      </Avatar>
                   }
@@ -170,9 +162,7 @@ export default function GigCard(props: GigCardProps) {
                   // }
                   title={props?.username || 'ANON'}
                   subheader={
-                     props?.date
-                        ? formatDate(props?.date)
-                        : formatDate(now)
+                     props?.date ? formatDate(props?.date) : formatDate(now)
                   }
                />
                <Divider />
@@ -211,11 +201,7 @@ export default function GigCard(props: GigCardProps) {
                      >
                         Starting at
                      </Typography>
-                     <Typography
-                        sx={{ pt: 0 }}
-                        variant="h6"
-                        fontWeight={900}
-                     >
+                     <Typography sx={{ pt: 0 }} variant="h6" fontWeight={900}>
                         {props?.price}$
                      </Typography>
                   </Stack>
@@ -226,8 +212,7 @@ export default function GigCard(props: GigCardProps) {
                         position: 'absolute',
                         top: 0,
                         left: 0,
-                        background: (theme) =>
-                           theme.palette.secondary.dark,
+                        background: (theme) => theme.palette.secondary.dark,
                         width: '100%',
                         height: '100%',
                         display: 'flex',
@@ -238,17 +223,12 @@ export default function GigCard(props: GigCardProps) {
                      }}
                   >
                      <Icon sizing="medium" name="add" />
-                     <Typography variant="h6">
-                        Create a gig
-                     </Typography>
+                     <Typography variant="h6">Create a gig</Typography>
                   </Box>
                )}
             </CardActionArea>
          </Collapse>
-         <Collapse
-            in={isEditing && props.isUser}
-            unmountOnExit
-         >
+         <Collapse in={isEditing && props.isUser} unmountOnExit>
             <CardContent
                sx={{
                   p: 0,
@@ -265,12 +245,8 @@ export default function GigCard(props: GigCardProps) {
                         key={`menucard-${i}`}
                         disablePadding
                      >
-                        <ListItemButton
-                           onClick={() => handleOption(_e)}
-                        >
-                           <ListItemIcon>
-                              {getIcon(_e)}
-                           </ListItemIcon>
+                        <ListItemButton onClick={() => handleOption(_e)}>
+                           <ListItemIcon>{getIcon(_e)}</ListItemIcon>
                            <ListItemText>{_e}</ListItemText>
                         </ListItemButton>
                      </ListItem>

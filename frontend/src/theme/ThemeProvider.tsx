@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import {
+   CssBaseline,
    Theme,
    ThemeProvider as MuiThemeProvider,
 } from '@mui/material'
@@ -11,13 +12,11 @@ interface ThemeProviderProps {
    theme: Theme
 }
 
-export const ThemeProvider = ({
-   children,
-   theme,
-}: ThemeProviderProps) => {
+export const ThemeProvider = ({ children, theme }: ThemeProviderProps) => {
    return (
       <MuiThemeProvider theme={theme}>
          <StyledThemeProvider theme={theme}>
+            <CssBaseline />
             <AppStyles />
             {children}
          </StyledThemeProvider>

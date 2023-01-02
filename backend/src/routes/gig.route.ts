@@ -1,7 +1,13 @@
 import { Router } from 'express'
 import { IPFS } from 'ipfs-core'
 import { Request, Response } from 'express'
-import { deleteGig, getGigsPerSubCategory, pauseGig, saveGig } from '../controllers/gig.controller'
+import {
+	deleteGig,
+	getGigPerHash,
+	getGigsPerSubCategory,
+	pauseGig,
+	saveGig,
+} from '../controllers/gig.controller'
 
 const gigRoute = (node: IPFS) => {
 	const router = Router()
@@ -16,6 +22,10 @@ const gigRoute = (node: IPFS) => {
 	)
 	router.post('/subcategory', (req: Request, res: Response) =>
 		getGigsPerSubCategory(req, res, node)
+	)
+
+	router.post('/hash', (req: Request, res: Response) =>
+		getGigPerHash(req, res, node)
 	)
 
 	return router

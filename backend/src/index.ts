@@ -21,32 +21,32 @@ const app = express()
 loadMonitor(app)
 
 app.listen(PORT, async () => {
-	await connectToDatabase()
-	const node: IPFS = await loadNode()
+    await connectToDatabase()
+    const node: IPFS = await loadNode()
 
-	app.use(
-		express.urlencoded({
-			extended: true,
-		})
-	)
-	app.use(express.json({ limit: '50mb' }))
-	app.use(
-		cors({
-			origin: '*',
-		})
-	)
-	app.use('/api/', statusRoute())
-	app.use('/api/', categoryRoute(node))
-	app.use('/api/', userRoute(node))
-	app.use('/api/', authRoute(node))
-	app.use('/gig/', gigRoute(node))
-	app.use('/api/ipfs/', ipfsRoute(node))
+    app.use(
+        express.urlencoded({
+            extended: true,
+        })
+    )
+    app.use(express.json({ limit: '50mb' }))
+    app.use(
+        cors({
+            origin: '*',
+        })
+    )
+    app.use('/api/', statusRoute())
+    app.use('/api/', categoryRoute(node))
+    app.use('/api/', userRoute(node))
+    app.use('/api/', authRoute(node))
+    app.use('/gig/', gigRoute(node))
+    app.use('/api/ipfs/', ipfsRoute(node))
 
-	app.get('/api', (req, res) => {
-		return res.json({
-			message: 'Hello World!',
-		})
-	})
+    app.get('/api', (req, res) => {
+        return res.json({
+            message: 'Hello World!',
+        })
+    })
 
-	console.log(`blockswan-node started on URL ${ HOST }:${ PORT } 🎉`)
+    console.log(`blockswan-node started on URL ${HOST}:${PORT} 🎉`)
 })

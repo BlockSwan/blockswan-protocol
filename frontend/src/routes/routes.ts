@@ -1,24 +1,24 @@
 import { lazy } from 'react'
 
-
+const dir = "../pages/";
 
 //imports
-const Home = lazy(() => import("../pages/Home"));
-const User = lazy(() => import("../pages/User/"));
-const Category = lazy(() => import("../pages/Category"));
-const SubCategory = lazy(() => import("../pages/SubCategory"));
-const NewGigOverview = lazy(() => import("../pages/NewGig/Step0"));
-const NewGigPrice = lazy(() => import("../pages/NewGig/Step1"));
-const NewGigDescription = lazy(() => import("../pages/NewGig/Step2"));
-const NewGigRequirement = lazy(() => import("../pages/NewGig/Step3"));
-const NewGigGallery = lazy(() => import("../pages/NewGig/Step4"));
-const NewGigPublish = lazy(() => import("../pages/NewGig/Step5"));
-const EditGigOverview = NewGigOverview;
-const EditGigPrice = NewGigPrice;
-const EditGigRequirement = NewGigRequirement;
-const EditGigGallery = NewGigGallery;
-const EditGigPublish = NewGigPublish;
-
+const Home = lazy(() => import(`../pages/Home`))
+const User = lazy(() => import(`../pages/User/`))
+const Gig = lazy(() => import(`../pages/Gig`));
+const Category = lazy(() => import(`../pages/Category`))
+const SubCategory = lazy(() => import(`../pages/SubCategory`))
+const NewGigOverview = lazy(() => import(`../pages/NewGig/Step0`))
+const NewGigPrice = lazy(() => import(`../pages/NewGig/Step1`))
+const NewGigDescription = lazy(() => import(`../pages/NewGig/Step2`))
+const NewGigRequirement = lazy(() => import(`../pages/NewGig/Step3`))
+const NewGigGallery = lazy(() => import(`../pages/NewGig/Step4`))
+const NewGigPublish = lazy(() => import(`../pages/NewGig/Step5`))
+const EditGigOverview = NewGigOverview
+const EditGigPrice = NewGigPrice
+const EditGigRequirement = NewGigRequirement
+const EditGigGallery = NewGigGallery
+const EditGigPublish = NewGigPublish
 
 export const pages = [
 	{ path: '/*', import: Home },
@@ -49,7 +49,7 @@ export const pages = [
 		path: '/:user/new-gig/publish',
 		import: NewGigPublish,
 	},
-	{ path: "/:user/edit/:gigHash", import: EditGigOverview },
+	{ path: '/:user/edit/:gigHash', import: EditGigOverview },
 	{
 		path: '/:user/manage/:gig',
 		import: Home,
@@ -68,7 +68,7 @@ export const pages = [
 	},
 	{
 		path: ':user/:gig',
-		import: User,
+		import: Gig,
 	},
 	{
 		path: '/:user/inbox/:contact',

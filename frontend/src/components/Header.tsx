@@ -23,20 +23,14 @@ export interface IHeader {
    isAuthenticated: boolean
 }
 
-export const Header = ({
-   onButtonClick,
-   isAuthenticated,
-}: IHeader) => {
+export const Header = ({ onButtonClick, isAuthenticated }: IHeader) => {
    const isSm = useMediaQuery('(max-width:600px)')
    const { login, logout, evmAddress } = useWeb3Context()
    const { goToUser } = useAppNavigation()
    const { userInfo } = useWeb3Context()
 
-   const [anchorElUser, setAnchorElUser] =
-      useState<null | HTMLElement>(null)
-   const handleOpenUserMenu = (
-      event: React.MouseEvent<HTMLElement>
-   ) => {
+   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
+   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorElUser(event.currentTarget)
    }
 
@@ -67,8 +61,7 @@ export const Header = ({
          position="fixed"
          sx={{
             width: {
-               md: (theme) =>
-                  `calc(100% - ${theme.drawerWidth}px)`,
+               md: (theme) => `calc(100% - ${theme.drawerWidth}px)`,
             },
             ml: {
                md: (theme) => `${theme.drawerWidth}px`,
@@ -109,10 +102,7 @@ export const Header = ({
                            aria-label="show 17 new notifications"
                            color="inherit"
                         >
-                           <Badge
-                              badgeContent={17}
-                              color="error"
-                           >
+                           <Badge badgeContent={17} color="error">
                               <NotificationsIcon color="primary" />
                            </Badge>
                         </IconButton>
@@ -140,16 +130,12 @@ export const Header = ({
                               }}
                               variant="dot"
                            >
-                              <Avatar
-                                 src={
-                                    userInfo?.profileImage
-                                 }
-                              >
+                              <Avatar src={userInfo?.profileImage}>
                                  {userInfo?.name?.charAt(0)}
                               </Avatar>
                            </OnlineBadge>
                            <Typography fontWeight={'bold'}>
-                              Oscarmac
+                              {userInfo?.name}
                            </Typography>
                         </Stack>
                      </IconButton>
@@ -159,8 +145,7 @@ export const Header = ({
                               border: '1px solid',
                               borderTop: 'none',
                               boxShadow: 'none',
-                              borderColor: (theme) =>
-                                 theme.palette.divider,
+                              borderColor: (theme) => theme.palette.divider,
                            },
                            style: {
                               width: '200px',
@@ -195,8 +180,7 @@ export const Header = ({
                                  px: 2,
                                  py: 1,
                                  borderBottom:
-                                    _index ===
-                                    menus?.length - 1
+                                    _index === menus?.length - 1
                                        ? ''
                                        : (theme) =>
                                             `1px solid ${theme.palette.divider}`,
@@ -208,10 +192,7 @@ export const Header = ({
                               }}
                            >
                               {' '}
-                              <Typography
-                                 fontWeight={500}
-                                 textAlign="start"
-                              >
+                              <Typography fontWeight={500} textAlign="start">
                                  {setting.emoji}
                               </Typography>
                               <Typography
@@ -229,10 +210,7 @@ export const Header = ({
                   </Box>
                </>
             ) : (
-               <Button
-                  onClick={async () => await login()}
-                  variant="contained"
-               >
+               <Button onClick={async () => await login()} variant="contained">
                   Connect
                </Button>
             )}

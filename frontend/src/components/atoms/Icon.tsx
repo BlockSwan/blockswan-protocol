@@ -1,8 +1,4 @@
-import {
-   Avatar,
-   IconButton,
-   IconButtonProps,
-} from '@mui/material'
+import { Avatar, IconButton, IconButtonProps } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DoneIcon from '@mui/icons-material/Done'
 import CancelIcon from '@mui/icons-material/Cancel'
@@ -14,10 +10,13 @@ import AttachFileIcon from '@mui/icons-material/AttachFile'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import FilterListIcon from '@mui/icons-material/FilterList'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import CheckIcon from '@mui/icons-material/Check'
+import CachedIcon from '@mui/icons-material/Cached'
 
 import { MouseEventHandler, ReactNode } from 'react'
 
-type IconProps = IconButtonProps & {
+export type IconProps = IconButtonProps & {
    name: string
    bgColor?: string
    label?: string
@@ -120,6 +119,22 @@ function getIcon(name: string, sx: any): any {
          return {
             icon: <FilterListIcon />,
             color: 'primary.main',
+         }
+
+      case 'time':
+         return {
+            icon: <AccessTimeIcon />,
+            color: 'secondary.light',
+         }
+      case 'check':
+         return {
+            icon: <CheckIcon />,
+            color: 'secondary.light',
+         }
+      case 'retry':
+         return {
+            icon: <CachedIcon />,
+            color: 'secondary.light',
          }
 
       default:

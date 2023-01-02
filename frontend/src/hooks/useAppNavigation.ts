@@ -1,15 +1,14 @@
 import { useNavigate } from 'react-router-dom'
-import { defaultGig } from '../constants/default';
-import { GigProps } from '../types/types';
+import { defaultGig } from '../constants/default'
+import { GigProps } from '../types/types'
 import { useGigsContext } from './useGigsContext'
 
 export const useAppNavigation = () => {
 	const navigate = useNavigate()
-	const { handleEditing, setGig } = useGigsContext();
-
+	const { handleEditing, setGig } = useGigsContext()
 
 	const goToHome = () => {
-		navigate("/");
+		navigate('/')
 	}
 
 	const goBack = () => {
@@ -33,7 +32,7 @@ export const useAppNavigation = () => {
 	}
 
 	const goToNewGig = (evmAddress: string) => {
-		handleEditing(false);
+		handleEditing(false)
 		setGig(defaultGig)
 		navigate(`/${ evmAddress }/new-gig`)
 	}
@@ -59,11 +58,18 @@ export const useAppNavigation = () => {
 	}
 
 	const goToEditGig = (evmAddress: string, gig: GigProps | any) => {
-		handleEditing(true);
-		setGig({ ...gig, category: gig?.subcategory?.category?.name, subcategory: gig?.subcategory?.name })
-		navigate(`/${ evmAddress }/edit/${ gig?.metadataHash }`);
+		handleEditing(true)
+		setGig({
+			...gig,
+			category: gig?.subcategory?.category?.name,
+			subcategory: gig?.subcategory?.name,
+		})
+		navigate(`/${ evmAddress }/edit/${ gig?.metadataHash }`)
 	}
 
+	const goToGig = (evmAddress: string, gigHash: GigProps["metadataHash"]) => {
+		navigate(`/${ evmAddress }/${ gigHash }`)
+	}
 
 	return {
 		goToHome,
@@ -78,6 +84,7 @@ export const useAppNavigation = () => {
 		goToNewGigGallery,
 		goToNewGigPublish,
 		goToUserReviews,
-		goToEditGig
+		goToEditGig,
+		goToGig
 	}
 }
