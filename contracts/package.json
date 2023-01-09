@@ -17,7 +17,7 @@
 		"compile": "hardhat compile",
 		"test": ". ./setup_test_env.sh && hardhat test",
 		"aTest": "hardhat test",
-		"rampage": "hardhat test ./test/rampageSuite.ts",
+		"rampage": "hardhat test ./test/rampage.spec.ts",
 		"clean": "hardhat clean && rm -rf cache",
 		"deploy": ". ./setup_test_env.sh && hardhat deploy",
 		"coverage": ". ./setup_test_env.sh && hardhat coverage"
