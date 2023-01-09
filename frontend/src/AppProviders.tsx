@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { ProtocolContextProvider } from './contexts/protocolContext'
 import { UsersContextProvider } from './contexts/userContext'
 import { BannerContextProvider } from './contexts/bannerContext'
+import { OrdersContextProvider } from './contexts/orderContext'
 interface AppProvidersProps {
    children?: ReactNode
 }
@@ -19,9 +20,11 @@ const AppProviders = ({ children }: AppProvidersProps) => {
                <CategoriesContextProvider>
                   <UsersContextProvider>
                      <GigsContextProvider>
-                        <BannerContextProvider>
-                           {children}
-                        </BannerContextProvider>
+                        <OrdersContextProvider>
+                           <BannerContextProvider>
+                              {children}
+                           </BannerContextProvider>
+                        </OrdersContextProvider>
                      </GigsContextProvider>
                   </UsersContextProvider>
                </CategoriesContextProvider>

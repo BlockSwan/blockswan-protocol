@@ -1,15 +1,7 @@
-import {
-   createContext,
-   ReactNode,
-   useEffect,
-   useState,
-} from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 
 import { Web3Auth } from '@web3auth/modal'
-import {
-   CHAIN_NAMESPACES,
-   SafeEventEmitterProvider,
-} from '@web3auth/base'
+import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from '@web3auth/base'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 // import { CoinbaseAdapter } from '@web3auth/coinbase-adapter'
 // import { WalletConnectV1Adapter } from '@web3auth/wallet-connect-v1-adapter'
@@ -24,22 +16,15 @@ interface Web3ContextProviderProps {
    children?: ReactNode
 }
 
-export const Web3ContextProvider = ({
-   children,
-}: Web3ContextProviderProps) => {
-   const [web3auth, setWeb3auth] =
-      useState<Web3Auth | null>(null)
-   const [provider, setProvider] =
-      useState<SafeEventEmitterProvider | null>(null)
-   const [evmAddress, setEvmAddress] = useState<
-      string | null
-   >(null)
-   const [userInfo, setUserInfo] = useState<any | null>(
+export const Web3ContextProvider = ({ children }: Web3ContextProviderProps) => {
+   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null)
+   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
       null
    )
-   const [userData, setUserData] = useState<any | null>(
-      null
-   )
+   const [evmAddress, setEvmAddress] = useState<string | null>(null)
+   const [userInfo, setUserInfo] = useState<any | null>(null)
+   const [userData, setUserData] = useState<any | null>(null)
+   const [balances, setBalances] = useState<any>({})
    // const [user, setUser] = useState<any | null>(null)
    const clientId =
       'BDY29ZodgKnnyrsKgwXlgcE58KL17B0DCUkqXnmpZtuT0m6GU6czH-jWO5xgY__7QdSMgIF_gQlqo58VQI0tBws'
@@ -53,11 +38,9 @@ export const Web3ContextProvider = ({
                   // this is ethereum chain config, change if other chain(Solana, Polygon)
                   chainNamespace: CHAIN_NAMESPACES.EIP155,
                   chainId: '0x13881',
-                  rpcTarget:
-                     'https://rpc.ankr.com/polygon_mumbai',
+                  rpcTarget: 'https://rpc.ankr.com/polygon_mumbai',
                   displayName: 'Polygon Mainnet',
-                  blockExplorer:
-                     'https://mumbai.polygonscan.com/',
+                  blockExplorer: 'https://mumbai.polygonscan.com/',
                   ticker: 'MATIC',
                   tickerName: 'Matic',
                },
@@ -74,8 +57,7 @@ export const Web3ContextProvider = ({
                   ],
                   defaultLanguage: 'en',
 
-                  appLogo:
-                     'https://testnet.blockswan.app/img/glyph.svg', // Your App Logo Here
+                  appLogo: 'https://testnet.blockswan.app/img/glyph.svg', // Your App Logo Here
                },
             })
 
@@ -89,10 +71,8 @@ export const Web3ContextProvider = ({
                   uxMode: 'popup',
                   whiteLabel: {
                      name: 'Blockswan',
-                     logoLight:
-                        'https:testnet.blockswan.app/img/glyph.svg',
-                     logoDark:
-                        'https:testnet.blockswan.app/img/glyph.svg',
+                     logoLight: 'https:testnet.blockswan.app/img/glyph.svg',
+                     logoDark: 'https:testnet.blockswan.app/img/glyph.svg',
                      defaultLanguage: 'en',
                      dark: false,
                   },
@@ -152,8 +132,10 @@ export const Web3ContextProvider = ({
    }, [])
 
    useEffect(() => {
-      alert('change')
-   }, [web3auth, evmAddress, provider])
+      alert('getting balance')
+      getBalance()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [provider])
 
    const authenticateUser = async () => {
       if (!web3auth) {
@@ -172,46 +154,6 @@ export const Web3ContextProvider = ({
       const user = await web3auth.getUserInfo()
 
       return user
-   }
-
-   const login = async () => {
-      if (!web3auth) {
-         uiConsole('web3auth not initialized yet')
-         return
-      }
-      await web3auth.initModal()
-      const web3authProvider = await web3auth.connect()
-      if (web3authProvider) {
-         const rpc = new RPC(web3authProvider)
-         const address = await rpc.getAccounts()
-         const _userInfo = await getUserInfo()
-         const app_scoped_privkey: any =
-            await web3authProvider.request({
-               method: 'eth_private_key', // use "private_key" for other non-evm chains
-            })
-         const app_pub_key = getPublicCompressed(
-            Buffer.from(
-               app_scoped_privkey.padStart(64, '0'),
-               'hex'
-            )
-         ).toString('hex')
-
-         AuthService.verify(
-            _userInfo?.idToken || '',
-            address || '',
-            app_pub_key || '',
-            _userInfo?.profileImage || '',
-            _userInfo?.email || '',
-            _userInfo?.name || 'Anon'
-         ).then(async (data: any) => {
-            console.log(data)
-            setUserData(data?._doc)
-            setEvmAddress(address)
-            setProvider(web3authProvider)
-            setUserInfo(_userInfo)
-            uiConsole('Logged in Successfully!')
-         })
-      }
    }
 
    const logout = async () => {
@@ -249,6 +191,7 @@ export const Web3ContextProvider = ({
       }
       const rpc = new RPC(provider)
       const balance = await rpc.getBalance()
+      setBalances({ ...balances, native: balance })
       uiConsole(balance)
    }
 
@@ -282,6 +225,42 @@ export const Web3ContextProvider = ({
       uiConsole(privateKey)
    }
 
+   const login = async () => {
+      if (!web3auth) {
+         uiConsole('web3auth not initialized yet')
+         return
+      }
+      await web3auth.initModal()
+      const web3authProvider = await web3auth.connect()
+      if (web3authProvider) {
+         const rpc = new RPC(web3authProvider)
+         const address = await rpc.getAccounts()
+         const _userInfo = await getUserInfo()
+         const app_scoped_privkey: any = await web3authProvider.request({
+            method: 'eth_private_key', // use "private_key" for other non-evm chains
+         })
+         const app_pub_key = getPublicCompressed(
+            Buffer.from(app_scoped_privkey.padStart(64, '0'), 'hex')
+         ).toString('hex')
+
+         AuthService.verify(
+            _userInfo?.idToken || '',
+            address || '',
+            app_pub_key || '',
+            _userInfo?.profileImage || '',
+            _userInfo?.email || '',
+            _userInfo?.name || 'Anon'
+         ).then(async (data: any) => {
+            console.log(data)
+            setUserData(data?._doc)
+            setEvmAddress(address)
+            setProvider(web3authProvider)
+            setUserInfo(_userInfo)
+            uiConsole('Logged in Successfully!')
+         })
+      }
+   }
+
    function uiConsole(...args: any[]): void {
       console.log(JSON.stringify(args || {}, null, 2))
       const el = document.querySelector('#console>p')
@@ -293,6 +272,8 @@ export const Web3ContextProvider = ({
    return (
       <Web3Context.Provider
          value={{
+            balances,
+            setBalances,
             provider,
             evmAddress,
             login,

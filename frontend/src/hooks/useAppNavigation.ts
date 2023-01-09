@@ -71,6 +71,10 @@ export const useAppNavigation = () => {
 		navigate(`/${ evmAddress }/${ gigHash }`)
 	}
 
+	const goToGigCheckout = (evmAddress: string, gigHash: GigProps["metadataHash"]) => {
+		navigate(`/${ evmAddress }/${ gigHash }/checkout`)
+	}
+
 	return {
 		goToHome,
 		goBack,
@@ -85,6 +89,7 @@ export const useAppNavigation = () => {
 		goToNewGigPublish,
 		goToUserReviews,
 		goToEditGig,
-		goToGig
+		goToGig,
+		goToGigCheckout
 	}
 }

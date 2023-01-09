@@ -1,8 +1,17 @@
 import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
 import { Carousel } from 'react-responsive-carousel'
 import styled from 'styled-components'
+import { Skeleton } from '@mui/material'
 
 export const ImagesCarousel = ({ array = [] }) => {
+   if (!array || array?.length === 0)
+      return (
+         <Skeleton
+            variant="rounded"
+            sx={{ aspectRatio: 16 / 9, height: 370, width: '100%' }}
+         />
+      )
+
    return (
       <CarouselStyle showIndicators={false} showStatus={false}>
          {array?.map((el, idx) => (

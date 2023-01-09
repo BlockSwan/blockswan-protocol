@@ -6,6 +6,7 @@ const dir = "../pages/";
 const Home = lazy(() => import(`../pages/Home`))
 const User = lazy(() => import(`../pages/User/`))
 const Gig = lazy(() => import(`../pages/Gig`));
+const GigCheckout = lazy(() => import(`../pages/Checkout`))
 const Category = lazy(() => import(`../pages/Category`))
 const SubCategory = lazy(() => import(`../pages/SubCategory`))
 const NewGigOverview = lazy(() => import(`../pages/NewGig/Step0`))
@@ -69,6 +70,10 @@ export const pages = [
 	{
 		path: ':user/:gig',
 		import: Gig,
+	},
+	{
+		path: ':user/:gig/checkout',
+		import: GigCheckout,
 	},
 	{
 		path: '/:user/inbox/:contact',

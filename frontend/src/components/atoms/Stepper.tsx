@@ -99,9 +99,7 @@ export const Stepper = (props: StepperProps) => {
             : steps
          ).map((label, index: number) => (
             <Step key={label + '-' + index}>
-               <StepLabel
-                  StepIconComponent={RainbowlibStepIcon}
-               >
+               <StepLabel StepIconComponent={RainbowlibStepIcon}>
                   {label}
                </StepLabel>
             </Step>

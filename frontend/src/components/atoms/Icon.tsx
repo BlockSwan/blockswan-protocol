@@ -13,6 +13,8 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import CheckIcon from '@mui/icons-material/Check'
 import CachedIcon from '@mui/icons-material/Cached'
+import RemoveIcon from '@mui/icons-material/Remove'
+import Inventory2Icon from '@mui/icons-material/Inventory2'
 
 import { MouseEventHandler, ReactNode } from 'react'
 
@@ -90,6 +92,11 @@ function getIcon(name: string, sx: any): any {
             icon: <AddIcon />,
             color: 'primary.light',
          }
+      case 'remove':
+         return {
+            icon: <RemoveIcon />,
+            color: 'primary.light',
+         }
       case 'free-text':
          return {
             icon: <NotesIcon />,
@@ -124,6 +131,11 @@ function getIcon(name: string, sx: any): any {
       case 'time':
          return {
             icon: <AccessTimeIcon />,
+            color: 'secondary.light',
+         }
+      case 'package':
+         return {
+            icon: <Inventory2Icon />,
             color: 'secondary.light',
          }
       case 'check':

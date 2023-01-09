@@ -1,0 +1,12 @@
+artifacts
+node_modules
+cache
+imports
+
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+**/imports
+**/cache
+**/artifacts

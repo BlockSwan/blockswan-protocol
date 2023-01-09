@@ -7,7 +7,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import { useGigsContext } from '../../../hooks/useGigsContext'
 import { useAppNavigation } from '../../../hooks/useAppNavigation'
 import { ImagesCarousel } from '../../../components/molecules/ImagesCarousel'
-import { Avatar, Box, Divider, useMediaQuery } from '@mui/material'
+import { Avatar, Box, Divider, Skeleton, useMediaQuery } from '@mui/material'
 import { OnlineBadge } from '../../../components/atoms/Avatar'
 import { Rating } from '../../../components/atoms/Rating'
 
@@ -28,6 +28,7 @@ const Overview = () => {
 
    const breadcrumbs = [
       <Link
+         component={'div'}
          underline="hover"
          key="1"
          color="inherit"
@@ -37,9 +38,10 @@ const Overview = () => {
             goToCategory(category?.url)
          }}
       >
-         {category?.name}
+         {category?.name ? category?.name : <Skeleton width={25} />}
       </Link>,
       <Link
+         component={'div'}
          underline="hover"
          key="2"
          color="text.primary"
@@ -49,7 +51,7 @@ const Overview = () => {
             goToSubCategory(category?.url, subcategory?.url)
          }}
       >
-         {subcategory?.name}
+         {subcategory?.name ? subcategory?.name : <Skeleton width={25} />}
       </Link>,
    ]
 
@@ -61,7 +63,9 @@ const Overview = () => {
          >
             {breadcrumbs}
          </Breadcrumbs>
-         <Typography variant="h4">{gig?.title}</Typography>
+         <Typography component="div" variant="h4">
+            {gig?.title !== '' ? gig.title : <Skeleton />}
+         </Typography>
          <Stack
             direction={!isSm ? 'row' : 'column'}
             alignItems={!isSm ? 'center' : 'start'}
@@ -84,16 +88,17 @@ const Overview = () => {
                >
                   <Avatar src={gig?.seller?.defaultProfileImg} />{' '}
                </OnlineBadge>
-               <Typography fontWeight={'bold'}>
-                  {gig?.seller?.username}
+               <Typography component="div" fontWeight={'bold'}>
+                  {gig?.seller?.username ? gig?.seller?.username : <Skeleton />}
                </Typography>
             </Stack>
             <Divider orientation={isSm ? 'horizontal' : 'vertical'} flexItem />
             <Box
                sx={{
-                  display: isSm ? 'flex' : '',
+                  display: 'flex',
                   justifyContent: isSm ? 'space-around' : '',
-                  width: isSm ? '100%' : '',
+                  width: isSm ? '100%' : 'fit-content',
+                  gap: !isSm ? 2 : '',
                }}
             >
                <Rating amount={5} withGrade={true} value={4.2} />
