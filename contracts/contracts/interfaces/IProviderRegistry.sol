@@ -38,7 +38,7 @@ interface IProviderRegistry {
      * @param addressProvider The address of the AddressProvider
      * @return The id of the AddressProvider or 0 if is not registered
      */
-    function getAddressProviderIdbyAddress(
+    function getAddressProviderIdByAddress(
         address addressProvider
     ) external view returns (uint256);
 

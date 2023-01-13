@@ -123,6 +123,49 @@ const _abi = [
         type: "uint256",
       },
     ],
+    name: "fetchContract",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_name",
+        type: "bytes32",
+      },
+    ],
+    name: "fetchContract",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_name",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "_version",
+        type: "uint256",
+      },
+    ],
     name: "getContract",
     outputs: [
       {

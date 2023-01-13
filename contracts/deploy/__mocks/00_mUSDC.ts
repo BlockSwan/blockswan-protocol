@@ -2,7 +2,7 @@ import { COMMON_DEPLOY_PARAMS } from '../../helpers/envs';
 import { waitForTx } from '../../utilities/tx';
 import { DeployFunction } from 'hardhat-deploy/types'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
-import { bold, bgBlue } from 'kleur';
+import { bgBlue } from 'kleur';
 import makeDeployment from '../../helpers/makeDeployment';
 import { MIN_INVESTMENT } from '../../helpers/constants';
 

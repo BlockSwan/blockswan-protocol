@@ -34,6 +34,16 @@ const _abi = [
             name: "inviterId",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "buyerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyerInvites",
+            type: "uint256",
+          },
         ],
         indexed: false,
         internalType: "struct DataTypes.User",
@@ -69,6 +79,16 @@ const _abi = [
           {
             internalType: "uint256",
             name: "inviterId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyerInvites",
             type: "uint256",
           },
         ],
@@ -140,6 +160,16 @@ const _abi = [
             name: "inviterId",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "buyerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyerInvites",
+            type: "uint256",
+          },
         ],
         internalType: "struct DataTypes.User",
         name: "",
@@ -171,6 +201,16 @@ const _abi = [
             name: "inviterId",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "buyerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyerInvites",
+            type: "uint256",
+          },
         ],
         internalType: "struct DataTypes.User",
         name: "",
@@ -194,6 +234,16 @@ const _abi = [
           {
             internalType: "uint256",
             name: "inviterId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyerInvites",
             type: "uint256",
           },
         ],

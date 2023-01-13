@@ -10,8 +10,9 @@ import {Pausable} from "../../imports/openzeppelin/contracts/Pausable.sol";
 import {Ownable} from "../../imports/openzeppelin/contracts/Ownable.sol";
 import {GPv2SafeERC20} from "../../imports/gnosis/contracts/GPv2SafeERC20.sol";
 import {PercentageMath} from "../../imports/aave/contracts/PercentageMath.sol";
+import {IBSWAN} from "../../interfaces/IBSWAN.sol";
 
-contract BSWAN is ERC20, Pausable, Ownable {
+contract BSWAN is ERC20, Pausable, Ownable, IBSWAN {
     using Math for uint256;
     using PercentageMath for uint256;
     using GPv2SafeERC20 for IERC20;
@@ -65,9 +66,8 @@ contract BSWAN is ERC20, Pausable, Ownable {
     /// @dev This is the denominator component of the fractional value.
     uint256 public buySlopeDen;
 
-    /// @notice The address of the token used as reserve in the bonding curve
-    /// (e.g. the DAI contract)
-    IERC20 public currency;
+    /// @inheritdoc IBSWAN
+    IERC20 public override currency;
 
     /// @notice The minimum amount of `currency` investment accepted.
     uint256 public minInvestment;
@@ -158,11 +158,12 @@ contract BSWAN is ERC20, Pausable, Ownable {
         currency = IERC20(_currencyAddress);
     }
 
+    /// @inheritdoc IBSWAN
     function updateConfig(
         address payable _newOwner,
-        uint _revenueCommitmentBasisPoints,
-        uint _minInvestment
-    ) public {
+        uint256 _revenueCommitmentBasisPoints,
+        uint256 _minInvestment
+    ) public override {
         require(
             _revenueCommitmentBasisPoints <= PercentageMath.PERCENTAGE_FACTOR,
             "INVALID_COMMITMENT"
@@ -215,12 +216,10 @@ contract BSWAN is ERC20, Pausable, Ownable {
         _transferCurrency(owner(), reserve);
     }
 
-    /// @notice Calculate how many BSWAN tokens you would buy with the given amount of currency if `buy` was called now.
-    /// @param _currencyValue How much currency to spend in order to buy BSWAN.
-
+    /// @inheritdoc IBSWAN
     function estimateBuyValue(
         uint256 _currencyValue
-    ) public view returns (uint256) {
+    ) public view override returns (uint256) {
         if (_currencyValue < minInvestment) {
             return 0;
         }
@@ -243,17 +242,12 @@ contract BSWAN is ERC20, Pausable, Ownable {
         return tokenValue;
     }
 
-    /// @notice Purchase BSWAN tokens with the given amount of currency.
-    /// @param _to The account to receive the BSWAN tokens from this purchase.
-    /// @param _currencyValue How much currency to spend in order to buy BSWAN.
-    /// @param _minTokensBought Buy at least this many BSWAN tokens or the transaction reverts.
-    /// @dev _minTokensBought is necessary as the price will change if some elses transaction mines after
-    /// yours was submitted.
+    /// @inheritdoc IBSWAN
     function buy(
         address _to,
         uint256 _currencyValue,
         uint256 _minTokensBought
-    ) public payable {
+    ) public payable override {
         require(_to != address(0), "INVALID_ADDRESS");
         require(_minTokensBought > 0, "MUST_BUY_AT_LEAST_1");
 
@@ -345,11 +339,10 @@ contract BSWAN is ERC20, Pausable, Ownable {
         emit Sell(msg.sender, _to, currencyValue, _quantityToSell);
     }
 
-    /// Pay
-
+    /// @inheritdoc IBSWAN
     function estimatePayValue(
         uint256 _currencyValue
-    ) public view returns (uint256) {
+    ) public view override returns (uint256) {
         // buy_slope = n/d
         // revenue_commitment = c/g
         // sqrt(
@@ -411,11 +404,8 @@ contract BSWAN is ERC20, Pausable, Ownable {
         emit Pay(msg.sender, _to, _currencyValue, tokenValue);
     }
 
-    /// @dev Pay the organization on-chain.
-    /// @param _to The account which receives tokens for the contribution. If this address
-    /// is not authorized to receive tokens then they will be sent to the beneficiary account instead.
-    /// @param _currencyValue How much currency which was paid.
-    function pay(address _to, uint _currencyValue) public payable {
+    /// @inheritdoc IBSWAN
+    function pay(address _to, uint _currencyValue) public payable override {
         _collectInvestment(_currencyValue);
         _pay(_to, _currencyValue);
     }

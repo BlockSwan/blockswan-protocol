@@ -4710,3 +4710,14 @@ Date: 19:16:09 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Met
 Date: 19:16:38 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: OPTIONS, Path: /api/auth
 Date: 19:16:38 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: POST, Path: /api/auth
 Date: 19:16:45 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: GET, Path: /api/user/0x0Cf52DF11Ba16762AE94aA275d4e3776f9a4ebF2
+Date: 19:09:19 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: GET, Path: /api/categories
+Date: 19:09:20 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: GET, Path: /api/categories
+Date: 19:10:13 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: OPTIONS, Path: /api/auth
+Date: 19:10:14 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: POST, Path: /api/auth
+Date: 19:10:17 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: GET, Path: /api/user/0x0Cf52DF11Ba16762AE94aA275d4e3776f9a4ebF2
+Date: 19:16:01 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: OPTIONS, Path: /gig/subcategory
+Date: 19:16:01 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: POST, Path: /gig/subcategory
+Date: 19:16:01 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: POST, Path: /gig/subcategory
+Date: 19:16:07 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: OPTIONS, Path: /gig/hash
+Date: 19:16:07 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: POST, Path: /gig/hash
+Date: 19:16:08 GMT+0000 (Coordinated Universal Time), Ip: ::ffff:172.18.0.1, Method: POST, Path: /gig/hash

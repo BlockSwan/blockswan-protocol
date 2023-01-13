@@ -1,4 +1,4 @@
-import { waitForTx } from './../../../utilities/tx';
+import { waitForTx } from '../../../utilities/tx';
 import { COMMON_DEPLOY_PARAMS } from '../../../helpers/envs';
 import { DeployFunction } from 'hardhat-deploy/types'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
@@ -29,6 +29,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 				registryOwner,
 			),
 		)
+
 		deployments.log(
 			`[Deployment] Transferred ownership of ProviderRegistry to: ${ registryOwner } `,
 		)

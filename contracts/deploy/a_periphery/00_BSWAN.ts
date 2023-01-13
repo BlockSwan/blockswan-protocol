@@ -85,5 +85,5 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 }
 
 func.id = 'DAT';
-func.tags = ['dat', 'bswan'];
+func.tags = ['dat', 'bswan', "periphery"];
 export default func

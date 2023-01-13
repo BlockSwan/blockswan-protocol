@@ -52,6 +52,15 @@ interface IAddressProvider {
         uint _version
     ) external view returns (address);
 
+    /** @notice requires returned address !== 0 */
+    function fetchContract(bytes32 _name) external view returns (address);
+
+    /** @notice requires returned address !== 0 */
+    function fetchContract(
+        bytes32 _name,
+        uint _version
+    ) external view returns (address);
+
     function getContractVersionCount(
         bytes32 _name
     ) external view returns (uint);

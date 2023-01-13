@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 import {Ownable} from "../../imports/openzeppelin/contracts/Ownable.sol";
 import {IProviderContract} from "../../interfaces/IProviderContract.sol";
 import {Errors} from "../libraries/helpers/Errors.sol";
 import {IAddressProvider} from "../../interfaces/IAddressProvider.sol";
+import {Address} from "../../imports/openzeppelin/contracts/Address.sol";
 
 /**
  * @title Central hub for ProvidersContracts that stores all contract addresses
@@ -19,6 +22,7 @@ import {IAddressProvider} from "../../interfaces/IAddressProvider.sol";
  */
 
 contract AddressProvider is Ownable, IAddressProvider {
+    using Address for address;
     // Identifier of the Blockswan MarketPlace
     string private _marketplaceId;
 
@@ -28,14 +32,6 @@ contract AddressProvider is Ownable, IAddressProvider {
      */
     mapping(bytes32 => address) private addressStorage;
     mapping(bytes32 => address[]) private addressStorageHistory;
-
-    bytes32 private constant GIG = "GIG";
-    bytes32 private constant ORDER = "ORDER";
-    bytes32 private constant USER = "USER";
-    bytes32 private constant PROTOCOL_CONFIGURATOR = "PROTOCOL_CONFIGURATOR";
-    bytes32 private constant DAT = "DAT";
-    bytes32 private constant ACL_MANAGER = "ACL_MANAGER";
-    bytes32 private constant DATA_PROVIDER = "DATA_PROVIDER";
 
     /**
      * @dev Constructor.
@@ -67,7 +63,9 @@ contract AddressProvider is Ownable, IAddressProvider {
             Errors.CONTRACT_NAME_ALREADY_USED
         );
         require(_address != address(0x00), Errors.ZERO_ADDRESS_IS_INVALID);
-        IProviderContract(_address).setProvider(this);
+        if (_address.isContract() && _name != bytes32("DAT")) {
+            IProviderContract(_address).setProvider(this);
+        }
         setAddress(_name, _address);
         emit ContractAdded(_name, _address);
     }
@@ -75,7 +73,7 @@ contract AddressProvider is Ownable, IAddressProvider {
     /// @inheritdoc IAddressProvider
     function getContract(
         bytes32 _name
-    ) external view override returns (address contractAddr) {
+    ) public view override returns (address contractAddr) {
         return addressStorage[_name];
     }
 
@@ -83,13 +81,32 @@ contract AddressProvider is Ownable, IAddressProvider {
     function getContract(
         bytes32 _name,
         uint _version
-    ) external view override returns (address contractAddr) {
+    ) public view override returns (address contractAddr) {
         // array length for key implies version number
         require(
             _version <= addressStorageHistory[_name].length,
             Errors.INDEX_OUT_OF_RANGE
         );
         return addressStorageHistory[_name][_version - 1];
+    }
+
+    /// @inheritdoc IAddressProvider
+    function fetchContract(
+        bytes32 _name
+    ) external view override returns (address contractAddr) {
+        address fetched = getContract(_name);
+        require(fetched != address(0), Errors.ZERO_ADDRESS_IS_INVALID);
+        return fetched;
+    }
+
+    /// @inheritdoc IAddressProvider
+    function fetchContract(
+        bytes32 _name,
+        uint _version
+    ) external view override returns (address contractAddr) {
+        address fetched = getContract(_name, _version);
+        require(fetched != address(0), Errors.ZERO_ADDRESS_IS_INVALID);
+        return fetched;
     }
 
     /// @inheritdoc IAddressProvider

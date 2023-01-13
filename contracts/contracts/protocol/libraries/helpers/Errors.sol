@@ -20,4 +20,7 @@ library Errors {
     // USER
     string public constant ADDRESS_ALREADY_USED = "7"; // 'The address provided has already been unsed to initialise an account'
     string public constant INVALID_USER_ID = "8"; // 'The userId is incorrect'
+    string public constant RESTRICTED_TO_BUYER = "9"; // this function can't  be called by buyers
+    string public constant INVALID_INVITER_ID = "10"; // The inviter ID provided is incorrect
+    string public constant FAILED_BECOMING_BUYER = "11"; // The execution to becomeBuyer failed
 }

@@ -23,5 +23,8 @@
 		"clean": "hardhat clean && rm -rf cache",
 		"deploy": ". ./setup_test_env.sh && hardhat deploy",
 		"coverage": ". ./setup_test_env.sh && hardhat coverage"
+	},
+	"dependencies": {
+		"@nomicfoundation/hardhat-network-helpers": "^1.0.7"
 	}
 }

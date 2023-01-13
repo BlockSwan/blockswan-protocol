@@ -30,7 +30,7 @@ import type {
 export interface ProviderRegistryInterface extends utils.Interface {
   functions: {
     "getAddressProviderById(uint256)": FunctionFragment;
-    "getAddressProviderIdbyAddress(address)": FunctionFragment;
+    "getAddressProviderIdByAddress(address)": FunctionFragment;
     "getAddressProvidersList()": FunctionFragment;
     "owner()": FunctionFragment;
     "registerAddressProvider(address,uint256)": FunctionFragment;
@@ -42,7 +42,7 @@ export interface ProviderRegistryInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "getAddressProviderById"
-      | "getAddressProviderIdbyAddress"
+      | "getAddressProviderIdByAddress"
       | "getAddressProvidersList"
       | "owner"
       | "registerAddressProvider"
@@ -56,7 +56,7 @@ export interface ProviderRegistryInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getAddressProviderIdbyAddress",
+    functionFragment: "getAddressProviderIdByAddress",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -86,7 +86,7 @@ export interface ProviderRegistryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getAddressProviderIdbyAddress",
+    functionFragment: "getAddressProviderIdByAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -192,7 +192,7 @@ export interface ProviderRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getAddressProviderIdbyAddress(
+    getAddressProviderIdByAddress(
       addresses_provider: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
@@ -227,7 +227,7 @@ export interface ProviderRegistry extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getAddressProviderIdbyAddress(
+  getAddressProviderIdByAddress(
     addresses_provider: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
@@ -262,7 +262,7 @@ export interface ProviderRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getAddressProviderIdbyAddress(
+    getAddressProviderIdByAddress(
       addresses_provider: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -325,7 +325,7 @@ export interface ProviderRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getAddressProviderIdbyAddress(
+    getAddressProviderIdByAddress(
       addresses_provider: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -361,7 +361,7 @@ export interface ProviderRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getAddressProviderIdbyAddress(
+    getAddressProviderIdByAddress(
       addresses_provider: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

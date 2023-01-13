@@ -3,6 +3,8 @@
 
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 import "./IERC20.sol";
 import "./IERC20Metadata.sol";
 import "./Context.sol";
@@ -257,6 +259,8 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         _beforeTokenTransfer(from, to, amount);
 
         uint256 fromBalance = _balances[from];
+	
+
         require(
             fromBalance >= amount,
             "ERC20: transfer amount exceeds balance"
@@ -365,6 +369,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         uint256 amount
     ) internal virtual {
         uint256 currentAllowance = allowance(owner, spender);
+
         if (currentAllowance != type(uint256).max) {
             require(
                 currentAllowance >= amount,

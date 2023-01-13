@@ -13,9 +13,33 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "AccessControl",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AccessControl__factory>;
+    getContractFactory(
+      name: "AccessControlEnumerable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AccessControlEnumerable__factory>;
+    getContractFactory(
+      name: "ERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC165__factory>;
+    getContractFactory(
       name: "ERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20__factory>;
+    getContractFactory(
+      name: "IAccessControl",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IAccessControl__factory>;
+    getContractFactory(
+      name: "IAccessControlEnumerable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IAccessControlEnumerable__factory>;
+    getContractFactory(
+      name: "IERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
       name: "IERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -33,9 +57,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Pausable__factory>;
     getContractFactory(
+      name: "IACLManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IACLManager__factory>;
+    getContractFactory(
       name: "IAddressProvider",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IAddressProvider__factory>;
+    getContractFactory(
+      name: "IBSWAN",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IBSWAN__factory>;
+    getContractFactory(
+      name: "IProtocolConfigurator",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IProtocolConfigurator__factory>;
     getContractFactory(
       name: "IProviderContract",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -57,9 +93,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.BSWAN__factory>;
     getContractFactory(
+      name: "ACLManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ACLManager__factory>;
+    getContractFactory(
       name: "AddressProvider",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AddressProvider__factory>;
+    getContractFactory(
+      name: "ProtocolConfigurator",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ProtocolConfigurator__factory>;
     getContractFactory(
       name: "ProviderContract",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -73,15 +117,49 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Errors__factory>;
     getContractFactory(
+      name: "InviterLogic",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.InviterLogic__factory>;
+    getContractFactory(
       name: "User",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.User__factory>;
 
     getContractAt(
+      name: "AccessControl",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AccessControl>;
+    getContractAt(
+      name: "AccessControlEnumerable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AccessControlEnumerable>;
+    getContractAt(
+      name: "ERC165",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC165>;
+    getContractAt(
       name: "ERC20",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ERC20>;
+    getContractAt(
+      name: "IAccessControl",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IAccessControl>;
+    getContractAt(
+      name: "IAccessControlEnumerable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IAccessControlEnumerable>;
+    getContractAt(
+      name: "IERC165",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC165>;
     getContractAt(
       name: "IERC20",
       address: string,
@@ -103,10 +181,25 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Pausable>;
     getContractAt(
+      name: "IACLManager",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IACLManager>;
+    getContractAt(
       name: "IAddressProvider",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IAddressProvider>;
+    getContractAt(
+      name: "IBSWAN",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IBSWAN>;
+    getContractAt(
+      name: "IProtocolConfigurator",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IProtocolConfigurator>;
     getContractAt(
       name: "IProviderContract",
       address: string,
@@ -133,10 +226,20 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.BSWAN>;
     getContractAt(
+      name: "ACLManager",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ACLManager>;
+    getContractAt(
       name: "AddressProvider",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.AddressProvider>;
+    getContractAt(
+      name: "ProtocolConfigurator",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ProtocolConfigurator>;
     getContractAt(
       name: "ProviderContract",
       address: string,
@@ -152,6 +255,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Errors>;
+    getContractAt(
+      name: "InviterLogic",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.InviterLogic>;
     getContractAt(
       name: "User",
       address: string,

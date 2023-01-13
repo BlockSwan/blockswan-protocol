@@ -1,5 +1,6 @@
-import { Signer, BigNumber } from 'ethers';
-import { BSWAN, ERC20, MUSDC, User, AddressProvider, ProviderRegistry } from '../types';
+import { Signer, BigNumber, utils } from 'ethers';
+import { BSWAN, ERC20, MUSDC, User, AddressProvider, ProviderRegistry, ACLManager, ProtocolConfigurator } from '../types';
+
 
 type EvmAddress = string;
 
@@ -18,7 +19,28 @@ type TrustDeployOptions = {
 	revenueCommitmentBasisPoints: string,
 	minInvestment: string,
 }
+type EntryParams = {
+	currencyValue: number,
+	timeAdded: number,
+	xpEarned: number,
+	invitationEarned: number,
+}
 
+type fxInput = string | number | BigNumber;
+type StructRetributionParams = {
+	affiliate: fxInput;
+	lvl0AffiliateShare: fxInput;
+}
+
+class RetributionParams {
+	affiliate: fxInput;
+	lvl0AffiliateShare: fxInput;
+	constructor({ affiliate, lvl0AffiliateShare }: StructRetributionParams) {
+		this.affiliate = affiliate;
+		this.lvl0AffiliateShare = lvl0AffiliateShare;
+	}
+
+}
 type DeploymentEnv = {
 	// admins & users
 	deployer: SignerWithAddress
@@ -30,8 +52,10 @@ type DeploymentEnv = {
 
 export type TestEnv = {
 	// admins & users
-	deployer: SignerWithAddress
-	protocolAdmin: SignerWithAddress
+	deployer: Signer
+	protocolAdmin: Signer
+	registryOwner: Signer
+	aclAdmin: Signer
 	users: SignerWithAddress[];
 
 	// contracts
@@ -39,7 +63,9 @@ export type TestEnv = {
 	mUSDC: MUSDC
 	User: User,
 	AddressProvider: AddressProvider,
+	ACLManager: ACLManager,
 	Registry: ProviderRegistry
+	ProtocolConfigurator: ProtocolConfigurator
 }
 
 
@@ -71,13 +97,23 @@ enum ProtocolErrors {
 	// USER
 	ADDRESS_ALREADY_USED = "7", // 'The address provided has already been unsed to initialise an account'
 	INVALID_USER_ID = "8", // 'The userId is incorrect'
+	RESTRICTED_TO_BUYER = "9", // this function can't  be called by buyers
+	INVALID_INVITER_ID = "10", // The inviter ID provided is incorrect
+	FAILED_BECOMING_BUYER = "11", // The execution to becomeBuyer failed
 }
+
+type UserInput = [string, number]
 
 export {
 	TrustData,
+	EntryParams,
 	EvmAddress,
 	SignerWithAddress,
 	DeploymentEnv,
 	TrustDeployOptions,
-	ProtocolErrors
+	ProtocolErrors,
+	UserInput,
+	RetributionParams,
+
+
 }

@@ -53,7 +53,7 @@ contract ProviderRegistry is Ownable, IProviderRegistry {
         );
         require(
             _addressProviderToId[provider] == 0,
-            Errors.INVALID_ADDRESS_PROVIDER_ID
+            Errors.ADDRESS_PROVIDER_ALREADY_ADDED
         );
 
         _addressProviderToId[provider] = id;
@@ -81,7 +81,7 @@ contract ProviderRegistry is Ownable, IProviderRegistry {
     }
 
     /// @inheritdoc IProviderRegistry
-    function getAddressProviderIdbyAddress(
+    function getAddressProviderIdByAddress(
         address addresses_provider
     ) external view override returns (uint256) {
         return _addressProviderToId[addresses_provider];

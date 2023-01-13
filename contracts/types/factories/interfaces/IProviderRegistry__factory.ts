@@ -75,7 +75,7 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "getAddressProviderIdbyAddress",
+    name: "getAddressProviderIdByAddress",
     outputs: [
       {
         internalType: "uint256",

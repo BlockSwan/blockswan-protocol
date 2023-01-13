@@ -31,11 +31,15 @@ export declare namespace DataTypes {
   export type UserStruct = {
     metadata: PromiseOrValue<string>;
     inviterId: PromiseOrValue<BigNumberish>;
+    buyerUntil: PromiseOrValue<BigNumberish>;
+    buyerInvites: PromiseOrValue<BigNumberish>;
   };
 
-  export type UserStructOutput = [string, BigNumber] & {
+  export type UserStructOutput = [string, BigNumber, BigNumber, BigNumber] & {
     metadata: string;
     inviterId: BigNumber;
+    buyerUntil: BigNumber;
+    buyerInvites: BigNumber;
   };
 }
 

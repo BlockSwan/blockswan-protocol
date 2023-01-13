@@ -32,7 +32,7 @@ const getRandomSigner = async (): Promise<SignerWithAddress> => {
 	};
 }
 
-const getNamedSigners = async () => {
+const getNamedSigners = async (): Promise<any> => {
 	let namedAccounts = await hre.getNamedAccounts();
 	let namedSigners: any = {};
 	Object.keys(namedAccounts).forEach(async (key: any) => {

@@ -26,9 +26,12 @@ export interface ErrorsInterface extends utils.Interface {
     "ADDRESS_PROVIDER_ALREADY_ADDED()": FunctionFragment;
     "ADDRESS_PROVIDER_NOT_REGISTERED()": FunctionFragment;
     "CONTRACT_NAME_ALREADY_USED()": FunctionFragment;
+    "FAILED_BECOMING_BUYER()": FunctionFragment;
     "INDEX_OUT_OF_RANGE()": FunctionFragment;
     "INVALID_ADDRESS_PROVIDER_ID()": FunctionFragment;
+    "INVALID_INVITER_ID()": FunctionFragment;
     "INVALID_USER_ID()": FunctionFragment;
+    "RESTRICTED_TO_BUYER()": FunctionFragment;
     "ZERO_ADDRESS_IS_INVALID()": FunctionFragment;
   };
 
@@ -38,9 +41,12 @@ export interface ErrorsInterface extends utils.Interface {
       | "ADDRESS_PROVIDER_ALREADY_ADDED"
       | "ADDRESS_PROVIDER_NOT_REGISTERED"
       | "CONTRACT_NAME_ALREADY_USED"
+      | "FAILED_BECOMING_BUYER"
       | "INDEX_OUT_OF_RANGE"
       | "INVALID_ADDRESS_PROVIDER_ID"
+      | "INVALID_INVITER_ID"
       | "INVALID_USER_ID"
+      | "RESTRICTED_TO_BUYER"
       | "ZERO_ADDRESS_IS_INVALID"
   ): FunctionFragment;
 
@@ -61,6 +67,10 @@ export interface ErrorsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "FAILED_BECOMING_BUYER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "INDEX_OUT_OF_RANGE",
     values?: undefined
   ): string;
@@ -69,7 +79,15 @@ export interface ErrorsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "INVALID_INVITER_ID",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "INVALID_USER_ID",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "RESTRICTED_TO_BUYER",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -94,6 +112,10 @@ export interface ErrorsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "FAILED_BECOMING_BUYER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "INDEX_OUT_OF_RANGE",
     data: BytesLike
   ): Result;
@@ -102,7 +124,15 @@ export interface ErrorsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "INVALID_INVITER_ID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "INVALID_USER_ID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "RESTRICTED_TO_BUYER",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -152,11 +182,17 @@ export interface Errors extends BaseContract {
 
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<[string]>;
 
+    FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<[string]>;
+
     INDEX_OUT_OF_RANGE(overrides?: CallOverrides): Promise<[string]>;
 
     INVALID_ADDRESS_PROVIDER_ID(overrides?: CallOverrides): Promise<[string]>;
 
+    INVALID_INVITER_ID(overrides?: CallOverrides): Promise<[string]>;
+
     INVALID_USER_ID(overrides?: CallOverrides): Promise<[string]>;
+
+    RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<[string]>;
 
     ZERO_ADDRESS_IS_INVALID(overrides?: CallOverrides): Promise<[string]>;
   };
@@ -169,11 +205,17 @@ export interface Errors extends BaseContract {
 
   CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<string>;
 
+  FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<string>;
+
   INDEX_OUT_OF_RANGE(overrides?: CallOverrides): Promise<string>;
 
   INVALID_ADDRESS_PROVIDER_ID(overrides?: CallOverrides): Promise<string>;
 
+  INVALID_INVITER_ID(overrides?: CallOverrides): Promise<string>;
+
   INVALID_USER_ID(overrides?: CallOverrides): Promise<string>;
+
+  RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<string>;
 
   ZERO_ADDRESS_IS_INVALID(overrides?: CallOverrides): Promise<string>;
 
@@ -186,11 +228,17 @@ export interface Errors extends BaseContract {
 
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<string>;
 
+    FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<string>;
+
     INDEX_OUT_OF_RANGE(overrides?: CallOverrides): Promise<string>;
 
     INVALID_ADDRESS_PROVIDER_ID(overrides?: CallOverrides): Promise<string>;
 
+    INVALID_INVITER_ID(overrides?: CallOverrides): Promise<string>;
+
     INVALID_USER_ID(overrides?: CallOverrides): Promise<string>;
+
+    RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<string>;
 
     ZERO_ADDRESS_IS_INVALID(overrides?: CallOverrides): Promise<string>;
   };
@@ -210,11 +258,17 @@ export interface Errors extends BaseContract {
 
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<BigNumber>;
 
+    FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
+
     INDEX_OUT_OF_RANGE(overrides?: CallOverrides): Promise<BigNumber>;
 
     INVALID_ADDRESS_PROVIDER_ID(overrides?: CallOverrides): Promise<BigNumber>;
 
+    INVALID_INVITER_ID(overrides?: CallOverrides): Promise<BigNumber>;
+
     INVALID_USER_ID(overrides?: CallOverrides): Promise<BigNumber>;
+
+    RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
 
     ZERO_ADDRESS_IS_INVALID(overrides?: CallOverrides): Promise<BigNumber>;
   };
@@ -236,6 +290,10 @@ export interface Errors extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    FAILED_BECOMING_BUYER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     INDEX_OUT_OF_RANGE(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -244,7 +302,15 @@ export interface Errors extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    INVALID_INVITER_ID(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     INVALID_USER_ID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    RESTRICTED_TO_BUYER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     ZERO_ADDRESS_IS_INVALID(
       overrides?: CallOverrides

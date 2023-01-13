@@ -12,15 +12,32 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			deployer
 		} = await getNamedAccounts()
 
-		await deploy("UserLogic", {
+
+		let ParamsLogic = await deploy("ParamsLogic", {
+			from: deployer,
+			...COMMON_DEPLOY_PARAMS,
+		})
+
+		let UserDataLogic = await deploy("UserDataLogic", {
 			from: deployer,
 			...COMMON_DEPLOY_PARAMS,
 		});
 
-		// await deploy("l_gig_logic", {
-		// 	from: deployer,
-		// 	...COMMON_DEPLOY_PARAMS,
-		// });
+		let InviterLogic = await deploy("InviterLogic", {
+			from: deployer,
+			...COMMON_DEPLOY_PARAMS,
+		});
+
+		await deploy("UserLogic", {
+			from: deployer,
+			...COMMON_DEPLOY_PARAMS,
+			libraries: {
+				InviterLogic: InviterLogic.address,
+				UserDataLogic: UserDataLogic.address
+			}
+		});
+
+
 
 	})
 }

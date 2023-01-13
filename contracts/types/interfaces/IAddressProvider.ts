@@ -30,6 +30,8 @@ import type {
 export interface IAddressProviderInterface extends utils.Interface {
   functions: {
     "addContract(bytes32,address)": FunctionFragment;
+    "fetchContract(bytes32,uint256)": FunctionFragment;
+    "fetchContract(bytes32)": FunctionFragment;
     "getContract(bytes32,uint256)": FunctionFragment;
     "getContract(bytes32)": FunctionFragment;
     "getContractVersionCount(bytes32)": FunctionFragment;
@@ -40,6 +42,8 @@ export interface IAddressProviderInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "addContract"
+      | "fetchContract(bytes32,uint256)"
+      | "fetchContract(bytes32)"
       | "getContract(bytes32,uint256)"
       | "getContract(bytes32)"
       | "getContractVersionCount"
@@ -50,6 +54,14 @@ export interface IAddressProviderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addContract",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "fetchContract(bytes32,uint256)",
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "fetchContract(bytes32)",
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: "getContract(bytes32,uint256)",
@@ -74,6 +86,14 @@ export interface IAddressProviderInterface extends utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "addContract",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "fetchContract(bytes32,uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "fetchContract(bytes32)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -190,6 +210,17 @@ export interface IAddressProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    "fetchContract(bytes32,uint256)"(
+      _name: PromiseOrValue<BytesLike>,
+      _version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "fetchContract(bytes32)"(
+      _name: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     "getContract(bytes32,uint256)"(
       _name: PromiseOrValue<BytesLike>,
       _version: PromiseOrValue<BigNumberish>,
@@ -224,6 +255,17 @@ export interface IAddressProvider extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  "fetchContract(bytes32,uint256)"(
+    _name: PromiseOrValue<BytesLike>,
+    _version: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "fetchContract(bytes32)"(
+    _name: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   "getContract(bytes32,uint256)"(
     _name: PromiseOrValue<BytesLike>,
     _version: PromiseOrValue<BigNumberish>,
@@ -257,6 +299,17 @@ export interface IAddressProvider extends BaseContract {
       _address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    "fetchContract(bytes32,uint256)"(
+      _name: PromiseOrValue<BytesLike>,
+      _version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "fetchContract(bytes32)"(
+      _name: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     "getContract(bytes32,uint256)"(
       _name: PromiseOrValue<BytesLike>,
@@ -327,6 +380,17 @@ export interface IAddressProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    "fetchContract(bytes32,uint256)"(
+      _name: PromiseOrValue<BytesLike>,
+      _version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "fetchContract(bytes32)"(
+      _name: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     "getContract(bytes32,uint256)"(
       _name: PromiseOrValue<BytesLike>,
       _version: PromiseOrValue<BigNumberish>,
@@ -360,6 +424,17 @@ export interface IAddressProvider extends BaseContract {
       _name: PromiseOrValue<BytesLike>,
       _address: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "fetchContract(bytes32,uint256)"(
+      _name: PromiseOrValue<BytesLike>,
+      _version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "fetchContract(bytes32)"(
+      _name: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "getContract(bytes32,uint256)"(

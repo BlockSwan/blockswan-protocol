@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 //import {Counters} from '../../imports/openzeppelin/contracts/Counters.sol';
 
 import {EnumerableSet} from "../../imports/openzeppelin/contracts/EnumerableSet.sol";
+import {EnumerableMap} from "../../imports/openzeppelin/contracts/EnumerableMap.sol";
 import {DataTypes} from "../libraries/types/DataTypes.sol";
 
 //import {l_account_logic} from "../libraries/logics/l_account_logic.sol";
@@ -16,11 +17,15 @@ import {DataTypes} from "../libraries/types/DataTypes.sol";
  */
 contract UserStorage {
     using EnumerableSet for EnumerableSet.AddressSet;
+    using EnumerableMap for EnumerableMap.AddressToUintMap;
 
     //using l_account_logic for l_data_types.s_escrow;
 
-    // Map of users and their data (userId => address)
+    // set of address by userId  (userId => address)
     EnumerableSet.AddressSet internal _userIdToAddress;
+
+    // Map of address and their userId (address => userId)
+    EnumerableMap.AddressToUintMap internal _userAddressToId;
 
     // Map of the public key used and their user data (address => User)
     mapping(address => DataTypes.User) internal _users;
