@@ -94,6 +94,214 @@ const _abi = [
         type: "uint256",
       },
     ],
+    name: "getDelayTimestamp",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "selfRefund",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "closeTrial",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "endTrial",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.DelayTimestamp",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getDelayTimestamp",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "selfRefund",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "closeTrial",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "endTrial",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.DelayTimestamp",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getGigCreationParams",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "currencyValue",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "xpEarned",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.CreationParams",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "version",
+        type: "uint256",
+      },
+    ],
+    name: "getGigCreationParams",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "currencyValue",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "xpEarned",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.CreationParams",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getOrderCreationParams",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "trialFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "trialPercent",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedPercent",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.OrderPriceParams",
+        name: "",
+        type: "tuple",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "version",
+        type: "uint256",
+      },
+    ],
+    name: "getOrderCreationParams",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "trialFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "trialPercent",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedPercent",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.OrderPriceParams",
+        name: "",
+        type: "tuple",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "version",
+        type: "uint256",
+      },
+    ],
     name: "getRetributionParams",
     outputs: [
       {
@@ -140,6 +348,378 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getSellerEntryParams",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "currencyValue",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "timeAdded",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "xpEarned",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "invitationEarned",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct DataTypes.EntryParams",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "version",
+        type: "uint256",
+      },
+    ],
+    name: "getSellerEntryParams",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "currencyValue",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "timeAdded",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "xpEarned",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "invitationEarned",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct DataTypes.EntryParams",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getSellerOrderFees",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "trialFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "trialPercent",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedPercent",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.OrderPriceParams",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "version",
+        type: "uint256",
+      },
+    ],
+    name: "getSellerOrderFees",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "trialFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "trialPercent",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedPercent",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.OrderPriceParams",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "currencyValue",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "timeAdded",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "xpEarned",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "invitationEarned",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct DataTypes.EntryParams",
+        name: "newParams",
+        type: "tuple",
+      },
+    ],
+    name: "updateBuyerEntryParams",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "selfRefund",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "closeTrial",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "endTrial",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.DelayTimestamp",
+        name: "newParams",
+        type: "tuple",
+      },
+    ],
+    name: "updateDelayTimestamp",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "currencyValue",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "xpEarned",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.CreationParams",
+        name: "newParams",
+        type: "tuple",
+      },
+    ],
+    name: "updateGigCreationParams",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "trialFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "trialPercent",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedPercent",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.OrderPriceParams",
+        name: "newParams",
+        type: "tuple",
+      },
+    ],
+    name: "updateOrderCreationParams",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "affiliate",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "lvl0AffiliateShare",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.RetributionParams",
+        name: "newParams",
+        type: "tuple",
+      },
+    ],
+    name: "updateRetributionParams",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "currencyValue",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "timeAdded",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "xpEarned",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "invitationEarned",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct DataTypes.EntryParams",
+        name: "newParams",
+        type: "tuple",
+      },
+    ],
+    name: "updateSellerEntryParams",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "trialFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "trialPercent",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedFlat",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "proceedPercent",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.OrderPriceParams",
+        name: "newParams",
+        type: "tuple",
+      },
+    ],
+    name: "updateSellerOrderFees",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ] as const;

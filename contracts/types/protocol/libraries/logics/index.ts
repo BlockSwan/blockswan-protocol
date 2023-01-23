@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { InviterLogic } from "./InviterLogic";
+export type { OrderLogic } from "./OrderLogic";

@@ -27,14 +27,14 @@ library InviterLogic {
     }
 
     function getInviterAddress(
-        DataTypes.User memory user,
+        DataTypes.User storage user,
         EnumerableSet.AddressSet storage userIdToAddress
     ) public view returns (address) {
         return (userIdToAddress.at(user.inviterId));
     }
 
     function getInvitersAddresses(
-        DataTypes.User memory user,
+        DataTypes.User storage user,
         EnumerableSet.AddressSet storage userIdToAddress,
         mapping(address => DataTypes.User) storage users
     ) public view returns (address, address) {

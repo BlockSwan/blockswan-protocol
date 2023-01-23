@@ -13,5 +13,5 @@ export const waitForTx = async (tx: any) => await tx.wait(1);
 
 export const getContract = async (id: string, address?: EvmAddress): Promise<unknown> => {
 	const artifact = await hre.deployments.getArtifact(id);
-	return hre.ethers.getContractAt(artifact.abi, address || (await (await hre.deployments.get(id)).address));
+	return hre.ethers.getContractAt(artifact.abi, address || ((await hre.deployments.get(id)).address));
 };

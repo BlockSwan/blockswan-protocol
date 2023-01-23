@@ -6,6 +6,7 @@
 		"@types/prettyjson": "^0.0.30",
 		"dotenv": "^16.0.3",
 		"hardhat": "^2.12.5",
+		"hardhat-contract-sizer": "^2.7.0",
 		"hardhat-deploy": "^0.11.22",
 		"kleur": "^4.1.5",
 		"prettier": "^2.8.1",
@@ -15,6 +16,7 @@
 		"typescript": "^4.9.4"
 	},
 	"scripts": {
+		"size": "npm run compile && npm run hardhat size-contracts",
 		"hardhat": "hardhat",
 		"compile": "hardhat compile",
 		"test": ". ./setup_test_env.sh && hardhat test",

@@ -1,26 +1,19 @@
 import { waitForTx } from './../../utilities/tx';
 import { expect } from 'chai';
-import { BUYER_ENTRY_PARAMS, BUYER_ROLE, USER_BIGINVITER_TEST, USER_TEST } from '../../helpers/constants';
-import { maxApproveUser } from '../../helpers/init_helpers';
-import { mintAndApproveDAT } from '../../helpers/test_helpers';
-import { ProtocolErrors, SignerWithAddress, TestEnv, UserInput } from '../../helpers/types';
+import { BUYER_ENTRY_PARAMS, BUYER_ROLE, DEFAULT_BALANCE, USER_BIGINVITER_TEST, USER_TEST0, USER_TEST1, USER_TEST2, XP_VALUES } from '../../helpers/constants';
+import { getBalances, setupBuyer, setupUser } from '../../helpers/test_helpers';
+import { Balance, ProtocolErrors, SignerWithAddress, TestEnv, UserInput, } from '../../helpers/types';
 import makeSuite from '../fixtures/makeSuite';
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 
-type Balance = {
-	USDC: number,
-	BSWAN: number,
-}
 
-const defaultBalance = {
-	USDC: 0,
-	BSWAN: 0,
-}
+
+
 
 describe('User: becomeBuyer', () => {
 	let testEnv = {} as TestEnv;
-	let { User, ProtocolConfigurator, mUSDC, dat, ACLManager } = testEnv;
+	let { User, XP, ProtocolConfigurator, mUSDC, dat, ACLManager } = testEnv;
 	let user0: SignerWithAddress;
 	let user1: SignerWithAddress;
 	let user2: SignerWithAddress;
@@ -30,8 +23,6 @@ describe('User: becomeBuyer', () => {
 	let timestamp: number;
 
 
-
-
 	beforeEach(async () => {
 
 
@@ -39,60 +30,40 @@ describe('User: becomeBuyer', () => {
 		User = testEnv.User;
 		mUSDC = testEnv.mUSDC;
 		dat = testEnv.dat;
+		XP = testEnv.XP;
 		ACLManager = testEnv.ACLManager;
 		ProtocolConfigurator = testEnv.ProtocolConfigurator;
 
 
 		user0 = testEnv.users[0];
-		user0BalanceBefore = defaultBalance
+		user0BalanceBefore = DEFAULT_BALANCE
 		user1 = testEnv.users[1];
-		user1BalanceBefore = defaultBalance
+		user1BalanceBefore = DEFAULT_BALANCE
 		user2 = testEnv.users[2];
-		user2BalanceBefore = defaultBalance
+		user2BalanceBefore = DEFAULT_BALANCE
 
 
 	})
 
 	describe("can become buyer", () => {
 
-		async function getBalances(user: SignerWithAddress): Promise<Balance> {
-			return {
-				USDC: (await mUSDC.balanceOf(user.address)).toNumber(),
-				BSWAN: (await dat.balanceOf(user.address)).toNumber()
-			};
+		async function setup(user: SignerWithAddress, createArgs: UserInput, balanceBefore: Balance) {
+			await setupUser(user, createArgs);
+			await setupBuyer(user, balanceBefore);
 		}
 
-
-
-
-
 		beforeEach(async () => {
-
-			async function setup(user: SignerWithAddress, createArgs: UserInput, userBalance: Balance) {
-				waitForTx(
-					await User.connect(user.signer).createUser(...createArgs)
-				)
-				await mintAndApproveDAT(mUSDC.address, dat.address, user);
-				await maxApproveUser(mUSDC.address, dat.address, User.address, user);
-				let balances = await getBalances(user);
-				userBalance.BSWAN = balances.BSWAN
-				userBalance.USDC = balances.USDC;
-
-				waitForTx(
-					await User.connect(user.signer).becomeBuyer()
-				)
-			}
-			await setup(user0, USER_TEST, user0BalanceBefore).then(async () => {
+			await setup(user0, USER_TEST0, user0BalanceBefore).then(async () => {
 				timestamp = await time.latest();
 			});
-			await setup(user1, ["user1", 0], user1BalanceBefore);
-			await setup(user2, ["user2", 1], user2BalanceBefore);
+			await setup(user1, USER_TEST1, user1BalanceBefore);
+			await setup(user2, USER_TEST2, user2BalanceBefore);
 		})
 		it("user0 should have buyer role", async () => {
 			let isBuyer = await ACLManager.hasRole(BUYER_ROLE, user0.address);
 			expect(isBuyer).to.be.equal(true, "User is not correctly set to BUYER_ROLE")
 		})
-		it("user0 should have more buyerTime", async () => {
+		it("user0 should have more buyer time", async () => {
 
 			let userData = await User.getUserByAddress(user0.address);
 			expect(userData[2]).to.be.equal(timestamp + BUYER_ENTRY_PARAMS.timeAdded, "Invalid buyer time added");
@@ -100,6 +71,10 @@ describe('User: becomeBuyer', () => {
 		it("user0 should have more buyer invitations", async () => {
 			let userData = await User.getUserByAddress(user0.address);
 			expect(userData[3]).to.be.equal(BUYER_ENTRY_PARAMS.invitationEarned, "Invalid invitation earned added");
+		})
+		it("user0 should have more xp", async () => {
+			let userXP = await XP.balanceOf(user0.address);
+			expect(userXP.toNumber()).to.be.equal(XP_VALUES[0].amount);
 		})
 
 		describe("Entry fees", () => {

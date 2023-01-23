@@ -25,6 +25,11 @@ const _abi = [
       {
         components: [
           {
+            internalType: "uint256",
+            name: "newId",
+            type: "uint256",
+          },
+          {
             internalType: "string",
             name: "metadata",
             type: "string",
@@ -35,18 +40,13 @@ const _abi = [
             type: "uint256",
           },
           {
-            internalType: "uint256",
-            name: "buyerUntil",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "buyerInvites",
-            type: "uint256",
+            internalType: "address",
+            name: "wallet",
+            type: "address",
           },
         ],
         indexed: false,
-        internalType: "struct DataTypes.User",
+        internalType: "struct InputTypes.CreateUserInput",
         name: "userData",
         type: "tuple",
       },
@@ -91,15 +91,118 @@ const _abi = [
             name: "buyerInvites",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "sellerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "sellerInvites",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "userId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
+          {
+            internalType: "uint256[]",
+            name: "gigIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "offerIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "bidIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "buyerOrderIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "gigReviewsIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "userReviewsIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "reviewsIds",
+            type: "uint256[]",
+          },
         ],
         indexed: false,
-        internalType: "struct DataTypes.User",
+        internalType: "struct OutputTypes.UserOutput",
         name: "userData",
         type: "tuple",
       },
     ],
     name: "UserEdited",
     type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "buyerId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "newOrderId",
+        type: "uint256",
+      },
+    ],
+    name: "createBuyerOrder",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "caller",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "newGigId",
+        type: "uint256",
+      },
+    ],
+    name: "createGig",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
@@ -142,6 +245,73 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "getIdByAddress",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "userId",
+        type: "uint256",
+      },
+    ],
+    name: "getInvitersById",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "getInvitersByUserAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "pubKey",
         type: "address",
       },
@@ -170,8 +340,63 @@ const _abi = [
             name: "buyerInvites",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "sellerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "sellerInvites",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "userId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
+          {
+            internalType: "uint256[]",
+            name: "gigIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "offerIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "bidIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "buyerOrderIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "gigReviewsIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "userReviewsIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "reviewsIds",
+            type: "uint256[]",
+          },
         ],
-        internalType: "struct DataTypes.User",
+        internalType: "struct OutputTypes.UserOutput",
         name: "",
         type: "tuple",
       },
@@ -211,8 +436,63 @@ const _abi = [
             name: "buyerInvites",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "sellerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "sellerInvites",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "userId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
+          {
+            internalType: "uint256[]",
+            name: "gigIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "offerIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "bidIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "buyerOrderIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "gigReviewsIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "userReviewsIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "reviewsIds",
+            type: "uint256[]",
+          },
         ],
-        internalType: "struct DataTypes.User",
+        internalType: "struct OutputTypes.UserOutput",
         name: "",
         type: "tuple",
       },
@@ -246,8 +526,63 @@ const _abi = [
             name: "buyerInvites",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "sellerUntil",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "sellerInvites",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "userId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
+          {
+            internalType: "uint256[]",
+            name: "gigIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "offerIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "bidIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "buyerOrderIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "gigReviewsIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "userReviewsIds",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "reviewsIds",
+            type: "uint256[]",
+          },
         ],
-        internalType: "struct DataTypes.User[]",
+        internalType: "struct OutputTypes.UserOutput[]",
         name: "",
         type: "tuple[]",
       },
@@ -263,6 +598,30 @@ const _abi = [
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "userId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "gigId",
+        type: "uint256",
+      },
+    ],
+    name: "isGigOwner",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
     stateMutability: "view",

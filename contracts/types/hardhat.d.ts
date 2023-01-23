@@ -69,6 +69,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IBSWAN__factory>;
     getContractFactory(
+      name: "IGig",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IGig__factory>;
+    getContractFactory(
       name: "IProtocolConfigurator",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IProtocolConfigurator__factory>;
@@ -84,6 +88,10 @@ declare module "hardhat/types/runtime" {
       name: "IUser",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IUser__factory>;
+    getContractFactory(
+      name: "IXP",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IXP__factory>;
     getContractFactory(
       name: "MUSDC",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -113,17 +121,45 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ProviderRegistry__factory>;
     getContractFactory(
+      name: "Gig",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Gig__factory>;
+    getContractFactory(
       name: "Errors",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Errors__factory>;
+    getContractFactory(
+      name: "RegistryKeys",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.RegistryKeys__factory>;
+    getContractFactory(
+      name: "RoleKeys",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.RoleKeys__factory>;
+    getContractFactory(
+      name: "XPKeys",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.XPKeys__factory>;
     getContractFactory(
       name: "InviterLogic",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.InviterLogic__factory>;
     getContractFactory(
+      name: "OrderLogic",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OrderLogic__factory>;
+    getContractFactory(
+      name: "Order",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Order__factory>;
+    getContractFactory(
       name: "User",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.User__factory>;
+    getContractFactory(
+      name: "XP",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.XP__factory>;
 
     getContractAt(
       name: "AccessControl",
@@ -196,6 +232,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IBSWAN>;
     getContractAt(
+      name: "IGig",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IGig>;
+    getContractAt(
       name: "IProtocolConfigurator",
       address: string,
       signer?: ethers.Signer
@@ -215,6 +256,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IUser>;
+    getContractAt(
+      name: "IXP",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IXP>;
     getContractAt(
       name: "MUSDC",
       address: string,
@@ -251,20 +297,55 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ProviderRegistry>;
     getContractAt(
+      name: "Gig",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Gig>;
+    getContractAt(
       name: "Errors",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Errors>;
+    getContractAt(
+      name: "RegistryKeys",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.RegistryKeys>;
+    getContractAt(
+      name: "RoleKeys",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.RoleKeys>;
+    getContractAt(
+      name: "XPKeys",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.XPKeys>;
     getContractAt(
       name: "InviterLogic",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.InviterLogic>;
     getContractAt(
+      name: "OrderLogic",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OrderLogic>;
+    getContractAt(
+      name: "Order",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Order>;
+    getContractAt(
       name: "User",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.User>;
+    getContractAt(
+      name: "XP",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.XP>;
 
     // default types
     getContractFactory(

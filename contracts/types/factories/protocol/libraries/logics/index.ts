@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { InviterLogic__factory } from "./InviterLogic__factory";
+export { OrderLogic__factory } from "./OrderLogic__factory";

@@ -18,12 +18,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			...COMMON_DEPLOY_PARAMS,
 		})
 
-		let UserDataLogic = await deploy("UserDataLogic", {
+
+		let InviterLogic = await deploy("InviterLogic", {
 			from: deployer,
 			...COMMON_DEPLOY_PARAMS,
 		});
 
-		let InviterLogic = await deploy("InviterLogic", {
+		let UserDataLogic = await deploy("UserDataLogic", {
 			from: deployer,
 			...COMMON_DEPLOY_PARAMS,
 		});
@@ -37,7 +38,31 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			}
 		});
 
+		let GigDataLogic = await deploy("GigDataLogic", {
+			from: deployer,
+			...COMMON_DEPLOY_PARAMS,
+		});
 
+		await deploy("GigLogic", {
+			from: deployer,
+			...COMMON_DEPLOY_PARAMS,
+			libraries: {
+				GigDataLogic: GigDataLogic.address,
+			}
+		});
+
+		let OrderDataLogic = await deploy("OrderDataLogic", {
+			from: deployer,
+			...COMMON_DEPLOY_PARAMS,
+		});
+
+		await deploy("OrderLogic", {
+			from: deployer,
+			...COMMON_DEPLOY_PARAMS,
+			libraries: {
+				OrderDataLogic: OrderDataLogic.address,
+			}
+		});
 
 	})
 }

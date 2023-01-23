@@ -7,7 +7,8 @@ import {Ownable} from "../../imports/openzeppelin/contracts/Ownable.sol";
 import {Errors} from "../libraries/helpers/Errors.sol";
 import {EnumerableSet} from "../../imports/openzeppelin/contracts/EnumerableSet.sol";
 import {DataTypes} from "../libraries/types/DataTypes.sol";
-
+import {RegistryKeys} from "../libraries/helpers/RegistryKeys.sol";
+import {RoleKeys} from "../libraries/helpers/RoleKeys.sol";
 import {IProviderRegistry} from "../../interfaces/IProviderRegistry.sol";
 import {IProtocolConfigurator} from "../../interfaces/IProtocolConfigurator.sol";
 import {IAddressProvider} from "../../interfaces/IAddressProvider.sol";
@@ -35,6 +36,21 @@ contract ProtocolConfigurator is ProviderContract, IProtocolConfigurator {
     mapping(uint256 => DataTypes.RetributionParams)
         private _retributionParamsHistory;
 
+    EnumerableSet.UintSet private _gigCreationParamsVersions;
+    mapping(uint256 => DataTypes.CreationParams)
+        private _gigCreationParamsHistory;
+
+    EnumerableSet.UintSet private _orderCreationParamsVersions;
+    mapping(uint256 => DataTypes.OrderPriceParams)
+        private _orderCreationParamsHistory;
+
+    EnumerableSet.UintSet private _sellerOrderFeesParamsVersions;
+    mapping(uint256 => DataTypes.OrderPriceParams)
+        private _sellerOrderFeesParamsHistory;
+
+    EnumerableSet.UintSet private _delayTimestampVersions;
+    mapping(uint256 => DataTypes.DelayTimestamp) private _delayTimestampHistory;
+
     constructor(IAddressProvider provider) ProviderContract(provider) {}
 
     /// @inheritdoc IProtocolConfigurator
@@ -59,18 +75,21 @@ contract ProtocolConfigurator is ProviderContract, IProtocolConfigurator {
             );
     }
 
+    /// @inheritdoc IProtocolConfigurator
     function updateBuyerEntryParams(
         DataTypes.EntryParams memory newParams
-    ) external onlyProtocolRole(PROTOCOL_ADMIN_ROLE) {
+    ) external override onlyProtocolRole(RoleKeys.PROTOCOL_ADMIN_ROLE) {
         _buyerEntryParamsVersions.updateEntryParams(
             _buyerEntryParamsHistory,
             newParams
         );
     }
 
+    /// @inheritdoc IProtocolConfigurator
     function getSellerEntryParams()
         external
         view
+        override
         returns (DataTypes.EntryParams memory)
     {
         return
@@ -79,9 +98,10 @@ contract ProtocolConfigurator is ProviderContract, IProtocolConfigurator {
             );
     }
 
+    /// @inheritdoc IProtocolConfigurator
     function getSellerEntryParams(
         uint256 version
-    ) external view returns (DataTypes.EntryParams memory) {
+    ) external view override returns (DataTypes.EntryParams memory) {
         return
             _sellerEntryParamsVersions.getEntryParams(
                 _sellerEntryParamsHistory,
@@ -89,9 +109,10 @@ contract ProtocolConfigurator is ProviderContract, IProtocolConfigurator {
             );
     }
 
+    /// @inheritdoc IProtocolConfigurator
     function updateSellerEntryParams(
         DataTypes.EntryParams memory newParams
-    ) external onlyProtocolRole(PROTOCOL_ADMIN_ROLE) {
+    ) external override onlyProtocolRole(RoleKeys.PROTOCOL_ADMIN_ROLE) {
         _sellerEntryParamsVersions.updateEntryParams(
             _sellerEntryParamsHistory,
             newParams
@@ -122,11 +143,155 @@ contract ProtocolConfigurator is ProviderContract, IProtocolConfigurator {
             );
     }
 
+    /// @inheritdoc IProtocolConfigurator
     function updateRetributionParams(
         DataTypes.RetributionParams memory newParams
-    ) external onlyProtocolRole(PROTOCOL_ADMIN_ROLE) {
+    ) external override onlyProtocolRole(RoleKeys.PROTOCOL_ADMIN_ROLE) {
         _retributionParamsVersions.updateRetributionParams(
             _retributionParamsHistory,
+            newParams
+        );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function getGigCreationParams()
+        external
+        view
+        override
+        returns (DataTypes.CreationParams memory)
+    {
+        return
+            _gigCreationParamsVersions.getCreationParams(
+                _gigCreationParamsHistory
+            );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function getGigCreationParams(
+        uint256 version
+    ) external view override returns (DataTypes.CreationParams memory) {
+        return
+            _gigCreationParamsVersions.getCreationParams(
+                _gigCreationParamsHistory,
+                version
+            );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function updateGigCreationParams(
+        DataTypes.CreationParams memory newParams
+    ) external override onlyProtocolRole(RoleKeys.PROTOCOL_ADMIN_ROLE) {
+        _gigCreationParamsVersions.updateCreationParams(
+            _gigCreationParamsHistory,
+            newParams
+        );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function getOrderCreationParams()
+        external
+        view
+        override
+        returns (DataTypes.OrderPriceParams memory, uint256)
+    {
+        return (
+            _orderCreationParamsVersions.getPriceParams(
+                _orderCreationParamsHistory
+            ),
+            _sellerOrderFeesParamsVersions.getLatestVersion()
+        );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function getOrderCreationParams(
+        uint256 version
+    )
+        external
+        view
+        override
+        returns (DataTypes.OrderPriceParams memory, uint256)
+    {
+        return (
+            _orderCreationParamsVersions.getPriceParams(
+                _orderCreationParamsHistory,
+                version
+            ),
+            _sellerOrderFeesParamsVersions.getLatestVersion()
+        );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function updateOrderCreationParams(
+        DataTypes.OrderPriceParams memory newParams
+    ) external override onlyProtocolRole(RoleKeys.PROTOCOL_ADMIN_ROLE) {
+        _orderCreationParamsVersions.updatePriceParams(
+            _orderCreationParamsHistory,
+            newParams
+        );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function getSellerOrderFees()
+        external
+        view
+        override
+        returns (DataTypes.OrderPriceParams memory)
+    {
+        return
+            _sellerOrderFeesParamsVersions.getPriceParams(
+                _sellerOrderFeesParamsHistory
+            );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function getSellerOrderFees(
+        uint256 version
+    ) external view override returns (DataTypes.OrderPriceParams memory) {
+        return
+            _sellerOrderFeesParamsVersions.getPriceParams(
+                _sellerOrderFeesParamsHistory,
+                version
+            );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function updateSellerOrderFees(
+        DataTypes.OrderPriceParams memory newParams
+    ) external override onlyProtocolRole(RoleKeys.PROTOCOL_ADMIN_ROLE) {
+        _sellerOrderFeesParamsVersions.updatePriceParams(
+            _sellerOrderFeesParamsHistory,
+            newParams
+        );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function getDelayTimestamp()
+        external
+        view
+        override
+        returns (DataTypes.DelayTimestamp memory)
+    {
+        return
+            _delayTimestampVersions.getDelayTimestamp(_delayTimestampHistory);
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function getDelayTimestamp(
+        uint256 version
+    ) external view override returns (DataTypes.DelayTimestamp memory) {
+        return
+            _delayTimestampVersions.getDelayTimestamp(
+                _delayTimestampHistory,
+                version
+            );
+    }
+
+    /// @inheritdoc IProtocolConfigurator
+    function updateDelayTimestamp(
+        DataTypes.DelayTimestamp memory newParams
+    ) external override onlyProtocolRole(RoleKeys.PROTOCOL_ADMIN_ROLE) {
+        _delayTimestampVersions.updateDelayTimestamp(
+            _delayTimestampHistory,
             newParams
         );
     }

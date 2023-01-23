@@ -6,18 +6,17 @@ import { ProtocolErrors, TestEnv } from '../helpers/types';
 import makeSuite from './fixtures/makeSuite';
 
 
-describe("provider_registry", function () {
+describe("ProviderRegistry", function () {
 	const NEW_ADDRESSES_PROVIDER_ID_2 = 2;
 	const NEW_ADDRESSES_PROVIDER_ID_3 = 3;
 	const NEW_ADDRESSES_PROVIDER_ADDRESS = ONE_ADDRESS;
-
 	const {
 		INVALID_ADDRESS_PROVIDER_ID,
 		ADDRESS_PROVIDER_NOT_REGISTERED,
 		ADDRESS_PROVIDER_ALREADY_ADDED,
 	} = ProtocolErrors;
 	let testEnv = {} as TestEnv;
-	let { Registry, registryOwner, AddressProvider, deployer, users } = testEnv;
+	let { Registry, registryOwner, AddressProvider, users } = testEnv;
 
 	before(async () => {
 		testEnv = await makeSuite();
@@ -26,8 +25,6 @@ describe("provider_registry", function () {
 		registryOwner = testEnv.registryOwner;
 		users = testEnv.users;
 	})
-
-
 
 	it('Checks the addresses provider is added to the Registry', async () => {
 

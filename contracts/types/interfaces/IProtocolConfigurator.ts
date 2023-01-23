@@ -7,6 +7,8 @@ import type {
   BigNumberish,
   BytesLike,
   CallOverrides,
+  ContractTransaction,
+  Overrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -41,6 +43,47 @@ export declare namespace DataTypes {
     invitationEarned: number;
   };
 
+  export type DelayTimestampStruct = {
+    selfRefund: PromiseOrValue<BigNumberish>;
+    closeTrial: PromiseOrValue<BigNumberish>;
+    endTrial: PromiseOrValue<BigNumberish>;
+  };
+
+  export type DelayTimestampStructOutput = [BigNumber, BigNumber, BigNumber] & {
+    selfRefund: BigNumber;
+    closeTrial: BigNumber;
+    endTrial: BigNumber;
+  };
+
+  export type CreationParamsStruct = {
+    currencyValue: PromiseOrValue<BigNumberish>;
+    xpEarned: PromiseOrValue<BigNumberish>;
+  };
+
+  export type CreationParamsStructOutput = [BigNumber, BigNumber] & {
+    currencyValue: BigNumber;
+    xpEarned: BigNumber;
+  };
+
+  export type OrderPriceParamsStruct = {
+    trialFlat: PromiseOrValue<BigNumberish>;
+    trialPercent: PromiseOrValue<BigNumberish>;
+    proceedFlat: PromiseOrValue<BigNumberish>;
+    proceedPercent: PromiseOrValue<BigNumberish>;
+  };
+
+  export type OrderPriceParamsStructOutput = [
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    trialFlat: BigNumber;
+    trialPercent: BigNumber;
+    proceedFlat: BigNumber;
+    proceedPercent: BigNumber;
+  };
+
   export type RetributionParamsStruct = {
     affiliate: PromiseOrValue<BigNumberish>;
     lvl0AffiliateShare: PromiseOrValue<BigNumberish>;
@@ -56,16 +99,50 @@ export interface IProtocolConfiguratorInterface extends utils.Interface {
   functions: {
     "getBuyerEntryParams(uint256)": FunctionFragment;
     "getBuyerEntryParams()": FunctionFragment;
+    "getDelayTimestamp(uint256)": FunctionFragment;
+    "getDelayTimestamp()": FunctionFragment;
+    "getGigCreationParams()": FunctionFragment;
+    "getGigCreationParams(uint256)": FunctionFragment;
+    "getOrderCreationParams()": FunctionFragment;
+    "getOrderCreationParams(uint256)": FunctionFragment;
     "getRetributionParams(uint256)": FunctionFragment;
     "getRetributionParams()": FunctionFragment;
+    "getSellerEntryParams()": FunctionFragment;
+    "getSellerEntryParams(uint256)": FunctionFragment;
+    "getSellerOrderFees()": FunctionFragment;
+    "getSellerOrderFees(uint256)": FunctionFragment;
+    "updateBuyerEntryParams((uint256,uint256,uint256,uint8))": FunctionFragment;
+    "updateDelayTimestamp((uint256,uint256,uint256))": FunctionFragment;
+    "updateGigCreationParams((uint256,uint256))": FunctionFragment;
+    "updateOrderCreationParams((uint256,uint256,uint256,uint256))": FunctionFragment;
+    "updateRetributionParams((uint256,uint256))": FunctionFragment;
+    "updateSellerEntryParams((uint256,uint256,uint256,uint8))": FunctionFragment;
+    "updateSellerOrderFees((uint256,uint256,uint256,uint256))": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "getBuyerEntryParams(uint256)"
       | "getBuyerEntryParams()"
+      | "getDelayTimestamp(uint256)"
+      | "getDelayTimestamp()"
+      | "getGigCreationParams()"
+      | "getGigCreationParams(uint256)"
+      | "getOrderCreationParams()"
+      | "getOrderCreationParams(uint256)"
       | "getRetributionParams(uint256)"
       | "getRetributionParams()"
+      | "getSellerEntryParams()"
+      | "getSellerEntryParams(uint256)"
+      | "getSellerOrderFees()"
+      | "getSellerOrderFees(uint256)"
+      | "updateBuyerEntryParams"
+      | "updateDelayTimestamp"
+      | "updateGigCreationParams"
+      | "updateOrderCreationParams"
+      | "updateRetributionParams"
+      | "updateSellerEntryParams"
+      | "updateSellerOrderFees"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -77,12 +154,80 @@ export interface IProtocolConfiguratorInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getDelayTimestamp(uint256)",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getDelayTimestamp()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getGigCreationParams()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getGigCreationParams(uint256)",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getOrderCreationParams()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getOrderCreationParams(uint256)",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getRetributionParams(uint256)",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getRetributionParams()",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSellerEntryParams()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSellerEntryParams(uint256)",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSellerOrderFees()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSellerOrderFees(uint256)",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateBuyerEntryParams",
+    values: [DataTypes.EntryParamsStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateDelayTimestamp",
+    values: [DataTypes.DelayTimestampStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateGigCreationParams",
+    values: [DataTypes.CreationParamsStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateOrderCreationParams",
+    values: [DataTypes.OrderPriceParamsStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateRetributionParams",
+    values: [DataTypes.RetributionParamsStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateSellerEntryParams",
+    values: [DataTypes.EntryParamsStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateSellerOrderFees",
+    values: [DataTypes.OrderPriceParamsStruct]
   ): string;
 
   decodeFunctionResult(
@@ -94,11 +239,79 @@ export interface IProtocolConfiguratorInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getDelayTimestamp(uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getDelayTimestamp()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getGigCreationParams()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getGigCreationParams(uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getOrderCreationParams()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getOrderCreationParams(uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getRetributionParams(uint256)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getRetributionParams()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSellerEntryParams()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSellerEntryParams(uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSellerOrderFees()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSellerOrderFees(uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateBuyerEntryParams",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateDelayTimestamp",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateGigCreationParams",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateOrderCreationParams",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateRetributionParams",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateSellerEntryParams",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateSellerOrderFees",
     data: BytesLike
   ): Result;
 
@@ -141,6 +354,33 @@ export interface IProtocolConfigurator extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[DataTypes.EntryParamsStructOutput]>;
 
+    "getDelayTimestamp(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.DelayTimestampStructOutput]>;
+
+    "getDelayTimestamp()"(
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.DelayTimestampStructOutput]>;
+
+    "getGigCreationParams()"(
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.CreationParamsStructOutput]>;
+
+    "getGigCreationParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.CreationParamsStructOutput]>;
+
+    "getOrderCreationParams()"(
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.OrderPriceParamsStructOutput, BigNumber]>;
+
+    "getOrderCreationParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.OrderPriceParamsStructOutput, BigNumber]>;
+
     "getRetributionParams(uint256)"(
       version: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -149,6 +389,59 @@ export interface IProtocolConfigurator extends BaseContract {
     "getRetributionParams()"(
       overrides?: CallOverrides
     ): Promise<[DataTypes.RetributionParamsStructOutput]>;
+
+    "getSellerEntryParams()"(
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.EntryParamsStructOutput]>;
+
+    "getSellerEntryParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.EntryParamsStructOutput]>;
+
+    "getSellerOrderFees()"(
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.OrderPriceParamsStructOutput]>;
+
+    "getSellerOrderFees(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.OrderPriceParamsStructOutput]>;
+
+    updateBuyerEntryParams(
+      newParams: DataTypes.EntryParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateDelayTimestamp(
+      newParams: DataTypes.DelayTimestampStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateGigCreationParams(
+      newParams: DataTypes.CreationParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateOrderCreationParams(
+      newParams: DataTypes.OrderPriceParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateRetributionParams(
+      newParams: DataTypes.RetributionParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateSellerEntryParams(
+      newParams: DataTypes.EntryParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    updateSellerOrderFees(
+      newParams: DataTypes.OrderPriceParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   "getBuyerEntryParams(uint256)"(
@@ -160,6 +453,33 @@ export interface IProtocolConfigurator extends BaseContract {
     overrides?: CallOverrides
   ): Promise<DataTypes.EntryParamsStructOutput>;
 
+  "getDelayTimestamp(uint256)"(
+    version: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.DelayTimestampStructOutput>;
+
+  "getDelayTimestamp()"(
+    overrides?: CallOverrides
+  ): Promise<DataTypes.DelayTimestampStructOutput>;
+
+  "getGigCreationParams()"(
+    overrides?: CallOverrides
+  ): Promise<DataTypes.CreationParamsStructOutput>;
+
+  "getGigCreationParams(uint256)"(
+    version: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.CreationParamsStructOutput>;
+
+  "getOrderCreationParams()"(
+    overrides?: CallOverrides
+  ): Promise<[DataTypes.OrderPriceParamsStructOutput, BigNumber]>;
+
+  "getOrderCreationParams(uint256)"(
+    version: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<[DataTypes.OrderPriceParamsStructOutput, BigNumber]>;
+
   "getRetributionParams(uint256)"(
     version: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -168,6 +488,59 @@ export interface IProtocolConfigurator extends BaseContract {
   "getRetributionParams()"(
     overrides?: CallOverrides
   ): Promise<DataTypes.RetributionParamsStructOutput>;
+
+  "getSellerEntryParams()"(
+    overrides?: CallOverrides
+  ): Promise<DataTypes.EntryParamsStructOutput>;
+
+  "getSellerEntryParams(uint256)"(
+    version: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.EntryParamsStructOutput>;
+
+  "getSellerOrderFees()"(
+    overrides?: CallOverrides
+  ): Promise<DataTypes.OrderPriceParamsStructOutput>;
+
+  "getSellerOrderFees(uint256)"(
+    version: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.OrderPriceParamsStructOutput>;
+
+  updateBuyerEntryParams(
+    newParams: DataTypes.EntryParamsStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateDelayTimestamp(
+    newParams: DataTypes.DelayTimestampStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateGigCreationParams(
+    newParams: DataTypes.CreationParamsStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateOrderCreationParams(
+    newParams: DataTypes.OrderPriceParamsStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateRetributionParams(
+    newParams: DataTypes.RetributionParamsStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateSellerEntryParams(
+    newParams: DataTypes.EntryParamsStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  updateSellerOrderFees(
+    newParams: DataTypes.OrderPriceParamsStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     "getBuyerEntryParams(uint256)"(
@@ -179,6 +552,33 @@ export interface IProtocolConfigurator extends BaseContract {
       overrides?: CallOverrides
     ): Promise<DataTypes.EntryParamsStructOutput>;
 
+    "getDelayTimestamp(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.DelayTimestampStructOutput>;
+
+    "getDelayTimestamp()"(
+      overrides?: CallOverrides
+    ): Promise<DataTypes.DelayTimestampStructOutput>;
+
+    "getGigCreationParams()"(
+      overrides?: CallOverrides
+    ): Promise<DataTypes.CreationParamsStructOutput>;
+
+    "getGigCreationParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.CreationParamsStructOutput>;
+
+    "getOrderCreationParams()"(
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.OrderPriceParamsStructOutput, BigNumber]>;
+
+    "getOrderCreationParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[DataTypes.OrderPriceParamsStructOutput, BigNumber]>;
+
     "getRetributionParams(uint256)"(
       version: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -187,6 +587,59 @@ export interface IProtocolConfigurator extends BaseContract {
     "getRetributionParams()"(
       overrides?: CallOverrides
     ): Promise<DataTypes.RetributionParamsStructOutput>;
+
+    "getSellerEntryParams()"(
+      overrides?: CallOverrides
+    ): Promise<DataTypes.EntryParamsStructOutput>;
+
+    "getSellerEntryParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.EntryParamsStructOutput>;
+
+    "getSellerOrderFees()"(
+      overrides?: CallOverrides
+    ): Promise<DataTypes.OrderPriceParamsStructOutput>;
+
+    "getSellerOrderFees(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.OrderPriceParamsStructOutput>;
+
+    updateBuyerEntryParams(
+      newParams: DataTypes.EntryParamsStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateDelayTimestamp(
+      newParams: DataTypes.DelayTimestampStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateGigCreationParams(
+      newParams: DataTypes.CreationParamsStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateOrderCreationParams(
+      newParams: DataTypes.OrderPriceParamsStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateRetributionParams(
+      newParams: DataTypes.RetributionParamsStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateSellerEntryParams(
+      newParams: DataTypes.EntryParamsStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateSellerOrderFees(
+      newParams: DataTypes.OrderPriceParamsStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {};
@@ -199,12 +652,82 @@ export interface IProtocolConfigurator extends BaseContract {
 
     "getBuyerEntryParams()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    "getDelayTimestamp(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getDelayTimestamp()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getGigCreationParams()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getGigCreationParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getOrderCreationParams()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getOrderCreationParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     "getRetributionParams(uint256)"(
       version: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     "getRetributionParams()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getSellerEntryParams()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getSellerEntryParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getSellerOrderFees()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getSellerOrderFees(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    updateBuyerEntryParams(
+      newParams: DataTypes.EntryParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateDelayTimestamp(
+      newParams: DataTypes.DelayTimestampStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateGigCreationParams(
+      newParams: DataTypes.CreationParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateOrderCreationParams(
+      newParams: DataTypes.OrderPriceParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateRetributionParams(
+      newParams: DataTypes.RetributionParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateSellerEntryParams(
+      newParams: DataTypes.EntryParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    updateSellerOrderFees(
+      newParams: DataTypes.OrderPriceParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -217,6 +740,33 @@ export interface IProtocolConfigurator extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    "getDelayTimestamp(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getDelayTimestamp()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getGigCreationParams()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getGigCreationParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getOrderCreationParams()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getOrderCreationParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     "getRetributionParams(uint256)"(
       version: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -224,6 +774,59 @@ export interface IProtocolConfigurator extends BaseContract {
 
     "getRetributionParams()"(
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getSellerEntryParams()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getSellerEntryParams(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getSellerOrderFees()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getSellerOrderFees(uint256)"(
+      version: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    updateBuyerEntryParams(
+      newParams: DataTypes.EntryParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateDelayTimestamp(
+      newParams: DataTypes.DelayTimestampStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateGigCreationParams(
+      newParams: DataTypes.CreationParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateOrderCreationParams(
+      newParams: DataTypes.OrderPriceParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateRetributionParams(
+      newParams: DataTypes.RetributionParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateSellerEntryParams(
+      newParams: DataTypes.EntryParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateSellerOrderFees(
+      newParams: DataTypes.OrderPriceParamsStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

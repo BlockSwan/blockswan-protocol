@@ -25,13 +25,26 @@ export interface ErrorsInterface extends utils.Interface {
     "ADDRESS_ALREADY_USED()": FunctionFragment;
     "ADDRESS_PROVIDER_ALREADY_ADDED()": FunctionFragment;
     "ADDRESS_PROVIDER_NOT_REGISTERED()": FunctionFragment;
+    "CALLER_NOT_BUYER_ID()": FunctionFragment;
+    "CALLER_NOT_SELLER_ID()": FunctionFragment;
     "CONTRACT_NAME_ALREADY_USED()": FunctionFragment;
     "FAILED_BECOMING_BUYER()": FunctionFragment;
+    "FAILED_BECOMING_SELLER()": FunctionFragment;
+    "GIG_ID_ALREADY_EXISING()": FunctionFragment;
     "INDEX_OUT_OF_RANGE()": FunctionFragment;
     "INVALID_ADDRESS_PROVIDER_ID()": FunctionFragment;
     "INVALID_INVITER_ID()": FunctionFragment;
+    "INVALID_ORDER_STATE()": FunctionFragment;
     "INVALID_USER_ID()": FunctionFragment;
+    "NOT_GIG_OWNER()": FunctionFragment;
+    "NOT_ORDER_BUYER()": FunctionFragment;
+    "NOT_ORDER_SELLER()": FunctionFragment;
+    "NO_MATCHING_XP_KEY()": FunctionFragment;
+    "ONLY_BUYER()": FunctionFragment;
+    "ONLY_SELLER()": FunctionFragment;
     "RESTRICTED_TO_BUYER()": FunctionFragment;
+    "RESTRICTED_TO_SELLER()": FunctionFragment;
+    "SELF_REFUND_DELAY_NOT_OVER()": FunctionFragment;
     "ZERO_ADDRESS_IS_INVALID()": FunctionFragment;
   };
 
@@ -40,13 +53,26 @@ export interface ErrorsInterface extends utils.Interface {
       | "ADDRESS_ALREADY_USED"
       | "ADDRESS_PROVIDER_ALREADY_ADDED"
       | "ADDRESS_PROVIDER_NOT_REGISTERED"
+      | "CALLER_NOT_BUYER_ID"
+      | "CALLER_NOT_SELLER_ID"
       | "CONTRACT_NAME_ALREADY_USED"
       | "FAILED_BECOMING_BUYER"
+      | "FAILED_BECOMING_SELLER"
+      | "GIG_ID_ALREADY_EXISING"
       | "INDEX_OUT_OF_RANGE"
       | "INVALID_ADDRESS_PROVIDER_ID"
       | "INVALID_INVITER_ID"
+      | "INVALID_ORDER_STATE"
       | "INVALID_USER_ID"
+      | "NOT_GIG_OWNER"
+      | "NOT_ORDER_BUYER"
+      | "NOT_ORDER_SELLER"
+      | "NO_MATCHING_XP_KEY"
+      | "ONLY_BUYER"
+      | "ONLY_SELLER"
       | "RESTRICTED_TO_BUYER"
+      | "RESTRICTED_TO_SELLER"
+      | "SELF_REFUND_DELAY_NOT_OVER"
       | "ZERO_ADDRESS_IS_INVALID"
   ): FunctionFragment;
 
@@ -63,11 +89,27 @@ export interface ErrorsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "CALLER_NOT_BUYER_ID",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "CALLER_NOT_SELLER_ID",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "CONTRACT_NAME_ALREADY_USED",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "FAILED_BECOMING_BUYER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "FAILED_BECOMING_SELLER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "GIG_ID_ALREADY_EXISING",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -83,11 +125,47 @@ export interface ErrorsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "INVALID_ORDER_STATE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "INVALID_USER_ID",
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "NOT_GIG_OWNER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "NOT_ORDER_BUYER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "NOT_ORDER_SELLER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "NO_MATCHING_XP_KEY",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "ONLY_BUYER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "ONLY_SELLER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "RESTRICTED_TO_BUYER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "RESTRICTED_TO_SELLER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "SELF_REFUND_DELAY_NOT_OVER",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -108,11 +186,27 @@ export interface ErrorsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "CALLER_NOT_BUYER_ID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "CALLER_NOT_SELLER_ID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "CONTRACT_NAME_ALREADY_USED",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "FAILED_BECOMING_BUYER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "FAILED_BECOMING_SELLER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "GIG_ID_ALREADY_EXISING",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -128,11 +222,44 @@ export interface ErrorsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "INVALID_ORDER_STATE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "INVALID_USER_ID",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "NOT_GIG_OWNER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "NOT_ORDER_BUYER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "NOT_ORDER_SELLER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "NO_MATCHING_XP_KEY",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "ONLY_BUYER", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "ONLY_SELLER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "RESTRICTED_TO_BUYER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "RESTRICTED_TO_SELLER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "SELF_REFUND_DELAY_NOT_OVER",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -180,9 +307,17 @@ export interface Errors extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    CALLER_NOT_BUYER_ID(overrides?: CallOverrides): Promise<[string]>;
+
+    CALLER_NOT_SELLER_ID(overrides?: CallOverrides): Promise<[string]>;
+
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<[string]>;
 
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<[string]>;
+
+    FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<[string]>;
+
+    GIG_ID_ALREADY_EXISING(overrides?: CallOverrides): Promise<[string]>;
 
     INDEX_OUT_OF_RANGE(overrides?: CallOverrides): Promise<[string]>;
 
@@ -190,9 +325,27 @@ export interface Errors extends BaseContract {
 
     INVALID_INVITER_ID(overrides?: CallOverrides): Promise<[string]>;
 
+    INVALID_ORDER_STATE(overrides?: CallOverrides): Promise<[string]>;
+
     INVALID_USER_ID(overrides?: CallOverrides): Promise<[string]>;
 
+    NOT_GIG_OWNER(overrides?: CallOverrides): Promise<[string]>;
+
+    NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<[string]>;
+
+    NOT_ORDER_SELLER(overrides?: CallOverrides): Promise<[string]>;
+
+    NO_MATCHING_XP_KEY(overrides?: CallOverrides): Promise<[string]>;
+
+    ONLY_BUYER(overrides?: CallOverrides): Promise<[string]>;
+
+    ONLY_SELLER(overrides?: CallOverrides): Promise<[string]>;
+
     RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<[string]>;
+
+    RESTRICTED_TO_SELLER(overrides?: CallOverrides): Promise<[string]>;
+
+    SELF_REFUND_DELAY_NOT_OVER(overrides?: CallOverrides): Promise<[string]>;
 
     ZERO_ADDRESS_IS_INVALID(overrides?: CallOverrides): Promise<[string]>;
   };
@@ -203,9 +356,17 @@ export interface Errors extends BaseContract {
 
   ADDRESS_PROVIDER_NOT_REGISTERED(overrides?: CallOverrides): Promise<string>;
 
+  CALLER_NOT_BUYER_ID(overrides?: CallOverrides): Promise<string>;
+
+  CALLER_NOT_SELLER_ID(overrides?: CallOverrides): Promise<string>;
+
   CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<string>;
 
   FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<string>;
+
+  FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<string>;
+
+  GIG_ID_ALREADY_EXISING(overrides?: CallOverrides): Promise<string>;
 
   INDEX_OUT_OF_RANGE(overrides?: CallOverrides): Promise<string>;
 
@@ -213,9 +374,27 @@ export interface Errors extends BaseContract {
 
   INVALID_INVITER_ID(overrides?: CallOverrides): Promise<string>;
 
+  INVALID_ORDER_STATE(overrides?: CallOverrides): Promise<string>;
+
   INVALID_USER_ID(overrides?: CallOverrides): Promise<string>;
 
+  NOT_GIG_OWNER(overrides?: CallOverrides): Promise<string>;
+
+  NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<string>;
+
+  NOT_ORDER_SELLER(overrides?: CallOverrides): Promise<string>;
+
+  NO_MATCHING_XP_KEY(overrides?: CallOverrides): Promise<string>;
+
+  ONLY_BUYER(overrides?: CallOverrides): Promise<string>;
+
+  ONLY_SELLER(overrides?: CallOverrides): Promise<string>;
+
   RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<string>;
+
+  RESTRICTED_TO_SELLER(overrides?: CallOverrides): Promise<string>;
+
+  SELF_REFUND_DELAY_NOT_OVER(overrides?: CallOverrides): Promise<string>;
 
   ZERO_ADDRESS_IS_INVALID(overrides?: CallOverrides): Promise<string>;
 
@@ -226,9 +405,17 @@ export interface Errors extends BaseContract {
 
     ADDRESS_PROVIDER_NOT_REGISTERED(overrides?: CallOverrides): Promise<string>;
 
+    CALLER_NOT_BUYER_ID(overrides?: CallOverrides): Promise<string>;
+
+    CALLER_NOT_SELLER_ID(overrides?: CallOverrides): Promise<string>;
+
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<string>;
 
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<string>;
+
+    FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<string>;
+
+    GIG_ID_ALREADY_EXISING(overrides?: CallOverrides): Promise<string>;
 
     INDEX_OUT_OF_RANGE(overrides?: CallOverrides): Promise<string>;
 
@@ -236,9 +423,27 @@ export interface Errors extends BaseContract {
 
     INVALID_INVITER_ID(overrides?: CallOverrides): Promise<string>;
 
+    INVALID_ORDER_STATE(overrides?: CallOverrides): Promise<string>;
+
     INVALID_USER_ID(overrides?: CallOverrides): Promise<string>;
 
+    NOT_GIG_OWNER(overrides?: CallOverrides): Promise<string>;
+
+    NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<string>;
+
+    NOT_ORDER_SELLER(overrides?: CallOverrides): Promise<string>;
+
+    NO_MATCHING_XP_KEY(overrides?: CallOverrides): Promise<string>;
+
+    ONLY_BUYER(overrides?: CallOverrides): Promise<string>;
+
+    ONLY_SELLER(overrides?: CallOverrides): Promise<string>;
+
     RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<string>;
+
+    RESTRICTED_TO_SELLER(overrides?: CallOverrides): Promise<string>;
+
+    SELF_REFUND_DELAY_NOT_OVER(overrides?: CallOverrides): Promise<string>;
 
     ZERO_ADDRESS_IS_INVALID(overrides?: CallOverrides): Promise<string>;
   };
@@ -256,9 +461,17 @@ export interface Errors extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    CALLER_NOT_BUYER_ID(overrides?: CallOverrides): Promise<BigNumber>;
+
+    CALLER_NOT_SELLER_ID(overrides?: CallOverrides): Promise<BigNumber>;
+
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<BigNumber>;
 
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    GIG_ID_ALREADY_EXISING(overrides?: CallOverrides): Promise<BigNumber>;
 
     INDEX_OUT_OF_RANGE(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -266,9 +479,27 @@ export interface Errors extends BaseContract {
 
     INVALID_INVITER_ID(overrides?: CallOverrides): Promise<BigNumber>;
 
+    INVALID_ORDER_STATE(overrides?: CallOverrides): Promise<BigNumber>;
+
     INVALID_USER_ID(overrides?: CallOverrides): Promise<BigNumber>;
 
+    NOT_GIG_OWNER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    NOT_ORDER_SELLER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    NO_MATCHING_XP_KEY(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ONLY_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ONLY_SELLER(overrides?: CallOverrides): Promise<BigNumber>;
+
     RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    RESTRICTED_TO_SELLER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    SELF_REFUND_DELAY_NOT_OVER(overrides?: CallOverrides): Promise<BigNumber>;
 
     ZERO_ADDRESS_IS_INVALID(overrides?: CallOverrides): Promise<BigNumber>;
   };
@@ -286,11 +517,27 @@ export interface Errors extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    CALLER_NOT_BUYER_ID(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    CALLER_NOT_SELLER_ID(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     CONTRACT_NAME_ALREADY_USED(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     FAILED_BECOMING_BUYER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    FAILED_BECOMING_SELLER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    GIG_ID_ALREADY_EXISING(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -306,9 +553,35 @@ export interface Errors extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    INVALID_ORDER_STATE(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     INVALID_USER_ID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    NOT_GIG_OWNER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    NOT_ORDER_SELLER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    NO_MATCHING_XP_KEY(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    ONLY_BUYER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    ONLY_SELLER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     RESTRICTED_TO_BUYER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    RESTRICTED_TO_SELLER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    SELF_REFUND_DELAY_NOT_OVER(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

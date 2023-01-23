@@ -27,47 +27,95 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
-export declare namespace DataTypes {
-  export type UserStruct = {
+export declare namespace InputTypes {
+  export type CreateUserInputStruct = {
+    newId: PromiseOrValue<BigNumberish>;
+    metadata: PromiseOrValue<string>;
+    inviterId: PromiseOrValue<BigNumberish>;
+    wallet: PromiseOrValue<string>;
+  };
+
+  export type CreateUserInputStructOutput = [
+    BigNumber,
+    string,
+    BigNumber,
+    string
+  ] & {
+    newId: BigNumber;
+    metadata: string;
+    inviterId: BigNumber;
+    wallet: string;
+  };
+}
+
+export declare namespace OutputTypes {
+  export type UserOutputStruct = {
     metadata: PromiseOrValue<string>;
     inviterId: PromiseOrValue<BigNumberish>;
     buyerUntil: PromiseOrValue<BigNumberish>;
     buyerInvites: PromiseOrValue<BigNumberish>;
+    sellerUntil: PromiseOrValue<BigNumberish>;
+    sellerInvites: PromiseOrValue<BigNumberish>;
+    userId: PromiseOrValue<BigNumberish>;
+    wallet: PromiseOrValue<string>;
+    gigIds: PromiseOrValue<BigNumberish>[];
+    offerIds: PromiseOrValue<BigNumberish>[];
+    bidIds: PromiseOrValue<BigNumberish>[];
+    buyerOrderIds: PromiseOrValue<BigNumberish>[];
+    gigReviewsIds: PromiseOrValue<BigNumberish>[];
+    userReviewsIds: PromiseOrValue<BigNumberish>[];
+    reviewsIds: PromiseOrValue<BigNumberish>[];
   };
 
-  export type UserStructOutput = [string, BigNumber, BigNumber, BigNumber] & {
+  export type UserOutputStructOutput = [
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    string,
+    BigNumber[],
+    BigNumber[],
+    BigNumber[],
+    BigNumber[],
+    BigNumber[],
+    BigNumber[],
+    BigNumber[]
+  ] & {
     metadata: string;
     inviterId: BigNumber;
     buyerUntil: BigNumber;
     buyerInvites: BigNumber;
+    sellerUntil: BigNumber;
+    sellerInvites: BigNumber;
+    userId: BigNumber;
+    wallet: string;
+    gigIds: BigNumber[];
+    offerIds: BigNumber[];
+    bidIds: BigNumber[];
+    buyerOrderIds: BigNumber[];
+    gigReviewsIds: BigNumber[];
+    userReviewsIds: BigNumber[];
+    reviewsIds: BigNumber[];
   };
 }
 
 export interface UserInterface extends utils.Interface {
   functions: {
-    "ACL_ADMIN()": FunctionFragment;
-    "ACL_MANAGER()": FunctionFragment;
     "ADDRESSES_PROVIDER()": FunctionFragment;
     "ADDRESS_PROVIDER()": FunctionFragment;
-    "BLACKLIST_ROLE()": FunctionFragment;
-    "BUYER_ROLE()": FunctionFragment;
-    "DAT()": FunctionFragment;
-    "DATA_PROVIDER()": FunctionFragment;
-    "GIG()": FunctionFragment;
-    "JUDGE_ROLE()": FunctionFragment;
     "MAX_UINT()": FunctionFragment;
-    "ORDER()": FunctionFragment;
-    "PROTOCOL_ADMIN_ROLE()": FunctionFragment;
-    "PROTOCOL_CONFIGURATOR()": FunctionFragment;
-    "SELLER_ROLE()": FunctionFragment;
-    "USER()": FunctionFragment;
-    "WHITELIST_ROLE()": FunctionFragment;
     "approve(address)": FunctionFragment;
     "becomeBuyer()": FunctionFragment;
+    "becomeSeller()": FunctionFragment;
+    "createBuyerOrder(uint256,uint256)": FunctionFragment;
+    "createGig(address,uint256)": FunctionFragment;
     "createUser(string,uint256)": FunctionFragment;
-    "datCurrency()": FunctionFragment;
     "fetchContract(bytes32)": FunctionFragment;
     "getAddressById(uint256)": FunctionFragment;
+    "getIdByAddress(address)": FunctionFragment;
     "getInvitersById(uint256)": FunctionFragment;
     "getInvitersByUserAddress(address)": FunctionFragment;
     "getUserByAddress(address)": FunctionFragment;
@@ -75,7 +123,10 @@ export interface UserInterface extends utils.Interface {
     "getUserList()": FunctionFragment;
     "getUsersCount()": FunctionFragment;
     "hasProtocolRole(bytes32,address)": FunctionFragment;
+    "isGigOwner(uint256,uint256,address)": FunctionFragment;
+    "isGigOwner(uint256,uint256)": FunctionFragment;
     "isStillBuyer(address)": FunctionFragment;
+    "isStillSeller(address)": FunctionFragment;
     "kill()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -85,29 +136,18 @@ export interface UserInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "ACL_ADMIN"
-      | "ACL_MANAGER"
       | "ADDRESSES_PROVIDER"
       | "ADDRESS_PROVIDER"
-      | "BLACKLIST_ROLE"
-      | "BUYER_ROLE"
-      | "DAT"
-      | "DATA_PROVIDER"
-      | "GIG"
-      | "JUDGE_ROLE"
       | "MAX_UINT"
-      | "ORDER"
-      | "PROTOCOL_ADMIN_ROLE"
-      | "PROTOCOL_CONFIGURATOR"
-      | "SELLER_ROLE"
-      | "USER"
-      | "WHITELIST_ROLE"
       | "approve"
       | "becomeBuyer"
+      | "becomeSeller"
+      | "createBuyerOrder"
+      | "createGig"
       | "createUser"
-      | "datCurrency"
       | "fetchContract"
       | "getAddressById"
+      | "getIdByAddress"
       | "getInvitersById"
       | "getInvitersByUserAddress"
       | "getUserByAddress"
@@ -115,7 +155,10 @@ export interface UserInterface extends utils.Interface {
       | "getUserList"
       | "getUsersCount"
       | "hasProtocolRole"
+      | "isGigOwner(uint256,uint256,address)"
+      | "isGigOwner(uint256,uint256)"
       | "isStillBuyer"
+      | "isStillSeller"
       | "kill"
       | "owner"
       | "renounceOwnership"
@@ -123,11 +166,6 @@ export interface UserInterface extends utils.Interface {
       | "transferOwnership"
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: "ACL_ADMIN", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "ACL_MANAGER",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "ADDRESSES_PROVIDER",
     values?: undefined
@@ -136,43 +174,7 @@ export interface UserInterface extends utils.Interface {
     functionFragment: "ADDRESS_PROVIDER",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "BLACKLIST_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "BUYER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "DAT", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "DATA_PROVIDER",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "GIG", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "JUDGE_ROLE",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "MAX_UINT", values?: undefined): string;
-  encodeFunctionData(functionFragment: "ORDER", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "PROTOCOL_ADMIN_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PROTOCOL_CONFIGURATOR",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "SELLER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "USER", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "WHITELIST_ROLE",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [PromiseOrValue<string>]
@@ -182,12 +184,20 @@ export interface UserInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "createUser",
+    functionFragment: "becomeSeller",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createBuyerOrder",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createGig",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "datCurrency",
-    values?: undefined
+    functionFragment: "createUser",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "fetchContract",
@@ -196,6 +206,10 @@ export interface UserInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getAddressById",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getIdByAddress",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getInvitersById",
@@ -226,7 +240,23 @@ export interface UserInterface extends utils.Interface {
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "isGigOwner(uint256,uint256,address)",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isGigOwner(uint256,uint256)",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "isStillBuyer",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isStillSeller",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "kill", values?: undefined): string;
@@ -244,11 +274,6 @@ export interface UserInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
-  decodeFunctionResult(functionFragment: "ACL_ADMIN", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "ACL_MANAGER",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "ADDRESSES_PROVIDER",
     data: BytesLike
@@ -257,53 +282,32 @@ export interface UserInterface extends utils.Interface {
     functionFragment: "ADDRESS_PROVIDER",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "BLACKLIST_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "BUYER_ROLE", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "DAT", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "DATA_PROVIDER",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "GIG", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "JUDGE_ROLE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "MAX_UINT", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "ORDER", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "PROTOCOL_ADMIN_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "PROTOCOL_CONFIGURATOR",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "SELLER_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "USER", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "WHITELIST_ROLE",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "becomeBuyer",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "createUser", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "datCurrency",
+    functionFragment: "becomeSeller",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "createBuyerOrder",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "createGig", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "createUser", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "fetchContract",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getAddressById",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getIdByAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -335,7 +339,19 @@ export interface UserInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "isGigOwner(uint256,uint256,address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isGigOwner(uint256,uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "isStillBuyer",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isStillSeller",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "kill", data: BytesLike): Result;
@@ -379,10 +395,10 @@ export type OwnershipTransferredEventFilter =
 export interface UserAddedEventObject {
   userId: BigNumber;
   userAddress: string;
-  userData: DataTypes.UserStructOutput;
+  userData: InputTypes.CreateUserInputStructOutput;
 }
 export type UserAddedEvent = TypedEvent<
-  [BigNumber, string, DataTypes.UserStructOutput],
+  [BigNumber, string, InputTypes.CreateUserInputStructOutput],
   UserAddedEventObject
 >;
 
@@ -391,10 +407,10 @@ export type UserAddedEventFilter = TypedEventFilter<UserAddedEvent>;
 export interface UserEditedEventObject {
   userId: BigNumber;
   userAddress: string;
-  userData: DataTypes.UserStructOutput;
+  userData: OutputTypes.UserOutputStructOutput;
 }
 export type UserEditedEvent = TypedEvent<
-  [BigNumber, string, DataTypes.UserStructOutput],
+  [BigNumber, string, OutputTypes.UserOutputStructOutput],
   UserEditedEventObject
 >;
 
@@ -427,39 +443,11 @@ export interface User extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    ACL_ADMIN(overrides?: CallOverrides): Promise<[string]>;
-
-    ACL_MANAGER(overrides?: CallOverrides): Promise<[string]>;
-
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<[string]>;
 
     ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<[string]>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    DAT(overrides?: CallOverrides): Promise<[string]>;
-
-    DATA_PROVIDER(overrides?: CallOverrides): Promise<[string]>;
-
-    GIG(overrides?: CallOverrides): Promise<[string]>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
     MAX_UINT(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    ORDER(overrides?: CallOverrides): Promise<[string]>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<[string]>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    USER(overrides?: CallOverrides): Promise<[string]>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     approve(
       erc20: PromiseOrValue<string>,
@@ -470,13 +458,25 @@ export interface User extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    createUser(
-      metadata: PromiseOrValue<string>,
-      inviterId: PromiseOrValue<BigNumberish>,
+    becomeSeller(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    datCurrency(
+    createBuyerOrder(
+      buyerId: PromiseOrValue<BigNumberish>,
+      newOrderId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    createGig(
+      caller: PromiseOrValue<string>,
+      newGigId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    createUser(
+      metadata: PromiseOrValue<string>,
+      inviterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -489,6 +489,11 @@ export interface User extends BaseContract {
       userId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getIdByAddress(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getInvitersById(
       userId: PromiseOrValue<BigNumberish>,
@@ -503,16 +508,16 @@ export interface User extends BaseContract {
     getUserByAddress(
       pubKey: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[DataTypes.UserStructOutput]>;
+    ): Promise<[OutputTypes.UserOutputStructOutput]>;
 
     getUserById(
       userId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[DataTypes.UserStructOutput]>;
+    ): Promise<[OutputTypes.UserOutputStructOutput]>;
 
     getUserList(
       overrides?: CallOverrides
-    ): Promise<[DataTypes.UserStructOutput[]]>;
+    ): Promise<[OutputTypes.UserOutputStructOutput[]]>;
 
     getUsersCount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -522,7 +527,25 @@ export interface User extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    "isGigOwner(uint256,uint256,address)"(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    "isGigOwner(uint256,uint256)"(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     isStillBuyer(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    isStillSeller(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
@@ -548,39 +571,11 @@ export interface User extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  ACL_ADMIN(overrides?: CallOverrides): Promise<string>;
-
-  ACL_MANAGER(overrides?: CallOverrides): Promise<string>;
-
   ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
   ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
-  BLACKLIST_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  BUYER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  DAT(overrides?: CallOverrides): Promise<string>;
-
-  DATA_PROVIDER(overrides?: CallOverrides): Promise<string>;
-
-  GIG(overrides?: CallOverrides): Promise<string>;
-
-  JUDGE_ROLE(overrides?: CallOverrides): Promise<string>;
-
   MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
-
-  ORDER(overrides?: CallOverrides): Promise<string>;
-
-  PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<string>;
-
-  SELLER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  USER(overrides?: CallOverrides): Promise<string>;
-
-  WHITELIST_ROLE(overrides?: CallOverrides): Promise<string>;
 
   approve(
     erc20: PromiseOrValue<string>,
@@ -591,13 +586,25 @@ export interface User extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  createUser(
-    metadata: PromiseOrValue<string>,
-    inviterId: PromiseOrValue<BigNumberish>,
+  becomeSeller(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  datCurrency(
+  createBuyerOrder(
+    buyerId: PromiseOrValue<BigNumberish>,
+    newOrderId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  createGig(
+    caller: PromiseOrValue<string>,
+    newGigId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  createUser(
+    metadata: PromiseOrValue<string>,
+    inviterId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -610,6 +617,11 @@ export interface User extends BaseContract {
     userId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getIdByAddress(
+    account: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getInvitersById(
     userId: PromiseOrValue<BigNumberish>,
@@ -624,14 +636,16 @@ export interface User extends BaseContract {
   getUserByAddress(
     pubKey: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<DataTypes.UserStructOutput>;
+  ): Promise<OutputTypes.UserOutputStructOutput>;
 
   getUserById(
     userId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<DataTypes.UserStructOutput>;
+  ): Promise<OutputTypes.UserOutputStructOutput>;
 
-  getUserList(overrides?: CallOverrides): Promise<DataTypes.UserStructOutput[]>;
+  getUserList(
+    overrides?: CallOverrides
+  ): Promise<OutputTypes.UserOutputStructOutput[]>;
 
   getUsersCount(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -641,7 +655,25 @@ export interface User extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  "isGigOwner(uint256,uint256,address)"(
+    userId: PromiseOrValue<BigNumberish>,
+    gigId: PromiseOrValue<BigNumberish>,
+    UserContract: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  "isGigOwner(uint256,uint256)"(
+    userId: PromiseOrValue<BigNumberish>,
+    gigId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   isStillBuyer(
+    account: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  isStillSeller(
     account: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
@@ -667,39 +699,11 @@ export interface User extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    ACL_ADMIN(overrides?: CallOverrides): Promise<string>;
-
-    ACL_MANAGER(overrides?: CallOverrides): Promise<string>;
-
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
     ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    DAT(overrides?: CallOverrides): Promise<string>;
-
-    DATA_PROVIDER(overrides?: CallOverrides): Promise<string>;
-
-    GIG(overrides?: CallOverrides): Promise<string>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<string>;
-
     MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
-
-    ORDER(overrides?: CallOverrides): Promise<string>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<string>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    USER(overrides?: CallOverrides): Promise<string>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<string>;
 
     approve(
       erc20: PromiseOrValue<string>,
@@ -708,13 +712,25 @@ export interface User extends BaseContract {
 
     becomeBuyer(overrides?: CallOverrides): Promise<void>;
 
+    becomeSeller(overrides?: CallOverrides): Promise<void>;
+
+    createBuyerOrder(
+      buyerId: PromiseOrValue<BigNumberish>,
+      newOrderId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    createGig(
+      caller: PromiseOrValue<string>,
+      newGigId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     createUser(
       metadata: PromiseOrValue<string>,
       inviterId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    datCurrency(overrides?: CallOverrides): Promise<string>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
@@ -725,6 +741,11 @@ export interface User extends BaseContract {
       userId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getIdByAddress(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getInvitersById(
       userId: PromiseOrValue<BigNumberish>,
@@ -739,16 +760,16 @@ export interface User extends BaseContract {
     getUserByAddress(
       pubKey: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<DataTypes.UserStructOutput>;
+    ): Promise<OutputTypes.UserOutputStructOutput>;
 
     getUserById(
       userId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<DataTypes.UserStructOutput>;
+    ): Promise<OutputTypes.UserOutputStructOutput>;
 
     getUserList(
       overrides?: CallOverrides
-    ): Promise<DataTypes.UserStructOutput[]>;
+    ): Promise<OutputTypes.UserOutputStructOutput[]>;
 
     getUsersCount(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -758,7 +779,25 @@ export interface User extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    "isGigOwner(uint256,uint256,address)"(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "isGigOwner(uint256,uint256)"(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     isStillBuyer(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    isStillSeller(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -814,39 +853,11 @@ export interface User extends BaseContract {
   };
 
   estimateGas: {
-    ACL_ADMIN(overrides?: CallOverrides): Promise<BigNumber>;
-
-    ACL_MANAGER(overrides?: CallOverrides): Promise<BigNumber>;
-
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<BigNumber>;
 
     ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<BigNumber>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    DAT(overrides?: CallOverrides): Promise<BigNumber>;
-
-    DATA_PROVIDER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    GIG(overrides?: CallOverrides): Promise<BigNumber>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
     MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
-
-    ORDER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<BigNumber>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    USER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     approve(
       erc20: PromiseOrValue<string>,
@@ -857,13 +868,25 @@ export interface User extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    createUser(
-      metadata: PromiseOrValue<string>,
-      inviterId: PromiseOrValue<BigNumberish>,
+    becomeSeller(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    datCurrency(
+    createBuyerOrder(
+      buyerId: PromiseOrValue<BigNumberish>,
+      newOrderId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    createGig(
+      caller: PromiseOrValue<string>,
+      newGigId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    createUser(
+      metadata: PromiseOrValue<string>,
+      inviterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -874,6 +897,11 @@ export interface User extends BaseContract {
 
     getAddressById(
       userId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getIdByAddress(
+      account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -907,7 +935,25 @@ export interface User extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    "isGigOwner(uint256,uint256,address)"(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "isGigOwner(uint256,uint256)"(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isStillBuyer(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    isStillSeller(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -934,45 +980,13 @@ export interface User extends BaseContract {
   };
 
   populateTransaction: {
-    ACL_ADMIN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    ACL_MANAGER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     ADDRESSES_PROVIDER(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    DAT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    DATA_PROVIDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    GIG(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     MAX_UINT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    ORDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    PROTOCOL_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    PROTOCOL_CONFIGURATOR(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    USER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     approve(
       erc20: PromiseOrValue<string>,
@@ -983,13 +997,25 @@ export interface User extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    createUser(
-      metadata: PromiseOrValue<string>,
-      inviterId: PromiseOrValue<BigNumberish>,
+    becomeSeller(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    datCurrency(
+    createBuyerOrder(
+      buyerId: PromiseOrValue<BigNumberish>,
+      newOrderId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createGig(
+      caller: PromiseOrValue<string>,
+      newGigId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createUser(
+      metadata: PromiseOrValue<string>,
+      inviterId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1000,6 +1026,11 @@ export interface User extends BaseContract {
 
     getAddressById(
       userId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getIdByAddress(
+      account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1033,7 +1064,25 @@ export interface User extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    "isGigOwner(uint256,uint256,address)"(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "isGigOwner(uint256,uint256)"(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     isStillBuyer(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isStillSeller(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

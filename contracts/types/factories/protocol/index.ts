@@ -2,5 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as configuration from "./configuration";
+export * as gig from "./gig";
 export * as libraries from "./libraries";
+export * as order from "./order";
 export * as user from "./user";
+export * as xp from "./xp";

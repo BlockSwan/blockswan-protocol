@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import {Errors} from "../helpers/Errors.sol";
 import {InputTypes} from "../types/InputTypes.sol";
 import {DataTypes} from "../types/DataTypes.sol";
+import {EnumerableSet} from "../../../imports/openzeppelin/contracts/EnumerableSet.sol";
 
 /**
  * @title UserData logic library
@@ -11,6 +12,8 @@ import {DataTypes} from "../types/DataTypes.sol";
  * @notice Implements the logic for user data specific functions
  */
 library UserDataLogic {
+    using EnumerableSet for EnumerableSet.UintSet;
+
     function updateMetadata(
         DataTypes.User storage user,
         string memory metadata
@@ -27,11 +30,43 @@ library UserDataLogic {
         return true;
     }
 
-    function addBuyerInviter(
+    function addBuyerInvites(
         DataTypes.User storage user,
         uint8 invitesAdded
     ) external returns (bool) {
         user.buyerInvites += invitesAdded;
+        return true;
+    }
+
+    function updateSellerUntil(
+        DataTypes.User storage user,
+        uint256 sellerTimeAdded
+    ) external returns (bool) {
+        user.sellerUntil = block.timestamp + sellerTimeAdded;
+        return true;
+    }
+
+    function addSellerInvites(
+        DataTypes.User storage user,
+        uint8 invitesAdded
+    ) external returns (bool) {
+        user.sellerInvites += invitesAdded;
+        return true;
+    }
+
+    function addGig(
+        DataTypes.User storage user,
+        uint256 newGigId
+    ) external returns (bool) {
+        user.gigIds.add(newGigId);
+        return true;
+    }
+
+    function addBuyerOrder(
+        DataTypes.User storage user,
+        uint256 newOrderId
+    ) external returns (bool) {
+        user.buyerOrderIds.add(newOrderId);
         return true;
     }
 }

@@ -1,13 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-//import {Counters} from '../../imports/openzeppelin/contracts/Counters.sol';
-
 import {EnumerableSet} from "../../imports/openzeppelin/contracts/EnumerableSet.sol";
 import {EnumerableMap} from "../../imports/openzeppelin/contracts/EnumerableMap.sol";
 import {DataTypes} from "../libraries/types/DataTypes.sol";
-
-//import {l_account_logic} from "../libraries/logics/l_account_logic.sol";
 
 /**
  * @title UserStorage

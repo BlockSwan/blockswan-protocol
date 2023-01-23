@@ -3,10 +3,9 @@ import { COMMON_DEPLOY_PARAMS } from '../../../helpers/envs';
 import { DeployFunction } from 'hardhat-deploy/types'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import makeDeployment from '../../../helpers/makeDeployment';
-import { ADDRESS_PROVIDER_ID, USER_IMPL_ID } from '../../../helpers/deploy_ids';
-import { getACLManager, getAddressProvider, getUser, getUserLibraries } from '../../../helpers/contract_getters';
-import { USER } from '../../../helpers/constants';
-import { setupBuyerAdminRoles } from '../../../helpers/init_helpers';
+import { ADDRESS_PROVIDER_ID, ORDER_IMPL_ID, } from '../../../helpers/deploy_ids';
+import { getACLManager, getAddressProvider, getOrder, getOrderLibraries } from '../../../helpers/contract_getters';
+import { ORDER, XP_GIVER_ROLE } from '../../../helpers/constants';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 	await makeDeployment(func.id, async () => {
@@ -19,15 +18,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		const { address: addressProviderAddress } = await deployments.get(ADDRESS_PROVIDER_ID);
 		const { address: mUSDCAddress } = await deployments.get("mUSDC");
 
-
-		const userLibraries = await getUserLibraries();
+		const orderLibraries = await getOrderLibraries();
 		// Deploy account contract
-		const userArtifact = await deploy(USER_IMPL_ID, {
-			contract: "User",
+		const orderArtifact = await deploy(ORDER_IMPL_ID, {
+			contract: "Order",
 			from: deployer,
 			args: [addressProviderAddress],
 			libraries: {
-				...userLibraries,
+				...orderLibraries,
 			},
 			...COMMON_DEPLOY_PARAMS,
 		});
@@ -37,16 +35,22 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 		// 4. set the ACL_ADMIN
 		waitForTx(
-			await addressProviderInstance.addContract(USER, userArtifact.address)
+			await addressProviderInstance.addContract(ORDER, orderArtifact.address)
 		)
-		deployments.log(`[Deployments] USER is registered to ${ userArtifact.address }`)
-		await setupBuyerAdminRoles(aclManager.address, userArtifact.address);
-		let UserInstance = await getUser(userArtifact.address);
-		deployments.log(`[Deployments] USER approved MAX_UINT to mUSDC at ${ userArtifact.address }`)
-		await UserInstance.approve(mUSDCAddress);
+		deployments.log(`[Deployments] ORDER is registered to ${ orderArtifact.address }`)
+		let OrderInstance = await getOrder(orderArtifact.address);
+		deployments.log(`[Deployments] ORDER approved MAX_UINT to mUSDC at ${ orderArtifact.address }`)
+		waitForTx(
+			await OrderInstance.approve(mUSDCAddress)
+		)
+		// give the XP_GIVER_ROLE
+		waitForTx(
+			await aclManager.grantRole(XP_GIVER_ROLE, orderArtifact.address)
+		)
+		deployments.log(`[Deployments] ORDER has the role XP_GIVER_ROLE`)
 	})
 }
 
-func.id = "userImplementation";
+func.id = "orderImplementation";
 func.tags = ["marketplace"];
 export default func

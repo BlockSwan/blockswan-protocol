@@ -4,10 +4,11 @@ import { DeployFunction } from 'hardhat-deploy/types'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import makeDeployment from '../../../helpers/makeDeployment';
 import { ADDRESS_PROVIDER_ID, PROTOCOL_CONFIGURATOR_ID } from '../../../helpers/deploy_ids';
-import { getAddressProvider, getBuyerEntryParams, getProtocolConfiguratorLibraries, getRetributionParams, getUserLibraries } from '../../../helpers/contract_getters';
-import { BUYER_ENTRY_PARAMS, PRETTYJSON, PROTOCOL_CONFIGURATOR, RETRIBUTION_PARAMS } from '../../../helpers/constants';
-import { setupBuyerAdminRoles, updateBuyerEntryParams, updateRetributionsParams } from '../../../helpers/init_helpers';
+import { getAddressProvider, getBuyerEntryParams, getDelaysTimestamp, getGigCreationParams, getOrderCreationParams, getProtocolConfiguratorLibraries, getRetributionParams, getSellerEntryParams, getSellerOrderParams, getUserLibraries } from '../../../helpers/contract_getters';
+import { BUYER_ENTRY_PARAMS, DELAYS_TIMESTAMP, GIG_CREATION_PARAMS, ORDER_CREATION_PARAMS, PRETTYJSON, PROTOCOL_CONFIGURATOR, RETRIBUTION_PARAMS, SELLER_ENTRY_PARAMS, SELLER_ORDER_FEES_PARAMS } from '../../../helpers/constants';
+import { setupBuyerAdminRoles, updateBuyerEntryParams, updateDelayTimestamp, updateGigCreationParams, updateOrderCreationParams, updateRetributionsParams, updateSellerEntryParams, updateSellerOrderParams } from '../../../helpers/init_helpers';
 import { render } from 'prettyjson';
+import { line } from '../../../helpers/logs';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 	await makeDeployment(func.id, async () => {
@@ -41,17 +42,54 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		deployments.log(`[Deployments] PROTOCOL_CONFIGURATOR is registered to ${ ProtocolConfiguratorArtifact.address }`)
 		await updateRetributionsParams(ProtocolConfiguratorArtifact.address, RETRIBUTION_PARAMS);
 		let retribParams = await getRetributionParams();
-		console.log(`New retribution params:\n\n`);
+		console.log(`New retribution params:\n`);
+		console.log(line(30));
 		console.log(render(retribParams, PRETTYJSON));
+		console.log(line(30));
 
 		await updateBuyerEntryParams(ProtocolConfiguratorArtifact.address, BUYER_ENTRY_PARAMS);
 		let buyerEntryParams = await getBuyerEntryParams();
-		console.log(`New buyer entry params:\n\n`);
+		console.log(`New buyer entry params:\n`);
+		console.log(line(30));
 		console.log(render(buyerEntryParams, PRETTYJSON));
+		console.log(line(30));
 
+		await updateSellerEntryParams(ProtocolConfiguratorArtifact.address, SELLER_ENTRY_PARAMS);
+		let sellerEntryParams = await getSellerEntryParams();
+		console.log(`New seller entry params:\n`);
+		console.log(line(30));
+		console.log(render(sellerEntryParams, PRETTYJSON));
+		console.log(line(30));
+
+		await updateGigCreationParams(ProtocolConfiguratorArtifact.address, GIG_CREATION_PARAMS);
+		let gigCreationParams = await getGigCreationParams();
+		console.log(`New gig creation params:\n`);
+		console.log(line(30));
+		console.log(render(gigCreationParams, PRETTYJSON));
+		console.log(line(30));
+
+		await updateDelayTimestamp(ProtocolConfiguratorArtifact.address, DELAYS_TIMESTAMP);
+		let delays = await getDelaysTimestamp();
+		console.log(`New protocol delays timestamp:\n`);
+		console.log(line(30));
+		console.log(render(delays, PRETTYJSON));
+		console.log(line(30));
+
+		await updateSellerOrderParams(ProtocolConfiguratorArtifact.address, SELLER_ORDER_FEES_PARAMS);
+		let sellerOrderParams = await getSellerOrderParams();
+		console.log(`New protocol seller fees on order:\n`);
+		console.log(line(30));
+		console.log(render(sellerOrderParams, PRETTYJSON));
+		console.log(line(30));
+
+		await updateOrderCreationParams(ProtocolConfiguratorArtifact.address, ORDER_CREATION_PARAMS);
+		let orderCreationParams = await getOrderCreationParams();
+		console.log(`New protocol order creation params:\n`);
+		console.log(line(30));
+		console.log(render(orderCreationParams, PRETTYJSON));
+		console.log(line(30));
 	})
 }
-
 func.id = "protocolConfigurator";
 func.tags = ["marketplace", "configurator"];
 export default func

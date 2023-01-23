@@ -8,6 +8,8 @@ import {IUser} from "../../interfaces/IUser.sol";
 import {IAddressProvider} from "../../interfaces/IAddressProvider.sol";
 import {IProtocolConfigurator} from "../../interfaces/IProtocolConfigurator.sol";
 import {IACLManager} from "../../interfaces/IACLManager.sol";
+import {IBSWAN} from "../../interfaces/IBSWAN.sol";
+
 import {InputTypes} from "../libraries/types/InputTypes.sol";
 import {OutputTypes} from "../libraries/types/OutputTypes.sol";
 
@@ -15,6 +17,10 @@ import {UserLogic} from "../libraries/logics/UserLogic.sol";
 import {InviterLogic} from "../libraries/logics/InviterLogic.sol";
 
 import {Errors} from "../libraries/helpers/Errors.sol";
+import {RegistryKeys} from "../libraries/helpers/RegistryKeys.sol";
+import {RoleKeys} from "../libraries/helpers/RoleKeys.sol";
+import {XPKeys} from "../libraries/helpers/XPKeys.sol";
+
 import {DataTypes} from "../libraries/types/DataTypes.sol";
 import {ProviderContract} from "../configuration/ProviderContract.sol";
 
@@ -43,8 +49,6 @@ contract User is UserStorage, IUser, ProviderContract {
     using EnumerableSet for EnumerableSet.AddressSet;
     using EnumerableMap for EnumerableMap.AddressToUintMap;
 
-    bytes32 constant REGISTRY_KEY = "USER";
-
     /**
      * @dev Constructor.
      * @param provider The address of the AddressProvider
@@ -66,6 +70,13 @@ contract User is UserStorage, IUser, ProviderContract {
     }
 
     /// @inheritdoc IUser
+    function getIdByAddress(
+        address account
+    ) public view override returns (uint256) {
+        return (_userAddressToId.get(account));
+    }
+
+    /// @inheritdoc IUser
     function getAddressById(
         uint256 userId
     ) public view virtual override returns (address) {
@@ -76,15 +87,17 @@ contract User is UserStorage, IUser, ProviderContract {
     /// @inheritdoc IUser
     function getUserById(
         uint256 userId
-    ) public view virtual override returns (DataTypes.User memory) {
-        return _users[_userIdToAddress.at(userId)];
+    ) public view virtual override returns (OutputTypes.UserOutput memory) {
+        DataTypes.User storage user = _users[_userIdToAddress.at(userId)];
+        return user.format(userId, getAddressById(userId));
     }
 
     /// @inheritdoc IUser
     function getUserByAddress(
         address pubKey
-    ) public view virtual override returns (DataTypes.User memory) {
-        return _users[pubKey];
+    ) public view virtual override returns (OutputTypes.UserOutput memory) {
+        DataTypes.User storage user = _users[pubKey];
+        return user.format(_userAddressToId.get(pubKey), pubKey);
     }
 
     /// @inheritdoc IUser
@@ -93,10 +106,12 @@ contract User is UserStorage, IUser, ProviderContract {
         view
         virtual
         override
-        returns (DataTypes.User[] memory)
+        returns (OutputTypes.UserOutput[] memory)
     {
         uint256 len = getUsersCount();
-        DataTypes.User[] memory userList = new DataTypes.User[](len);
+        OutputTypes.UserOutput[] memory userList = new OutputTypes.UserOutput[](
+            len
+        );
         for (uint256 i = 0; i < len; i++) {
             userList[i] = getUserById(i);
         }
@@ -115,33 +130,37 @@ contract User is UserStorage, IUser, ProviderContract {
         );
 
         uint256 newId = totalUser;
-
-        bool isCreated = UserLogic.executeCreateUser(
-            _userIdToAddress,
-            _userAddressToId,
-            _users,
-            InputTypes.CreateUserInput({
+        InputTypes.CreateUserInput memory userInput = InputTypes
+            .CreateUserInput({
                 newId: newId,
                 metadata: metadata,
                 inviterId: inviterId,
                 wallet: _msgSender()
-            })
+            });
+        bool isCreated = UserLogic.executeCreateUser(
+            _userIdToAddress,
+            _userAddressToId,
+            _users,
+            userInput
         );
         require(
             isCreated && newId == getUsersCount() - 1,
             Errors.INVALID_USER_ID
         );
-        emit UserAdded(newId, _msgSender(), _users[_msgSender()]);
+        emit UserAdded(newId, _msgSender(), userInput);
     }
 
     function becomeBuyer() external {
         address caller = _msgSender();
-        bool isBuyer = hasProtocolRole(BUYER_ROLE, caller);
+        bool isBuyer = hasProtocolRole(RoleKeys.BUYER_ROLE, caller);
         require(!isBuyer, Errors.RESTRICTED_TO_BUYER);
 
         OutputTypes.PrepareBecomeRoleOutput
-            memory becomeBuyerParams = _prepareRoleParams(BUYER_ROLE, caller);
-        grantProtocolRole(BUYER_ROLE, caller);
+            memory becomeBuyerParams = _prepareRoleParams(
+                RoleKeys.BUYER_ROLE,
+                caller
+            );
+        grantProtocolRole(RoleKeys.BUYER_ROLE, caller);
         bool isBecomeBuyer = _userAddressToId.executeBecomeBuyer(
             _users,
             _userIdToAddress,
@@ -152,9 +171,10 @@ contract User is UserStorage, IUser, ProviderContract {
             })
         );
         require(isBecomeBuyer, Errors.FAILED_BECOMING_BUYER);
+        _giveXP(XPKeys.BECOME_BUYER, caller);
         _processPayment(
             InputTypes.ProcessPaymentInput({
-                caller: _msgSender(),
+                caller: caller,
                 inviter0: becomeBuyerParams.inviter0,
                 inviter1: becomeBuyerParams.inviter1,
                 inviter0Rewards: becomeBuyerParams.rewards.inviter0Rewards,
@@ -164,17 +184,64 @@ contract User is UserStorage, IUser, ProviderContract {
         );
     }
 
+    function becomeSeller() external {
+        address caller = _msgSender();
+        bool isSeller = hasProtocolRole(RoleKeys.SELLER_ROLE, caller);
+        require(!isSeller, Errors.RESTRICTED_TO_SELLER);
+
+        OutputTypes.PrepareBecomeRoleOutput
+            memory becomeSellerParams = _prepareRoleParams(
+                RoleKeys.SELLER_ROLE,
+                caller
+            );
+        grantProtocolRole(RoleKeys.SELLER_ROLE, caller);
+        bool isBecomeSeller = _userAddressToId.executeBecomeSeller(
+            _users,
+            _userIdToAddress,
+            InputTypes.BecomeSellerInput({
+                account: caller,
+                sellerTimeAdded: becomeSellerParams.entryParams.timeAdded,
+                invitationEarned: becomeSellerParams
+                    .entryParams
+                    .invitationEarned
+            })
+        );
+        require(isBecomeSeller, Errors.FAILED_BECOMING_SELLER);
+        _giveXP(XPKeys.BECOME_SELLER, caller);
+        _processPayment(
+            InputTypes.ProcessPaymentInput({
+                caller: caller,
+                inviter0: becomeSellerParams.inviter0,
+                inviter1: becomeSellerParams.inviter1,
+                inviter0Rewards: becomeSellerParams.rewards.inviter0Rewards,
+                inviter1Rewards: becomeSellerParams.rewards.inviter1Rewards,
+                remainingRewards: becomeSellerParams.rewards.remainingRewards
+            })
+        );
+    }
+
+    /// @inheritdoc IUser
     function getInvitersById(
         uint256 userId
-    ) public view returns (address, address) {
-        DataTypes.User memory user = getUserById(userId);
+    ) public view override returns (address, address) {
+        DataTypes.User storage user = UserLogic.getUserById(
+            userId,
+            _userIdToAddress,
+            _users
+        );
         return user.getInvitersAddresses(_userIdToAddress, _users);
     }
 
+    /// @inheritdoc IUser
     function getInvitersByUserAddress(
         address account
-    ) public view returns (address, address) {
-        DataTypes.User memory user = getUserByAddress(account);
+    ) public view override returns (address, address) {
+        DataTypes.User storage user = UserLogic.getUserByAddress(
+            account,
+            _userAddressToId,
+            _userIdToAddress,
+            _users
+        );
         return user.getInvitersAddresses(_userIdToAddress, _users);
     }
 
@@ -184,18 +251,31 @@ contract User is UserStorage, IUser, ProviderContract {
         returns (DataTypes.EntryParams memory)
     {
         return
-            IProtocolConfigurator(fetchContract(PROTOCOL_CONFIGURATOR))
-                .getBuyerEntryParams();
+            IProtocolConfigurator(
+                fetchContract(RegistryKeys.PROTOCOL_CONFIGURATOR)
+            ).getBuyerEntryParams();
     }
 
-    function getRetributionParams()
+    function getBecomeSellerParams()
         internal
         view
-        returns (DataTypes.RetributionParams memory)
+        returns (DataTypes.EntryParams memory)
     {
         return
-            IProtocolConfigurator(fetchContract(PROTOCOL_CONFIGURATOR))
-                .getRetributionParams();
+            IProtocolConfigurator(
+                fetchContract(RegistryKeys.PROTOCOL_CONFIGURATOR)
+            ).getSellerEntryParams();
+    }
+
+    function getGigCreationParams()
+        internal
+        view
+        returns (DataTypes.CreationParams memory)
+    {
+        return
+            IProtocolConfigurator(
+                fetchContract(RegistryKeys.PROTOCOL_CONFIGURATOR)
+            ).getGigCreationParams();
     }
 
     function _prepareRoleParams(
@@ -203,12 +283,14 @@ contract User is UserStorage, IUser, ProviderContract {
         address caller
     ) internal view returns (OutputTypes.PrepareBecomeRoleOutput memory) {
         DataTypes.EntryParams memory entryParams;
-        if (role == BUYER_ROLE) {
+        if (role == RoleKeys.BUYER_ROLE) {
             entryParams = getBecomeBuyerParams();
+        } else {
+            entryParams = getBecomeSellerParams();
         }
         (address inviter0, address inviter1) = getInvitersByUserAddress(caller);
         DataTypes.RetributionParams
-            memory retributionParams = getRetributionParams();
+            memory retributionParams = getProtocolRetributionParams();
         OutputTypes.CalcInvitersRewardsOutput memory rewards = InviterLogic
             .calcInvitersRewards(
                 InputTypes.CalcInvitersRewardsInput({
@@ -217,7 +299,6 @@ contract User is UserStorage, IUser, ProviderContract {
                     lvl0AffiliateShare: retributionParams.lvl0AffiliateShare
                 })
             );
-
         return (
             OutputTypes.PrepareBecomeRoleOutput({
                 inviter0: inviter0,
@@ -227,5 +308,41 @@ contract User is UserStorage, IUser, ProviderContract {
                 rewards: rewards
             })
         );
+    }
+
+    /// @inheritdoc IUser
+    function createGig(
+        address caller,
+        uint256 newGigId
+    ) external override onlyProvider(RegistryKeys.GIG) returns (bool) {
+        bool success = UserLogic.executeAddGig(
+            newGigId,
+            getIdByAddress(caller),
+            _userIdToAddress,
+            _users
+        );
+        return success;
+    }
+
+    /// @inheritdoc IUser
+    function createBuyerOrder(
+        uint256 buyerId,
+        uint256 newOrderId
+    ) external override onlyProvider(RegistryKeys.ORDER) returns (bool) {
+        bool success = UserLogic.executeAddBuyerOrder(
+            newOrderId,
+            buyerId,
+            _userIdToAddress,
+            _users
+        );
+        return success;
+    }
+
+    /// @inheritdoc IUser
+    function isGigOwner(
+        uint256 userId,
+        uint256 gigId
+    ) public view override returns (bool) {
+        return UserLogic.isGigOwner(userId, gigId, _userIdToAddress, _users);
     }
 }

@@ -3,7 +3,13 @@
 /* eslint-disable */
 import type * as configuration from "./configuration";
 export type { configuration };
+import type * as gig from "./gig";
+export type { gig };
 import type * as libraries from "./libraries";
 export type { libraries };
+import type * as order from "./order";
+export type { order };
 import type * as user from "./user";
 export type { user };
+import type * as xp from "./xp";
+export type { xp };

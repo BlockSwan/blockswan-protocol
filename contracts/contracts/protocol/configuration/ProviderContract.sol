@@ -5,13 +5,20 @@ import "hardhat/console.sol";
 
 import {Ownable} from "../../imports/openzeppelin/contracts/Ownable.sol";
 import {IERC20} from "../../imports/openzeppelin/contracts/IERC20.sol";
+import {GPv2SafeERC20} from "../../imports/gnosis/contracts/GPv2SafeERC20.sol";
 import {Errors} from "../libraries/helpers/Errors.sol";
 import {IAddressProvider} from "../../interfaces/IAddressProvider.sol";
+import {IProtocolConfigurator} from "../../interfaces/IProtocolConfigurator.sol";
+
 import {IProviderContract} from "../../interfaces/IProviderContract.sol";
 import {IACLManager} from "../../interfaces/IACLManager.sol";
 import {IBSWAN} from "../../interfaces/IBSWAN.sol";
+import {IXP} from "../../interfaces/IXP.sol";
 import {IUser} from "../../interfaces/IUser.sol";
 import {InputTypes} from "../libraries/types/InputTypes.sol";
+import {DataTypes} from "../libraries/types/DataTypes.sol";
+import {RegistryKeys} from "../libraries/helpers/RegistryKeys.sol";
+import {RoleKeys} from "../libraries/helpers/RoleKeys.sol";
 
 /**
  * @title Parent class to all contracts used to check that a contract is registerable
@@ -20,29 +27,10 @@ import {InputTypes} from "../libraries/types/InputTypes.sol";
  */
 
 contract ProviderContract is Ownable, IProviderContract {
+    using GPv2SafeERC20 for IERC20;
     IAddressProvider public ADDRESS_PROVIDER;
 
     uint256 public MAX_UINT = 2 ** 256 - 1;
-
-    // contracts
-    bytes32 public constant GIG = "GIG";
-    bytes32 public constant ORDER = "ORDER";
-    bytes32 public constant USER = "USER";
-    bytes32 public constant PROTOCOL_CONFIGURATOR = "PROTOCOL_CONFIGURATOR";
-    bytes32 public constant DAT = "DAT";
-    bytes32 public constant ACL_MANAGER = "ACL_MANAGER";
-    bytes32 public constant DATA_PROVIDER = "DATA_PROVIDER";
-    // humans
-    bytes32 public constant ACL_ADMIN = "ACL_ADMIN";
-
-    // ---- ROLES ------
-
-    bytes32 public constant override PROTOCOL_ADMIN_ROLE = "PROTOCOL_ADMIN";
-    bytes32 public constant override BUYER_ROLE = "BUYER";
-    bytes32 public constant override SELLER_ROLE = "SELLER";
-    bytes32 public constant override JUDGE_ROLE = "JUDGE";
-    bytes32 public constant override BLACKLIST_ROLE = "BLACKLIST_ROLE";
-    bytes32 public constant override WHITELIST_ROLE = "WHITELIST_ROLE";
 
     /// @notice all contracts that inherit from ProviderContract are automatically Ownable()
     /// @dev internal constructor makes ProviderContract abstract
@@ -76,7 +64,12 @@ contract ProviderContract is Ownable, IProviderContract {
     }
 
     modifier onlyStillBuyer() {
-        require(isStillBuyer(_msgSender()), "buyer time elapsed");
+        require(isStillBuyer(_msgSender()), Errors.ONLY_BUYER);
+        _;
+    }
+
+    modifier onlyStillSeller() {
+        require(isStillSeller(_msgSender()), Errors.ONLY_SELLER);
         _;
     }
 
@@ -84,17 +77,40 @@ contract ProviderContract is Ownable, IProviderContract {
         bytes32 _role,
         address account
     ) public view returns (bool) {
-        bool hasRole = IACLManager(fetchContract(ACL_MANAGER)).hasRole(
-            _role,
-            account
-        );
+        bool hasRole = IACLManager(fetchContract(RegistryKeys.ACL_MANAGER))
+            .hasRole(_role, account);
         return hasRole;
     }
 
+    // function hasProtocolRoles(
+    //     bytes32[] memory _roles,
+    //     address account
+    // ) public view returns (bool) {
+    //     for (uint256 i; i < _roles.length; i++) {
+    //         bool hasRole = IACLManager(fetchContract(RegistryKeys.ACL_MANAGER))
+    //             .hasRole(_roles[i], account);
+    //         if (hasRole) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
     function isStillBuyer(address account) public view returns (bool) {
         return
-            hasProtocolRole(BUYER_ROLE, account) &&
-            IUser(fetchContract(USER)).getUserByAddress(account).buyerUntil >
+            hasProtocolRole(RoleKeys.BUYER_ROLE, account) &&
+            IUser(fetchContract(RegistryKeys.USER))
+                .getUserByAddress(account)
+                .buyerUntil >
+            block.timestamp;
+    }
+
+    function isStillSeller(address account) public view returns (bool) {
+        return
+            hasProtocolRole(RoleKeys.SELLER_ROLE, account) &&
+            IUser(fetchContract(RegistryKeys.USER))
+                .getUserByAddress(account)
+                .sellerUntil >
             block.timestamp;
     }
 
@@ -132,36 +148,67 @@ contract ProviderContract is Ownable, IProviderContract {
     }
 
     function grantProtocolRole(bytes32 _role, address account) internal {
-        IACLManager(fetchContract(ACL_MANAGER)).grantRole(_role, account);
+        IACLManager(fetchContract(RegistryKeys.ACL_MANAGER)).grantRole(
+            _role,
+            account
+        );
     }
 
     function approve(
         address erc20
-    ) public onlyProtocolRole(PROTOCOL_ADMIN_ROLE) {
-        address dat = fetchContract(DAT);
+    ) public onlyProtocolRole(RoleKeys.PROTOCOL_ADMIN_ROLE) {
+        address dat = fetchContract(RegistryKeys.DAT);
         IERC20(erc20).approve(dat, MAX_UINT);
-    }
-
-    function datCurrency() public returns (address) {
-        address dat = fetchContract(DAT);
-        address erc20 = address(IBSWAN(dat).currency());
-        return erc20;
-    }
-
-    function pay(address _from, address _to, uint256 _currencyValue) internal {
-        IERC20(datCurrency()).transferFrom(
-            _from,
-            address(this),
-            _currencyValue
-        );
-        IBSWAN(fetchContract(DAT)).pay(_to, _currencyValue);
     }
 
     function _processPayment(
         InputTypes.ProcessPaymentInput memory params
     ) internal {
-        pay(params.caller, params.inviter0, params.inviter0Rewards);
-        pay(params.caller, params.inviter1, params.inviter1Rewards);
-        pay(params.caller, address(0), params.remainingRewards);
+        IBSWAN dat = IBSWAN(fetchContract(RegistryKeys.DAT));
+        uint256 total = params.inviter0Rewards +
+            params.inviter1Rewards +
+            params.remainingRewards;
+        IERC20(dat.currency()).safeTransferFrom(
+            params.caller,
+            address(this),
+            total
+        );
+        dat.pay(params.inviter0, params.inviter0Rewards);
+        dat.pay(params.inviter1, params.inviter1Rewards);
+        dat.pay(address(0), params.remainingRewards);
+    }
+
+    function _giveXP(bytes32 _key, address _to) internal {
+        IXP(fetchContract(RegistryKeys.XP)).mint(_key, _to);
+    }
+
+    function getProtocolRetributionParams()
+        internal
+        view
+        returns (DataTypes.RetributionParams memory)
+    {
+        return
+            IProtocolConfigurator(
+                fetchContract(RegistryKeys.PROTOCOL_CONFIGURATOR)
+            ).getRetributionParams();
+    }
+
+    function getProtocolDelayTimestamp()
+        internal
+        view
+        returns (DataTypes.DelayTimestamp memory)
+    {
+        return
+            IProtocolConfigurator(
+                fetchContract(RegistryKeys.PROTOCOL_CONFIGURATOR)
+            ).getDelayTimestamp();
+    }
+
+    function isGigOwner(
+        uint256 userId,
+        uint256 gigId,
+        IUser UserContract
+    ) public view returns (bool) {
+        return UserContract.isGigOwner(userId, gigId);
     }
 }

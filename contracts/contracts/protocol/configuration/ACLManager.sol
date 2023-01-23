@@ -8,6 +8,8 @@ import {Strings} from "../../imports/openzeppelin/contracts/Strings.sol";
 import {IAddressProvider} from "../../interfaces/IAddressProvider.sol";
 import {IACLManager} from "../../interfaces/IACLManager.sol";
 import {Errors} from "../libraries/helpers/Errors.sol";
+import {RegistryKeys} from "../libraries/helpers/RegistryKeys.sol";
+import {RoleKeys} from "../libraries/helpers/RoleKeys.sol";
 import {ProviderContract} from "./ProviderContract.sol";
 
 /**
@@ -23,7 +25,9 @@ contract ACLManager is AccessControlEnumerable, IACLManager, ProviderContract {
      */
 
     constructor(IAddressProvider provider) ProviderContract(provider) {
-        address aclAdmin = ADDRESS_PROVIDER.fetchContract(ACL_ADMIN);
+        address aclAdmin = ADDRESS_PROVIDER.fetchContract(
+            RegistryKeys.ACL_ADMIN
+        );
         require(aclAdmin != address(0), Errors.ZERO_ADDRESS_IS_INVALID);
         _setupRole(DEFAULT_ADMIN_ROLE, aclAdmin);
     }

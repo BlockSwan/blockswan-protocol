@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { USER_BIGINVITER_TEST, USER_TEST } from '../../helpers/constants';
+import { USER_BIGINVITER_TEST, USER_TEST0 } from '../../helpers/constants';
 import { ProtocolErrors, TestEnv } from '../../helpers/types';
 import makeSuite from '../fixtures/makeSuite';
 
@@ -14,8 +14,8 @@ describe('User: getUser', () => {
 		testEnv = await makeSuite();
 		User = testEnv.User;
 		users = testEnv.users;
-		await User.connect(users[0].signer).createUser(...USER_TEST);
-		await User.connect(users[1].signer).createUser(...USER_TEST);
+		await User.connect(users[0].signer).createUser(...USER_TEST0);
+		await User.connect(users[1].signer).createUser(...USER_TEST0);
 	})
 
 
@@ -30,7 +30,7 @@ describe('User: getUser', () => {
 	})
 	it("Tries to create a new account with an address already used (revert expected)", async () => {
 		await expect(
-			User.connect(users[1].signer).createUser(...USER_TEST)
+			User.connect(users[1].signer).createUser(...USER_TEST0)
 		).to.be.revertedWith(ProtocolErrors.ADDRESS_ALREADY_USED);
 
 	})
@@ -46,10 +46,10 @@ describe('User: getUser', () => {
 
 		const user0 = await User.getUserById(0);
 		const user1 = await User.getUserById(1);
-		expect(user0[0]).to.be.equal(USER_TEST[0]);
-		expect(user0[1]).to.be.equal(USER_TEST[1]);
-		expect(user1[0]).to.be.equal(USER_TEST[0]);
-		expect(user1[1]).to.be.equal(USER_TEST[1]);
+		expect(user0[0]).to.be.equal(USER_TEST0[0]);
+		expect(user0[1]).to.be.equal(USER_TEST0[1]);
+		expect(user1[0]).to.be.equal(USER_TEST0[0]);
+		expect(user1[1]).to.be.equal(USER_TEST0[1]);
 	});
 
 	it('should get user data by address', async () => {
@@ -57,10 +57,10 @@ describe('User: getUser', () => {
 
 		const user0 = await User.getUserByAddress(users[0].address);
 		const user1 = await User.getUserByAddress(users[1].address);
-		expect(user0[0]).to.be.equal(USER_TEST[0]);
-		expect(user0[1]).to.be.equal(USER_TEST[1]);
-		expect(user1[0]).to.be.equal(USER_TEST[0]);
-		expect(user1[1]).to.be.equal(USER_TEST[1]);
+		expect(user0[0]).to.be.equal(USER_TEST0[0]);
+		expect(user0[1]).to.be.equal(USER_TEST0[1]);
+		expect(user1[0]).to.be.equal(USER_TEST0[0]);
+		expect(user1[1]).to.be.equal(USER_TEST0[1]);
 	});
 
 	it('User calls `getUserList`', async () => {

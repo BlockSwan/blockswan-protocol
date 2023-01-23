@@ -4,6 +4,7 @@
 import type {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -28,28 +29,15 @@ import type {
 
 export interface ProviderContractInterface extends utils.Interface {
   functions: {
-    "ACL_ADMIN()": FunctionFragment;
-    "ACL_MANAGER()": FunctionFragment;
     "ADDRESSES_PROVIDER()": FunctionFragment;
     "ADDRESS_PROVIDER()": FunctionFragment;
-    "BLACKLIST_ROLE()": FunctionFragment;
-    "BUYER_ROLE()": FunctionFragment;
-    "DAT()": FunctionFragment;
-    "DATA_PROVIDER()": FunctionFragment;
-    "GIG()": FunctionFragment;
-    "JUDGE_ROLE()": FunctionFragment;
     "MAX_UINT()": FunctionFragment;
-    "ORDER()": FunctionFragment;
-    "PROTOCOL_ADMIN_ROLE()": FunctionFragment;
-    "PROTOCOL_CONFIGURATOR()": FunctionFragment;
-    "SELLER_ROLE()": FunctionFragment;
-    "USER()": FunctionFragment;
-    "WHITELIST_ROLE()": FunctionFragment;
     "approve(address)": FunctionFragment;
-    "datCurrency()": FunctionFragment;
     "fetchContract(bytes32)": FunctionFragment;
     "hasProtocolRole(bytes32,address)": FunctionFragment;
+    "isGigOwner(uint256,uint256,address)": FunctionFragment;
     "isStillBuyer(address)": FunctionFragment;
+    "isStillSeller(address)": FunctionFragment;
     "kill()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -59,28 +47,15 @@ export interface ProviderContractInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "ACL_ADMIN"
-      | "ACL_MANAGER"
       | "ADDRESSES_PROVIDER"
       | "ADDRESS_PROVIDER"
-      | "BLACKLIST_ROLE"
-      | "BUYER_ROLE"
-      | "DAT"
-      | "DATA_PROVIDER"
-      | "GIG"
-      | "JUDGE_ROLE"
       | "MAX_UINT"
-      | "ORDER"
-      | "PROTOCOL_ADMIN_ROLE"
-      | "PROTOCOL_CONFIGURATOR"
-      | "SELLER_ROLE"
-      | "USER"
-      | "WHITELIST_ROLE"
       | "approve"
-      | "datCurrency"
       | "fetchContract"
       | "hasProtocolRole"
+      | "isGigOwner"
       | "isStillBuyer"
+      | "isStillSeller"
       | "kill"
       | "owner"
       | "renounceOwnership"
@@ -88,11 +63,6 @@ export interface ProviderContractInterface extends utils.Interface {
       | "transferOwnership"
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: "ACL_ADMIN", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "ACL_MANAGER",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "ADDRESSES_PROVIDER",
     values?: undefined
@@ -101,50 +71,10 @@ export interface ProviderContractInterface extends utils.Interface {
     functionFragment: "ADDRESS_PROVIDER",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "BLACKLIST_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "BUYER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "DAT", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "DATA_PROVIDER",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "GIG", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "JUDGE_ROLE",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "MAX_UINT", values?: undefined): string;
-  encodeFunctionData(functionFragment: "ORDER", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "PROTOCOL_ADMIN_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PROTOCOL_CONFIGURATOR",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "SELLER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "USER", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "WHITELIST_ROLE",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "datCurrency",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "fetchContract",
@@ -155,7 +85,19 @@ export interface ProviderContractInterface extends utils.Interface {
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "isGigOwner",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "isStillBuyer",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isStillSeller",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "kill", values?: undefined): string;
@@ -173,11 +115,6 @@ export interface ProviderContractInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
-  decodeFunctionResult(functionFragment: "ACL_ADMIN", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "ACL_MANAGER",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "ADDRESSES_PROVIDER",
     data: BytesLike
@@ -186,42 +123,8 @@ export interface ProviderContractInterface extends utils.Interface {
     functionFragment: "ADDRESS_PROVIDER",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "BLACKLIST_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "BUYER_ROLE", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "DAT", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "DATA_PROVIDER",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "GIG", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "JUDGE_ROLE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "MAX_UINT", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "ORDER", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "PROTOCOL_ADMIN_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "PROTOCOL_CONFIGURATOR",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "SELLER_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "USER", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "WHITELIST_ROLE",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "datCurrency",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "fetchContract",
     data: BytesLike
@@ -230,8 +133,13 @@ export interface ProviderContractInterface extends utils.Interface {
     functionFragment: "hasProtocolRole",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "isGigOwner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isStillBuyer",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isStillSeller",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "kill", data: BytesLike): Result;
@@ -295,46 +203,14 @@ export interface ProviderContract extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    ACL_ADMIN(overrides?: CallOverrides): Promise<[string]>;
-
-    ACL_MANAGER(overrides?: CallOverrides): Promise<[string]>;
-
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<[string]>;
 
     ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<[string]>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    DAT(overrides?: CallOverrides): Promise<[string]>;
-
-    DATA_PROVIDER(overrides?: CallOverrides): Promise<[string]>;
-
-    GIG(overrides?: CallOverrides): Promise<[string]>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
     MAX_UINT(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    ORDER(overrides?: CallOverrides): Promise<[string]>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<[string]>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    USER(overrides?: CallOverrides): Promise<[string]>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     approve(
       erc20: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    datCurrency(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -349,7 +225,19 @@ export interface ProviderContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    isGigOwner(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     isStillBuyer(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    isStillSeller(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
@@ -375,46 +263,14 @@ export interface ProviderContract extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  ACL_ADMIN(overrides?: CallOverrides): Promise<string>;
-
-  ACL_MANAGER(overrides?: CallOverrides): Promise<string>;
-
   ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
   ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
-  BLACKLIST_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  BUYER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  DAT(overrides?: CallOverrides): Promise<string>;
-
-  DATA_PROVIDER(overrides?: CallOverrides): Promise<string>;
-
-  GIG(overrides?: CallOverrides): Promise<string>;
-
-  JUDGE_ROLE(overrides?: CallOverrides): Promise<string>;
-
   MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
-
-  ORDER(overrides?: CallOverrides): Promise<string>;
-
-  PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<string>;
-
-  SELLER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  USER(overrides?: CallOverrides): Promise<string>;
-
-  WHITELIST_ROLE(overrides?: CallOverrides): Promise<string>;
 
   approve(
     erc20: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  datCurrency(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -429,7 +285,19 @@ export interface ProviderContract extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  isGigOwner(
+    userId: PromiseOrValue<BigNumberish>,
+    gigId: PromiseOrValue<BigNumberish>,
+    UserContract: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   isStillBuyer(
+    account: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  isStillSeller(
     account: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
@@ -455,46 +323,16 @@ export interface ProviderContract extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    ACL_ADMIN(overrides?: CallOverrides): Promise<string>;
-
-    ACL_MANAGER(overrides?: CallOverrides): Promise<string>;
-
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
     ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    DAT(overrides?: CallOverrides): Promise<string>;
-
-    DATA_PROVIDER(overrides?: CallOverrides): Promise<string>;
-
-    GIG(overrides?: CallOverrides): Promise<string>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<string>;
-
     MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
-
-    ORDER(overrides?: CallOverrides): Promise<string>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<string>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    USER(overrides?: CallOverrides): Promise<string>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<string>;
 
     approve(
       erc20: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    datCurrency(overrides?: CallOverrides): Promise<string>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
@@ -507,7 +345,19 @@ export interface ProviderContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    isGigOwner(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     isStillBuyer(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    isStillSeller(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -541,46 +391,14 @@ export interface ProviderContract extends BaseContract {
   };
 
   estimateGas: {
-    ACL_ADMIN(overrides?: CallOverrides): Promise<BigNumber>;
-
-    ACL_MANAGER(overrides?: CallOverrides): Promise<BigNumber>;
-
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<BigNumber>;
 
     ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<BigNumber>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    DAT(overrides?: CallOverrides): Promise<BigNumber>;
-
-    DATA_PROVIDER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    GIG(overrides?: CallOverrides): Promise<BigNumber>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
     MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
-
-    ORDER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<BigNumber>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    USER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     approve(
       erc20: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    datCurrency(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -595,7 +413,19 @@ export interface ProviderContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    isGigOwner(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isStillBuyer(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    isStillSeller(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -622,52 +452,16 @@ export interface ProviderContract extends BaseContract {
   };
 
   populateTransaction: {
-    ACL_ADMIN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    ACL_MANAGER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     ADDRESSES_PROVIDER(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     ADDRESS_PROVIDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    DAT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    DATA_PROVIDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    GIG(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     MAX_UINT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    ORDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    PROTOCOL_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    PROTOCOL_CONFIGURATOR(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    USER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     approve(
       erc20: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    datCurrency(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -682,7 +476,19 @@ export interface ProviderContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    isGigOwner(
+      userId: PromiseOrValue<BigNumberish>,
+      gigId: PromiseOrValue<BigNumberish>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     isStillBuyer(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isStillSeller(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

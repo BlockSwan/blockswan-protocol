@@ -1,6 +1,22 @@
+import { ethers } from 'hardhat';
 import { Signer, BigNumber, utils } from 'ethers';
-import { BSWAN, ERC20, MUSDC, User, AddressProvider, ProviderRegistry, ACLManager, ProtocolConfigurator } from '../types';
+import { BSWAN, Gig, XP, Order, ERC20, MUSDC, User, AddressProvider, ProviderRegistry, ACLManager, ProtocolConfigurator } from '../types';
 
+type ValidInput = string | number | BigNumber;
+
+enum OrderState {
+	UNCONFIRMED,
+	CONFIRMED,
+	TRIAL,
+	PENDING,
+	DONE
+	// UPDATING
+}
+
+type Balance = {
+	USDC: number,
+	BSWAN: number,
+}
 
 type EvmAddress = string;
 
@@ -26,21 +42,39 @@ type EntryParams = {
 	invitationEarned: number,
 }
 
-type fxInput = string | number | BigNumber;
+type CreationParams = {
+	currencyValue: ValidInput,
+	xpEarned: number,
+}
+
+type OrderPriceParams = {
+	trialFlat: ValidInput;
+	trialPercent: ValidInput;
+	proceedFlat: ValidInput;
+	proceedPercent: ValidInput;
+}
+
+type DelayTimestamp = {
+	selfRefund: ValidInput;
+	closeTrial: ValidInput;
+	endTrial: ValidInput;
+}
+
+
 type StructRetributionParams = {
-	affiliate: fxInput;
-	lvl0AffiliateShare: fxInput;
+	affiliate: ValidInput;
+	lvl0AffiliateShare: ValidInput;
 }
 
 class RetributionParams {
-	affiliate: fxInput;
-	lvl0AffiliateShare: fxInput;
+	affiliate: ValidInput;
+	lvl0AffiliateShare: ValidInput;
 	constructor({ affiliate, lvl0AffiliateShare }: StructRetributionParams) {
 		this.affiliate = affiliate;
 		this.lvl0AffiliateShare = lvl0AffiliateShare;
 	}
-
 }
+
 type DeploymentEnv = {
 	// admins & users
 	deployer: SignerWithAddress
@@ -62,10 +96,13 @@ export type TestEnv = {
 	dat: BSWAN
 	mUSDC: MUSDC
 	User: User,
+	Gig: Gig,
+	Order: Order,
 	AddressProvider: AddressProvider,
 	ACLManager: ACLManager,
 	Registry: ProviderRegistry
 	ProtocolConfigurator: ProtocolConfigurator
+	XP: XP
 }
 
 
@@ -100,11 +137,38 @@ enum ProtocolErrors {
 	RESTRICTED_TO_BUYER = "9", // this function can't  be called by buyers
 	INVALID_INVITER_ID = "10", // The inviter ID provided is incorrect
 	FAILED_BECOMING_BUYER = "11", // The execution to becomeBuyer failed
+	RESTRICTED_TO_SELLER = "12", // this function can't  be called by sellers
+	FAILED_BECOMING_SELLER = "13", // The execution to becomeSeller failed
+	ONLY_SELLER = "16", // Only account with the seller role can call the functions
+	ONLY_BUYER = "17", // Only buyers can call those functions.
+	NOT_GIG_OWNER = "18", // The id provided does not match with the gig owner id
+	CALLER_NOT_SELLER_ID = "19", // The seller id provided is not matching with the account address calling the function
+	CALLER_NOT_BUYER_ID = "20", // The buyer id provided is not matching with the account address calling the function
+	NOT_ORDER_SELLER = "21", // The id provided is not the order seller
+	NOT_ORDER_BUYER = "22", // The id provided is not the order buyer
+	INVALID_ORDER_STATE = "23", // The function can't be called under the current order state
+	SELF_REFUND_DELAY_NOT_OVER = "24", // The self refund delay is not over
+
 }
 
 type UserInput = [string, number]
+type PackageInput = { price: BigNumber, timeDelivery: BigNumber };
+
+type GigInput = [string, [PackageInput, PackageInput, PackageInput]];
+type OrderInput = {
+	sellerId: ValidInput;
+	buyerId: ValidInput;
+	gigId: ValidInput;
+	packageId: ValidInput;
+	brief: string;
+}
+
+
+
 
 export {
+	ValidInput,
+	Balance,
 	TrustData,
 	EntryParams,
 	EvmAddress,
@@ -114,6 +178,11 @@ export {
 	ProtocolErrors,
 	UserInput,
 	RetributionParams,
-
-
+	PackageInput,
+	GigInput,
+	CreationParams,
+	OrderInput,
+	OrderPriceParams,
+	DelayTimestamp,
+	OrderState
 }

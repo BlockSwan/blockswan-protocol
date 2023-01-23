@@ -25,12 +25,6 @@ import type {
 export interface IProviderContractInterface extends utils.Interface {
   functions: {
     "ADDRESSES_PROVIDER()": FunctionFragment;
-    "BLACKLIST_ROLE()": FunctionFragment;
-    "BUYER_ROLE()": FunctionFragment;
-    "JUDGE_ROLE()": FunctionFragment;
-    "PROTOCOL_ADMIN_ROLE()": FunctionFragment;
-    "SELLER_ROLE()": FunctionFragment;
-    "WHITELIST_ROLE()": FunctionFragment;
     "fetchContract(bytes32)": FunctionFragment;
     "kill()": FunctionFragment;
     "setProvider(address)": FunctionFragment;
@@ -39,12 +33,6 @@ export interface IProviderContractInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "ADDRESSES_PROVIDER"
-      | "BLACKLIST_ROLE"
-      | "BUYER_ROLE"
-      | "JUDGE_ROLE"
-      | "PROTOCOL_ADMIN_ROLE"
-      | "SELLER_ROLE"
-      | "WHITELIST_ROLE"
       | "fetchContract"
       | "kill"
       | "setProvider"
@@ -52,30 +40,6 @@ export interface IProviderContractInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "ADDRESSES_PROVIDER",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "BLACKLIST_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "BUYER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "JUDGE_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PROTOCOL_ADMIN_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "SELLER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "WHITELIST_ROLE",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -90,24 +54,6 @@ export interface IProviderContractInterface extends utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "ADDRESSES_PROVIDER",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "BLACKLIST_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "BUYER_ROLE", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "JUDGE_ROLE", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "PROTOCOL_ADMIN_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "SELLER_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "WHITELIST_ROLE",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -152,18 +98,6 @@ export interface IProviderContract extends BaseContract {
   functions: {
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<[string]>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -180,18 +114,6 @@ export interface IProviderContract extends BaseContract {
   };
 
   ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<string>;
-
-  BLACKLIST_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  BUYER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  JUDGE_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  SELLER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  WHITELIST_ROLE(overrides?: CallOverrides): Promise<string>;
 
   fetchContract(
     _name: PromiseOrValue<BytesLike>,
@@ -210,18 +132,6 @@ export interface IProviderContract extends BaseContract {
   callStatic: {
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<string>;
-
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -239,18 +149,6 @@ export interface IProviderContract extends BaseContract {
 
   estimateGas: {
     ADDRESSES_PROVIDER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PROTOCOL_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
@@ -271,20 +169,6 @@ export interface IProviderContract extends BaseContract {
     ADDRESSES_PROVIDER(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    BLACKLIST_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    BUYER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    JUDGE_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    PROTOCOL_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    SELLER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    WHITELIST_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
