@@ -86,6 +86,23 @@ library OrderLogic {
         );
     }
 
+    function executeRefundOrder(
+        uint256 orderId, 
+        uint256 sellerId,
+        uint256 buyerId,  
+        mapping(uint256 => DataTypes.Order) storage orders
+    ) external returns (uint256, IERC20){
+        DataTypes.Order storage order = getOrderById(orderId, orders);
+        checkOrderSeller(order, sellerId);
+        checkOrderBuyer(order, buyerId);
+        checkState(order, DataTypes.OrderState.CONFIRMED);
+        order.setState(DataTypes.OrderState.DONE);
+         return (
+            order.package.price + order.toTrial + order.toProceed,
+            order.currency
+        );
+    }
+
     function executePayOrder(
         uint256 orderId,
         uint256 buyerId,

@@ -140,6 +140,7 @@ contract Order is OrderStorage, ProviderContract {
         _transfer(paidByBuyer, caller, currency);
     }
 
+
     function payOrder(uint256 orderId, uint256 buyerId) external {
         address buyer = _msgSender();
         IUser UserContract = IUser(fetchContract(RegistryKeys.USER));
@@ -182,6 +183,18 @@ contract Order is OrderStorage, ProviderContract {
         );
     }
 
+    function refundOrder(uint256 orderId, uint256 sellerId, uint256 buyerId) external{
+        address seller = _msgSender();
+        IUser UserContract = IUser(fetchContract(RegistryKeys.USER));
+        address buyer = UserContract.getAddressById(buyerId);
+       require(
+            isCallerUser(seller, sellerId, UserContract),
+            Errors.CALLER_NOT_SELLER_ID
+        );
+        (uint256 orderPrice, IERC20 currency) = OrderLogic.executeRefundOrder(orderId, sellerId, buyerId,_orders);
+         _transfer(orderPrice, buyer, currency);
+    }
+
     function _processOrderPayment(
         uint256 currencyValue,
         address account,
@@ -200,16 +213,11 @@ contract Order is OrderStorage, ProviderContract {
                     lvl0AffiliateShare: retributionParams.lvl0AffiliateShare
                 })
             );
-        _processPayment(
-            InputTypes.ProcessPaymentInput({
-                caller: address(this),
-                inviter0: inviter0,
-                inviter1: inviter1,
-                inviter0Rewards: rewards.inviter0Rewards,
-                inviter1Rewards: rewards.inviter1Rewards,
-                remainingRewards: rewards.remainingRewards
-            })
-        );
+        
+        IBSWAN dat = IBSWAN(fetchContract(RegistryKeys.DAT));
+        dat.pay(inviter0, rewards.inviter0Rewards);
+        dat.pay(inviter1, rewards.inviter1Rewards);
+        dat.pay(address(0), rewards.remainingRewards);
         _giveXP(XPKeys.PAY_ORDER, account);
     }
 

@@ -137,6 +137,7 @@ export interface OrderInterface extends utils.Interface {
     "kill()": FunctionFragment;
     "owner()": FunctionFragment;
     "payOrder(uint256,uint256)": FunctionFragment;
+    "refundOrder(uint256,uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setProvider(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -165,6 +166,7 @@ export interface OrderInterface extends utils.Interface {
       | "kill"
       | "owner"
       | "payOrder"
+      | "refundOrder"
       | "renounceOwnership"
       | "setProvider"
       | "transferOwnership"
@@ -254,6 +256,14 @@ export interface OrderInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "refundOrder",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
@@ -329,6 +339,10 @@ export interface OrderInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "kill", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "payOrder", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "refundOrder",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -485,6 +499,13 @@ export interface Order extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    refundOrder(
+      orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -597,6 +618,13 @@ export interface Order extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  refundOrder(
+    orderId: PromiseOrValue<BigNumberish>,
+    sellerId: PromiseOrValue<BigNumberish>,
+    buyerId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -703,6 +731,13 @@ export interface Order extends BaseContract {
 
     payOrder(
       orderId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    refundOrder(
+      orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
       buyerId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -827,6 +862,13 @@ export interface Order extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    refundOrder(
+      orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -936,6 +978,13 @@ export interface Order extends BaseContract {
 
     payOrder(
       orderId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    refundOrder(
+      orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
       buyerId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

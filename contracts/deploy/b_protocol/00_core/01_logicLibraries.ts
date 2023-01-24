@@ -60,6 +60,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			from: deployer,
 			...COMMON_DEPLOY_PARAMS,
 			libraries: {
+				InviterLogic: InviterLogic.address,
 				OrderDataLogic: OrderDataLogic.address,
 			}
 		});
