@@ -91,25 +91,25 @@ library ParamsLogic {
         history[newParamId] = newParams;
     }
 
-    function getPriceParams(
+    function getFeeParams(
         EnumerableSet.UintSet storage params,
-        mapping(uint256 => DataTypes.OrderPriceParams) storage history
-    ) external view returns (DataTypes.OrderPriceParams memory) {
+        mapping(uint256 => DataTypes.FeeParams) storage history
+    ) external view returns (DataTypes.FeeParams memory) {
         return history[params.at(params.length() - 1)];
     }
 
-    function getPriceParams(
+    function getFeeParams(
         EnumerableSet.UintSet storage params,
-        mapping(uint256 => DataTypes.OrderPriceParams) storage history,
+        mapping(uint256 => DataTypes.FeeParams) storage history,
         uint256 version
-    ) external view returns (DataTypes.OrderPriceParams memory) {
+    ) external view returns (DataTypes.FeeParams memory) {
         return history[params.at(version)];
     }
 
-    function updatePriceParams(
+    function updateFeeParams(
         EnumerableSet.UintSet storage params,
-        mapping(uint256 => DataTypes.OrderPriceParams) storage history,
-        DataTypes.OrderPriceParams memory newParams
+        mapping(uint256 => DataTypes.FeeParams) storage history,
+        DataTypes.FeeParams memory newParams
     ) external {
         uint256 newParamId = params.length();
         params.add(newParamId);
@@ -141,6 +141,31 @@ library ParamsLogic {
         EnumerableSet.UintSet storage params,
         mapping(uint256 => DataTypes.DelayTimestamp) storage history,
         DataTypes.DelayTimestamp memory newParams
+    ) external {
+        uint256 newParamId = params.length();
+        params.add(newParamId);
+        history[newParamId] = newParams;
+    }
+
+    function getDisputeParams(
+        EnumerableSet.UintSet storage params,
+        mapping(uint256 => DataTypes.DisputeParams) storage history
+    ) external view returns (DataTypes.DisputeParams memory) {
+        return history[params.at(params.length() - 1)];
+    }
+
+    function getDisputeParams(
+        EnumerableSet.UintSet storage params,
+        mapping(uint256 => DataTypes.DisputeParams) storage history,
+        uint256 version
+    ) external view returns (DataTypes.DisputeParams memory) {
+        return history[params.at(version)];
+    }
+
+    function updateDisputeParams(
+        EnumerableSet.UintSet storage params,
+        mapping(uint256 => DataTypes.DisputeParams) storage history,
+        DataTypes.DisputeParams memory newParams
     ) external {
         uint256 newParamId = params.length();
         params.add(newParamId);

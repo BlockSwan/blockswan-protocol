@@ -35,36 +35,12 @@ library OrderDataLogic {
         return true;
     }
 
-    function setSellerFeesVersion(
-        DataTypes.Order storage order,
-        uint256 sellerFeesVersion
-    ) external returns (bool) {
-        order.sellerFeesVersion = sellerFeesVersion;
-        return true;
-    }
+   
+  
 
-    function setToTrial(
-        DataTypes.Order storage order,
-        uint256 toTrial
-    ) external returns (bool) {
-        order.toTrial = toTrial;
-        return true;
-    }
+   
 
-    function setToProceed(
-        DataTypes.Order storage order,
-        uint256 toProceed
-    ) external returns (bool) {
-        order.toProceed = toProceed;
-        return true;
-    }
-
-    function setCreatedAt(
-        DataTypes.Order storage order
-    ) external returns (bool) {
-        order.createdAt = block.timestamp;
-        return true;
-    }
+  
 
     function setBuyerId(
         DataTypes.Order storage order,
@@ -90,11 +66,11 @@ library OrderDataLogic {
         return true;
     }
 
-    function setPackage(
+    function setInvoice(
         DataTypes.Order storage order,
-        DataTypes.Package memory package
+        DataTypes.Invoice memory invoice 
     ) external returns (bool) {
-        order.package = package;
+        order.invoice = invoice;
         return true;
     }
 
@@ -103,6 +79,16 @@ library OrderDataLogic {
         DataTypes.OrderState state
     ) external returns (bool) {
         order.state = state;
+        return true;
+    }
+
+
+    function setDisputeId(
+        DataTypes.Order storage order,
+        uint256 disputeId
+    ) external returns (bool) {
+        order.disputeId = disputeId;
+        order.disputed = true;
         return true;
     }
 
@@ -121,14 +107,7 @@ library OrderDataLogic {
         order.reviewIds.remove(reviewId);
         return true;
     }
-
-    function setCurrency(
-        DataTypes.Order storage order,
-        IERC20 currency
-    ) external {
-        order.currency = currency;
-    }
-
+  
     function isSeller(
         DataTypes.Order storage order,
         uint256 userId

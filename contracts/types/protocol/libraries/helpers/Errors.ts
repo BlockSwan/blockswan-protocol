@@ -28,15 +28,20 @@ export interface ErrorsInterface extends utils.Interface {
     "CALLER_NOT_BUYER_ID()": FunctionFragment;
     "CALLER_NOT_SELLER_ID()": FunctionFragment;
     "CONTRACT_NAME_ALREADY_USED()": FunctionFragment;
+    "DISPUTE_NOT_CREATED()": FunctionFragment;
     "FAILED_BECOMING_BUYER()": FunctionFragment;
     "FAILED_BECOMING_SELLER()": FunctionFragment;
+    "FAILED_TO_STAKE_JURY()": FunctionFragment;
+    "FAILED_TO_WITHDRAW_JURY()": FunctionFragment;
     "GIG_ID_ALREADY_EXISING()": FunctionFragment;
     "INDEX_OUT_OF_RANGE()": FunctionFragment;
     "INVALID_ADDRESS_PROVIDER_ID()": FunctionFragment;
     "INVALID_INVITER_ID()": FunctionFragment;
     "INVALID_ORDER_STATE()": FunctionFragment;
     "INVALID_USER_ID()": FunctionFragment;
+    "JURY_STAKE_NOT_ENOUGH()": FunctionFragment;
     "NOT_GIG_OWNER()": FunctionFragment;
+    "NOT_ORDER_ACTOR()": FunctionFragment;
     "NOT_ORDER_BUYER()": FunctionFragment;
     "NOT_ORDER_SELLER()": FunctionFragment;
     "NO_MATCHING_XP_KEY()": FunctionFragment;
@@ -56,15 +61,20 @@ export interface ErrorsInterface extends utils.Interface {
       | "CALLER_NOT_BUYER_ID"
       | "CALLER_NOT_SELLER_ID"
       | "CONTRACT_NAME_ALREADY_USED"
+      | "DISPUTE_NOT_CREATED"
       | "FAILED_BECOMING_BUYER"
       | "FAILED_BECOMING_SELLER"
+      | "FAILED_TO_STAKE_JURY"
+      | "FAILED_TO_WITHDRAW_JURY"
       | "GIG_ID_ALREADY_EXISING"
       | "INDEX_OUT_OF_RANGE"
       | "INVALID_ADDRESS_PROVIDER_ID"
       | "INVALID_INVITER_ID"
       | "INVALID_ORDER_STATE"
       | "INVALID_USER_ID"
+      | "JURY_STAKE_NOT_ENOUGH"
       | "NOT_GIG_OWNER"
+      | "NOT_ORDER_ACTOR"
       | "NOT_ORDER_BUYER"
       | "NOT_ORDER_SELLER"
       | "NO_MATCHING_XP_KEY"
@@ -101,11 +111,23 @@ export interface ErrorsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "DISPUTE_NOT_CREATED",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "FAILED_BECOMING_BUYER",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "FAILED_BECOMING_SELLER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "FAILED_TO_STAKE_JURY",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "FAILED_TO_WITHDRAW_JURY",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -133,7 +155,15 @@ export interface ErrorsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "JURY_STAKE_NOT_ENOUGH",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "NOT_GIG_OWNER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "NOT_ORDER_ACTOR",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -198,11 +228,23 @@ export interface ErrorsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "DISPUTE_NOT_CREATED",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "FAILED_BECOMING_BUYER",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "FAILED_BECOMING_SELLER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "FAILED_TO_STAKE_JURY",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "FAILED_TO_WITHDRAW_JURY",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -230,7 +272,15 @@ export interface ErrorsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "JURY_STAKE_NOT_ENOUGH",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "NOT_GIG_OWNER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "NOT_ORDER_ACTOR",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -313,9 +363,15 @@ export interface Errors extends BaseContract {
 
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<[string]>;
 
+    DISPUTE_NOT_CREATED(overrides?: CallOverrides): Promise<[string]>;
+
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<[string]>;
 
     FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<[string]>;
+
+    FAILED_TO_STAKE_JURY(overrides?: CallOverrides): Promise<[string]>;
+
+    FAILED_TO_WITHDRAW_JURY(overrides?: CallOverrides): Promise<[string]>;
 
     GIG_ID_ALREADY_EXISING(overrides?: CallOverrides): Promise<[string]>;
 
@@ -329,7 +385,11 @@ export interface Errors extends BaseContract {
 
     INVALID_USER_ID(overrides?: CallOverrides): Promise<[string]>;
 
+    JURY_STAKE_NOT_ENOUGH(overrides?: CallOverrides): Promise<[string]>;
+
     NOT_GIG_OWNER(overrides?: CallOverrides): Promise<[string]>;
+
+    NOT_ORDER_ACTOR(overrides?: CallOverrides): Promise<[string]>;
 
     NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<[string]>;
 
@@ -362,9 +422,15 @@ export interface Errors extends BaseContract {
 
   CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<string>;
 
+  DISPUTE_NOT_CREATED(overrides?: CallOverrides): Promise<string>;
+
   FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<string>;
 
   FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<string>;
+
+  FAILED_TO_STAKE_JURY(overrides?: CallOverrides): Promise<string>;
+
+  FAILED_TO_WITHDRAW_JURY(overrides?: CallOverrides): Promise<string>;
 
   GIG_ID_ALREADY_EXISING(overrides?: CallOverrides): Promise<string>;
 
@@ -378,7 +444,11 @@ export interface Errors extends BaseContract {
 
   INVALID_USER_ID(overrides?: CallOverrides): Promise<string>;
 
+  JURY_STAKE_NOT_ENOUGH(overrides?: CallOverrides): Promise<string>;
+
   NOT_GIG_OWNER(overrides?: CallOverrides): Promise<string>;
+
+  NOT_ORDER_ACTOR(overrides?: CallOverrides): Promise<string>;
 
   NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<string>;
 
@@ -411,9 +481,15 @@ export interface Errors extends BaseContract {
 
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<string>;
 
+    DISPUTE_NOT_CREATED(overrides?: CallOverrides): Promise<string>;
+
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<string>;
 
     FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<string>;
+
+    FAILED_TO_STAKE_JURY(overrides?: CallOverrides): Promise<string>;
+
+    FAILED_TO_WITHDRAW_JURY(overrides?: CallOverrides): Promise<string>;
 
     GIG_ID_ALREADY_EXISING(overrides?: CallOverrides): Promise<string>;
 
@@ -427,7 +503,11 @@ export interface Errors extends BaseContract {
 
     INVALID_USER_ID(overrides?: CallOverrides): Promise<string>;
 
+    JURY_STAKE_NOT_ENOUGH(overrides?: CallOverrides): Promise<string>;
+
     NOT_GIG_OWNER(overrides?: CallOverrides): Promise<string>;
+
+    NOT_ORDER_ACTOR(overrides?: CallOverrides): Promise<string>;
 
     NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<string>;
 
@@ -467,9 +547,15 @@ export interface Errors extends BaseContract {
 
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<BigNumber>;
 
+    DISPUTE_NOT_CREATED(overrides?: CallOverrides): Promise<BigNumber>;
+
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
 
     FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    FAILED_TO_STAKE_JURY(overrides?: CallOverrides): Promise<BigNumber>;
+
+    FAILED_TO_WITHDRAW_JURY(overrides?: CallOverrides): Promise<BigNumber>;
 
     GIG_ID_ALREADY_EXISING(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -483,7 +569,11 @@ export interface Errors extends BaseContract {
 
     INVALID_USER_ID(overrides?: CallOverrides): Promise<BigNumber>;
 
+    JURY_STAKE_NOT_ENOUGH(overrides?: CallOverrides): Promise<BigNumber>;
+
     NOT_GIG_OWNER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    NOT_ORDER_ACTOR(overrides?: CallOverrides): Promise<BigNumber>;
 
     NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -529,11 +619,23 @@ export interface Errors extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    DISPUTE_NOT_CREATED(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     FAILED_BECOMING_BUYER(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     FAILED_BECOMING_SELLER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    FAILED_TO_STAKE_JURY(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    FAILED_TO_WITHDRAW_JURY(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -559,7 +661,13 @@ export interface Errors extends BaseContract {
 
     INVALID_USER_ID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    JURY_STAKE_NOT_ENOUGH(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     NOT_GIG_OWNER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    NOT_ORDER_ACTOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     NOT_ORDER_BUYER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

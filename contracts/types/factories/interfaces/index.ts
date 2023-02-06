@@ -4,6 +4,7 @@
 export { IACLManager__factory } from "./IACLManager__factory";
 export { IAddressProvider__factory } from "./IAddressProvider__factory";
 export { IBSWAN__factory } from "./IBSWAN__factory";
+export { IDispute__factory } from "./IDispute__factory";
 export { IGig__factory } from "./IGig__factory";
 export { IProtocolConfigurator__factory } from "./IProtocolConfigurator__factory";
 export { IProviderContract__factory } from "./IProviderContract__factory";

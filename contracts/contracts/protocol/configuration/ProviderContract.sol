@@ -161,6 +161,13 @@ contract ProviderContract is Ownable, IProviderContract {
         IERC20(erc20).approve(dat, MAX_UINT);
     }
 
+
+    function _pay(InputTypes.ProcessPaymentInput memory params, IBSWAN dat) internal {
+        dat.pay(params.inviter0, params.inviter0Rewards);
+        dat.pay(params.inviter1, params.inviter1Rewards);
+        dat.pay(address(0), params.remainingRewards); 
+    }
+
     function _processPayment(
         InputTypes.ProcessPaymentInput memory params
     ) internal {
@@ -173,10 +180,10 @@ contract ProviderContract is Ownable, IProviderContract {
             address(this),
             total
         );
-        dat.pay(params.inviter0, params.inviter0Rewards);
-        dat.pay(params.inviter1, params.inviter1Rewards);
-        dat.pay(address(0), params.remainingRewards);
+        _pay(params, dat);
     }
+
+   
 
     function _giveXP(bytes32 _key, address _to) internal {
         IXP(fetchContract(RegistryKeys.XP)).mint(_key, _to);

@@ -254,82 +254,59 @@ const _abi = [
       {
         components: [
           {
+            internalType: "uint256",
+            name: "gigId",
+            type: "uint256",
+          },
+          {
             internalType: "string",
             name: "metadata",
             type: "string",
           },
           {
             internalType: "uint256",
-            name: "inviterId",
+            name: "createdAt",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "buyerUntil",
+            name: "successSell",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "buyerInvites",
+            name: "failedSell",
             type: "uint256",
           },
           {
-            internalType: "uint256",
-            name: "sellerUntil",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "sellerInvites",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "userId",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "wallet",
-            type: "address",
-          },
-          {
             internalType: "uint256[]",
-            name: "gigIds",
+            name: "reviewIds",
             type: "uint256[]",
           },
           {
             internalType: "uint256[]",
-            name: "offerIds",
+            name: "orderIds",
             type: "uint256[]",
           },
           {
-            internalType: "uint256[]",
-            name: "bidIds",
-            type: "uint256[]",
-          },
-          {
-            internalType: "uint256[]",
-            name: "buyerOrderIds",
-            type: "uint256[]",
-          },
-          {
-            internalType: "uint256[]",
-            name: "gigReviewsIds",
-            type: "uint256[]",
-          },
-          {
-            internalType: "uint256[]",
-            name: "userReviewsIds",
-            type: "uint256[]",
-          },
-          {
-            internalType: "uint256[]",
-            name: "reviewsIds",
-            type: "uint256[]",
+            components: [
+              {
+                internalType: "uint256",
+                name: "price",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "timeDelivery",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct DataTypes.Package[3]",
+            name: "packages",
+            type: "tuple[3]",
           },
         ],
-        internalType: "struct OutputTypes.UserOutput[]",
+        internalType: "struct OutputTypes.GigOutput[]",
         name: "",
         type: "tuple[]",
       },

@@ -26,9 +26,11 @@ export interface RegistryKeysInterface extends utils.Interface {
     "ACL_MANAGER()": FunctionFragment;
     "DAT()": FunctionFragment;
     "DATA_PROVIDER()": FunctionFragment;
+    "DISPUTE()": FunctionFragment;
     "GIG()": FunctionFragment;
     "ORDER()": FunctionFragment;
     "PROTOCOL_CONFIGURATOR()": FunctionFragment;
+    "TREE_KEY()": FunctionFragment;
     "USER()": FunctionFragment;
     "XP()": FunctionFragment;
   };
@@ -39,9 +41,11 @@ export interface RegistryKeysInterface extends utils.Interface {
       | "ACL_MANAGER"
       | "DAT"
       | "DATA_PROVIDER"
+      | "DISPUTE"
       | "GIG"
       | "ORDER"
       | "PROTOCOL_CONFIGURATOR"
+      | "TREE_KEY"
       | "USER"
       | "XP"
   ): FunctionFragment;
@@ -56,12 +60,14 @@ export interface RegistryKeysInterface extends utils.Interface {
     functionFragment: "DATA_PROVIDER",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "DISPUTE", values?: undefined): string;
   encodeFunctionData(functionFragment: "GIG", values?: undefined): string;
   encodeFunctionData(functionFragment: "ORDER", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "PROTOCOL_CONFIGURATOR",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "TREE_KEY", values?: undefined): string;
   encodeFunctionData(functionFragment: "USER", values?: undefined): string;
   encodeFunctionData(functionFragment: "XP", values?: undefined): string;
 
@@ -75,12 +81,14 @@ export interface RegistryKeysInterface extends utils.Interface {
     functionFragment: "DATA_PROVIDER",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "DISPUTE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "GIG", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ORDER", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "PROTOCOL_CONFIGURATOR",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "TREE_KEY", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "USER", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "XP", data: BytesLike): Result;
 
@@ -122,11 +130,15 @@ export interface RegistryKeys extends BaseContract {
 
     DATA_PROVIDER(overrides?: CallOverrides): Promise<[string]>;
 
+    DISPUTE(overrides?: CallOverrides): Promise<[string]>;
+
     GIG(overrides?: CallOverrides): Promise<[string]>;
 
     ORDER(overrides?: CallOverrides): Promise<[string]>;
 
     PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<[string]>;
+
+    TREE_KEY(overrides?: CallOverrides): Promise<[string]>;
 
     USER(overrides?: CallOverrides): Promise<[string]>;
 
@@ -141,11 +153,15 @@ export interface RegistryKeys extends BaseContract {
 
   DATA_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
+  DISPUTE(overrides?: CallOverrides): Promise<string>;
+
   GIG(overrides?: CallOverrides): Promise<string>;
 
   ORDER(overrides?: CallOverrides): Promise<string>;
 
   PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<string>;
+
+  TREE_KEY(overrides?: CallOverrides): Promise<string>;
 
   USER(overrides?: CallOverrides): Promise<string>;
 
@@ -160,11 +176,15 @@ export interface RegistryKeys extends BaseContract {
 
     DATA_PROVIDER(overrides?: CallOverrides): Promise<string>;
 
+    DISPUTE(overrides?: CallOverrides): Promise<string>;
+
     GIG(overrides?: CallOverrides): Promise<string>;
 
     ORDER(overrides?: CallOverrides): Promise<string>;
 
     PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<string>;
+
+    TREE_KEY(overrides?: CallOverrides): Promise<string>;
 
     USER(overrides?: CallOverrides): Promise<string>;
 
@@ -182,11 +202,15 @@ export interface RegistryKeys extends BaseContract {
 
     DATA_PROVIDER(overrides?: CallOverrides): Promise<BigNumber>;
 
+    DISPUTE(overrides?: CallOverrides): Promise<BigNumber>;
+
     GIG(overrides?: CallOverrides): Promise<BigNumber>;
 
     ORDER(overrides?: CallOverrides): Promise<BigNumber>;
 
     PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<BigNumber>;
+
+    TREE_KEY(overrides?: CallOverrides): Promise<BigNumber>;
 
     USER(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -202,6 +226,8 @@ export interface RegistryKeys extends BaseContract {
 
     DATA_PROVIDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    DISPUTE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     GIG(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ORDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -209,6 +235,8 @@ export interface RegistryKeys extends BaseContract {
     PROTOCOL_CONFIGURATOR(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    TREE_KEY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     USER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

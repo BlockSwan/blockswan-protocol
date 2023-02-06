@@ -105,12 +105,22 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "closeTrial",
+            name: "evidence",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "endTrial",
+            name: "commit",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "vote",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "appeal",
             type: "uint256",
           },
         ],
@@ -135,12 +145,22 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "closeTrial",
+            name: "evidence",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "endTrial",
+            name: "commit",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "vote",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "appeal",
             type: "uint256",
           },
         ],
@@ -153,6 +173,82 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "version",
+        type: "uint256",
+      },
+    ],
+    name: "getDisputeParams",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "minStake",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "alpha",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "feePerJuror",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "maxVotes",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.DisputeParams",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getDisputeParams",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "minStake",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "alpha",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "feePerJuror",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "maxVotes",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.DisputeParams",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getGigCreationParams",
     outputs: [
@@ -216,33 +312,18 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "trialFlat",
+            name: "flat",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "trialPercent",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedFlat",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedPercent",
+            name: "percent",
             type: "uint256",
           },
         ],
-        internalType: "struct DataTypes.OrderPriceParams",
+        internalType: "struct DataTypes.FeeParams",
         name: "",
         type: "tuple",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -262,33 +343,18 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "trialFlat",
+            name: "flat",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "trialPercent",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedFlat",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedPercent",
+            name: "percent",
             type: "uint256",
           },
         ],
-        internalType: "struct DataTypes.OrderPriceParams",
+        internalType: "struct DataTypes.FeeParams",
         name: "",
         type: "tuple",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -434,26 +500,16 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "trialFlat",
+            name: "flat",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "trialPercent",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedFlat",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedPercent",
+            name: "percent",
             type: "uint256",
           },
         ],
-        internalType: "struct DataTypes.OrderPriceParams",
+        internalType: "struct DataTypes.FeeParams",
         name: "",
         type: "tuple",
       },
@@ -475,26 +531,16 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "trialFlat",
+            name: "flat",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "trialPercent",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedFlat",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedPercent",
+            name: "percent",
             type: "uint256",
           },
         ],
-        internalType: "struct DataTypes.OrderPriceParams",
+        internalType: "struct DataTypes.FeeParams",
         name: "",
         type: "tuple",
       },
@@ -548,12 +594,22 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "closeTrial",
+            name: "evidence",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "endTrial",
+            name: "commit",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "vote",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "appeal",
             type: "uint256",
           },
         ],
@@ -563,6 +619,41 @@ const _abi = [
       },
     ],
     name: "updateDelayTimestamp",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "minStake",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "alpha",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "feePerJuror",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "maxVotes",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct DataTypes.DisputeParams",
+        name: "newParams",
+        type: "tuple",
+      },
+    ],
+    name: "updateDisputeParams",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -598,26 +689,16 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "trialFlat",
+            name: "flat",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "trialPercent",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedFlat",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedPercent",
+            name: "percent",
             type: "uint256",
           },
         ],
-        internalType: "struct DataTypes.OrderPriceParams",
+        internalType: "struct DataTypes.FeeParams",
         name: "newParams",
         type: "tuple",
       },
@@ -693,26 +774,16 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "trialFlat",
+            name: "flat",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "trialPercent",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedFlat",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "proceedPercent",
+            name: "percent",
             type: "uint256",
           },
         ],
-        internalType: "struct DataTypes.OrderPriceParams",
+        internalType: "struct DataTypes.FeeParams",
         name: "newParams",
         type: "tuple",
       },

@@ -82,58 +82,6 @@ export declare namespace OutputTypes {
       DataTypes.PackageStructOutput
     ];
   };
-
-  export type UserOutputStruct = {
-    metadata: PromiseOrValue<string>;
-    inviterId: PromiseOrValue<BigNumberish>;
-    buyerUntil: PromiseOrValue<BigNumberish>;
-    buyerInvites: PromiseOrValue<BigNumberish>;
-    sellerUntil: PromiseOrValue<BigNumberish>;
-    sellerInvites: PromiseOrValue<BigNumberish>;
-    userId: PromiseOrValue<BigNumberish>;
-    wallet: PromiseOrValue<string>;
-    gigIds: PromiseOrValue<BigNumberish>[];
-    offerIds: PromiseOrValue<BigNumberish>[];
-    bidIds: PromiseOrValue<BigNumberish>[];
-    buyerOrderIds: PromiseOrValue<BigNumberish>[];
-    gigReviewsIds: PromiseOrValue<BigNumberish>[];
-    userReviewsIds: PromiseOrValue<BigNumberish>[];
-    reviewsIds: PromiseOrValue<BigNumberish>[];
-  };
-
-  export type UserOutputStructOutput = [
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    string,
-    BigNumber[],
-    BigNumber[],
-    BigNumber[],
-    BigNumber[],
-    BigNumber[],
-    BigNumber[],
-    BigNumber[]
-  ] & {
-    metadata: string;
-    inviterId: BigNumber;
-    buyerUntil: BigNumber;
-    buyerInvites: BigNumber;
-    sellerUntil: BigNumber;
-    sellerInvites: BigNumber;
-    userId: BigNumber;
-    wallet: string;
-    gigIds: BigNumber[];
-    offerIds: BigNumber[];
-    bidIds: BigNumber[];
-    buyerOrderIds: BigNumber[];
-    gigReviewsIds: BigNumber[];
-    userReviewsIds: BigNumber[];
-    reviewsIds: BigNumber[];
-  };
 }
 
 export interface IGigInterface extends utils.Interface {
@@ -330,7 +278,7 @@ export interface IGig extends BaseContract {
 
     getGigList(
       overrides?: CallOverrides
-    ): Promise<[OutputTypes.UserOutputStructOutput[]]>;
+    ): Promise<[OutputTypes.GigOutputStructOutput[]]>;
 
     getGigsCount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -369,7 +317,7 @@ export interface IGig extends BaseContract {
 
   getGigList(
     overrides?: CallOverrides
-  ): Promise<OutputTypes.UserOutputStructOutput[]>;
+  ): Promise<OutputTypes.GigOutputStructOutput[]>;
 
   getGigsCount(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -408,7 +356,7 @@ export interface IGig extends BaseContract {
 
     getGigList(
       overrides?: CallOverrides
-    ): Promise<OutputTypes.UserOutputStructOutput[]>;
+    ): Promise<OutputTypes.GigOutputStructOutput[]>;
 
     getGigsCount(overrides?: CallOverrides): Promise<BigNumber>;
 

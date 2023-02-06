@@ -102,24 +102,23 @@ interface IProtocolConfigurator {
     /**
      * @notice Retrieves the parameters when creating an order.
      * @return parameters The parameters when creating an order.
-     * @return sellerFeesParamsVersion The latest fee structur version that will be applied to the seller upon order completion.
      */
     function getOrderCreationParams()
         external
         view
-        returns (DataTypes.OrderPriceParams memory, uint256);
+        returns (DataTypes.FeeParams memory);
 
     // extends the above function specifying a version to retrieve
     function getOrderCreationParams(
         uint256 version
-    ) external view returns (DataTypes.OrderPriceParams memory, uint256);
+    ) external view returns (DataTypes.FeeParams memory);
 
     /**
      * @notice Update the order creation parameters of the protocol.
      * @param newParams The new order creation paramaters
      */
     function updateOrderCreationParams(
-        DataTypes.OrderPriceParams memory newParams
+        DataTypes.FeeParams memory newParams
     ) external;
 
     /**
@@ -129,19 +128,19 @@ interface IProtocolConfigurator {
     function getSellerOrderFees()
         external
         view
-        returns (DataTypes.OrderPriceParams memory);
+        returns (DataTypes.FeeParams memory);
 
     // extends the above function specifying a version to retrieve
     function getSellerOrderFees(
         uint256 version
-    ) external view returns (DataTypes.OrderPriceParams memory);
+    ) external view returns (DataTypes.FeeParams memory);
 
     /**
      * @notice Update the order creation parameters of the protocol applied to a seller.
      * @param newParams The new sellerr-applied order creation paramaters
      */
     function updateSellerOrderFees(
-        DataTypes.OrderPriceParams memory newParams
+        DataTypes.FeeParams memory newParams
     ) external;
 
     /**
@@ -164,5 +163,27 @@ interface IProtocolConfigurator {
      */
     function updateDelayTimestamp(
         DataTypes.DelayTimestamp memory newParams
+    ) external;
+
+    /**
+     * @notice Retrieves the protocol dispute parameters.
+     * @return parameters The dispute parameters
+     */
+    function getDisputeParams()
+        external
+        view
+        returns (DataTypes.DisputeParams memory);
+
+    // extends the above function specifying a version to retrieve
+    function getDisputeParams(
+        uint256 version
+    ) external view returns (DataTypes.DisputeParams memory);
+
+    /**
+     * @notice Update the dispute parameters of the protocol.
+     * @param newParams The new dispute paramaters
+     */
+    function updateDisputeParams(
+        DataTypes.DisputeParams memory newParams
     ) external;
 }

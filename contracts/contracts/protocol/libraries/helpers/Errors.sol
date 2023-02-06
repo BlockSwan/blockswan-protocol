@@ -44,4 +44,11 @@ library Errors {
     string public constant NOT_ORDER_BUYER = "22"; // The id provided is not the order buyer
     string public constant INVALID_ORDER_STATE = "23"; // The function can't be called under the current order state
     string public constant SELF_REFUND_DELAY_NOT_OVER = "24"; // The self refund delay is not over
+    string public constant NOT_ORDER_ACTOR = "25"; // The account address calling the function is not matching with the buyerId nor sellerId.
+    string public constant DISPUTE_NOT_CREATED = "26"; // The dispute has not been created yet
+
+    // Jury
+    string public constant JURY_STAKE_NOT_ENOUGH = "27"; // The jury stake is not enough
+    string public constant FAILED_TO_STAKE_JURY = "28"; // The jury stake failed
+    string public constant FAILED_TO_WITHDRAW_JURY = "29"; // The jury withdraw failed
 }

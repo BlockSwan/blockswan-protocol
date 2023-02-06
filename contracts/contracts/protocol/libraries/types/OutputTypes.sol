@@ -53,18 +53,41 @@ library OutputTypes {
     struct OrderOutput {
         string metadata;
         string brief;
-        uint256 sellerFeesVersion;
-        uint256 toTrial;
-        uint256 toProceed;
         uint256 orderId;
-        uint256 createdAt;
         uint256 buyerId;
         uint256 sellerId;
         uint256 gigId;
+        uint256 disputeId;
         uint256[] reviewIds;
-        DataTypes.Package package;
+        bool disputed;
+        DataTypes.Invoice invoice;
         DataTypes.OrderState state;
-        IERC20 currency;
+    }
+
+    struct RoundOutput {
+        uint256 roundId;
+        uint256 tokensAtStakePerJuror;
+        uint256 totalFeesForJurors;
+        uint256 maxVotes;
+        uint256 penalties;
+        uint256 winningChoice;
+        uint256 totalRepartitions;
+        uint256 totalVoted;
+        uint256 totalCommited;
+        uint256[] counts;
+        DataTypes.Vote[] votes;
+        DataTypes.Evidence[2] evidences;
+        address[] drawnJurors;
+    }
+
+    struct DisputeOutput {
+        uint256 disputeId;
+        uint256 orderId;
+        uint256 sellerId;
+        uint256 buyerId;
+        uint256 ruling;
+        DataTypes.DisputeState state;
+        RoundOutput[] rounds;
     }
 
     struct PopulatedGig {

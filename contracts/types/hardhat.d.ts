@@ -69,6 +69,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IBSWAN__factory>;
     getContractFactory(
+      name: "IDispute",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IDispute__factory>;
+    getContractFactory(
       name: "IGig",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IGig__factory>;
@@ -121,9 +125,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ProviderRegistry__factory>;
     getContractFactory(
+      name: "Dispute",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Dispute__factory>;
+    getContractFactory(
+      name: "DisputeStorage",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DisputeStorage__factory>;
+    getContractFactory(
       name: "Gig",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Gig__factory>;
+    getContractFactory(
+      name: "Jury",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Jury__factory>;
     getContractFactory(
       name: "Errors",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -145,9 +161,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.InviterLogic__factory>;
     getContractFactory(
-      name: "OrderLogic",
+      name: "InvoiceLogic",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.OrderLogic__factory>;
+    ): Promise<Contracts.InvoiceLogic__factory>;
     getContractFactory(
       name: "Order",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -232,6 +248,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IBSWAN>;
     getContractAt(
+      name: "IDispute",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IDispute>;
+    getContractAt(
       name: "IGig",
       address: string,
       signer?: ethers.Signer
@@ -297,10 +318,25 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ProviderRegistry>;
     getContractAt(
+      name: "Dispute",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Dispute>;
+    getContractAt(
+      name: "DisputeStorage",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DisputeStorage>;
+    getContractAt(
       name: "Gig",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Gig>;
+    getContractAt(
+      name: "Jury",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Jury>;
     getContractAt(
       name: "Errors",
       address: string,
@@ -327,10 +363,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.InviterLogic>;
     getContractAt(
-      name: "OrderLogic",
+      name: "InvoiceLogic",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.OrderLogic>;
+    ): Promise<Contracts.InvoiceLogic>;
     getContractAt(
       name: "Order",
       address: string,

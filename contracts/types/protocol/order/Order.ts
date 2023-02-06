@@ -52,14 +52,26 @@ export declare namespace InputTypes {
 }
 
 export declare namespace DataTypes {
-  export type PackageStruct = {
+  export type InvoiceStruct = {
     price: PromiseOrValue<BigNumberish>;
-    timeDelivery: PromiseOrValue<BigNumberish>;
+    buyerFees: PromiseOrValue<BigNumberish>;
+    sellerFees: PromiseOrValue<BigNumberish>;
+    createdAt: PromiseOrValue<BigNumberish>;
+    currency: PromiseOrValue<string>;
   };
 
-  export type PackageStructOutput = [BigNumber, BigNumber] & {
+  export type InvoiceStructOutput = [
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    string
+  ] & {
     price: BigNumber;
-    timeDelivery: BigNumber;
+    buyerFees: BigNumber;
+    sellerFees: BigNumber;
+    createdAt: BigNumber;
+    currency: string;
   };
 }
 
@@ -67,18 +79,15 @@ export declare namespace OutputTypes {
   export type OrderOutputStruct = {
     metadata: PromiseOrValue<string>;
     brief: PromiseOrValue<string>;
-    sellerFeesVersion: PromiseOrValue<BigNumberish>;
-    toTrial: PromiseOrValue<BigNumberish>;
-    toProceed: PromiseOrValue<BigNumberish>;
     orderId: PromiseOrValue<BigNumberish>;
-    createdAt: PromiseOrValue<BigNumberish>;
     buyerId: PromiseOrValue<BigNumberish>;
     sellerId: PromiseOrValue<BigNumberish>;
     gigId: PromiseOrValue<BigNumberish>;
+    disputeId: PromiseOrValue<BigNumberish>;
     reviewIds: PromiseOrValue<BigNumberish>[];
-    package: DataTypes.PackageStruct;
+    disputed: PromiseOrValue<boolean>;
+    invoice: DataTypes.InvoiceStruct;
     state: PromiseOrValue<BigNumberish>;
-    currency: PromiseOrValue<string>;
   };
 
   export type OrderOutputStructOutput = [
@@ -89,28 +98,22 @@ export declare namespace OutputTypes {
     BigNumber,
     BigNumber,
     BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
     BigNumber[],
-    DataTypes.PackageStructOutput,
-    number,
-    string
+    boolean,
+    DataTypes.InvoiceStructOutput,
+    number
   ] & {
     metadata: string;
     brief: string;
-    sellerFeesVersion: BigNumber;
-    toTrial: BigNumber;
-    toProceed: BigNumber;
     orderId: BigNumber;
-    createdAt: BigNumber;
     buyerId: BigNumber;
     sellerId: BigNumber;
     gigId: BigNumber;
+    disputeId: BigNumber;
     reviewIds: BigNumber[];
-    package: DataTypes.PackageStructOutput;
+    disputed: boolean;
+    invoice: DataTypes.InvoiceStructOutput;
     state: number;
-    currency: string;
   };
 }
 
@@ -123,6 +126,7 @@ export interface OrderInterface extends utils.Interface {
     "autoRefund(uint256,uint256)": FunctionFragment;
     "confirmOrder(uint256,uint256)": FunctionFragment;
     "createOrder((uint256,uint256,uint256,uint256,string))": FunctionFragment;
+    "dispute(uint256,uint256,uint256)": FunctionFragment;
     "fetchContract(bytes32)": FunctionFragment;
     "getInvitersByAddress(address,address)": FunctionFragment;
     "getInvitersById(uint256)": FunctionFragment;
@@ -152,6 +156,7 @@ export interface OrderInterface extends utils.Interface {
       | "autoRefund"
       | "confirmOrder"
       | "createOrder"
+      | "dispute"
       | "fetchContract"
       | "getInvitersByAddress"
       | "getInvitersById"
@@ -196,6 +201,14 @@ export interface OrderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "createOrder",
     values: [InputTypes.CreateOrderInputStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "dispute",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "fetchContract",
@@ -295,6 +308,7 @@ export interface OrderInterface extends utils.Interface {
     functionFragment: "createOrder",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "dispute", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "fetchContract",
     data: BytesLike
@@ -430,6 +444,13 @@ export interface Order extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    dispute(
+      orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -549,6 +570,13 @@ export interface Order extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  dispute(
+    orderId: PromiseOrValue<BigNumberish>,
+    sellerId: PromiseOrValue<BigNumberish>,
+    buyerId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   fetchContract(
     _name: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
@@ -665,6 +693,13 @@ export interface Order extends BaseContract {
 
     createOrder(
       input: InputTypes.CreateOrderInputStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    dispute(
+      orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -795,6 +830,13 @@ export interface Order extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    dispute(
+      orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -912,6 +954,13 @@ export interface Order extends BaseContract {
 
     createOrder(
       input: InputTypes.CreateOrderInputStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    dispute(
+      orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

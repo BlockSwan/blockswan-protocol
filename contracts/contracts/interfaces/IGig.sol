@@ -56,7 +56,7 @@ interface IGig {
     function getGigList()
         external
         view
-        returns (OutputTypes.UserOutput[] memory);
+        returns (OutputTypes.GigOutput[] memory);
 
     /**
      * @notice Returns the current amount of gigs

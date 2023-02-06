@@ -11,6 +11,7 @@ import {DataTypes} from "../types/DataTypes.sol";
 import {OutputTypes} from "../types/OutputTypes.sol";
 import {Errors} from "../helpers/Errors.sol";
 import {OrderDataLogic} from "./OrderDataLogic.sol";
+import {InvoiceLogic} from "./InvoiceLogic.sol";
 import {PercentageMath} from "../../../imports/aave/contracts/PercentageMath.sol";
 
 /**
@@ -21,6 +22,7 @@ import {PercentageMath} from "../../../imports/aave/contracts/PercentageMath.sol
 library OrderLogic {
     using EnumerableSet for EnumerableSet.UintSet;
     using OrderDataLogic for DataTypes.Order;
+    using InvoiceLogic for DataTypes.Invoice;
     using Counters for Counters.Counter;
     using PercentageMath for uint256;
 
@@ -35,24 +37,19 @@ library OrderLogic {
         EnumerableSet.UintSet storage orderIds,
         mapping(uint256 => DataTypes.Order) storage orders,
         InputTypes.ExecuteCreateOrderInput memory params
-    ) external returns (bool) {
+    ) external returns (bool, uint256 paidByBuyer) {
         bool added = orderIds.add(params.relations.newId);
         DataTypes.Order storage order = getOrderById(
             params.relations.newId,
             orders
         );
+        order.invoice.create(params.price, params.currency, params.fees.buyerFees, params.fees.sellerFees);
         order.setMetadata(params.metadata);
         order.setBrief(params.brief);
-        order.setCreatedAt();
         order.setBuyerId(params.relations.buyerId);
         order.setSellerId(params.relations.sellerId);
         order.setGigId(params.relations.gigId);
-        order.setPackage(params.package);
-        order.setToProceed(params.fees.toProceed);
-        order.setToTrial(params.fees.toTrial);
-        order.setSellerFeesVersion(params.fees.sellerFeesVersion);
-        order.setCurrency(params.currency);
-        return (added);
+        return (added, order.invoice.paidByBuyer());
     }
 
     function executeConfirmOrder(
@@ -76,13 +73,13 @@ library OrderLogic {
         checkOrderBuyer(order, buyerId);
         checkState(order, DataTypes.OrderState.UNCONFIRMED);
         require(
-             block.timestamp > order.createdAt + selfRefundDelay,
+             block.timestamp > order.invoice.createdAt + selfRefundDelay,
             Errors.SELF_REFUND_DELAY_NOT_OVER
         );
         order.setState(DataTypes.OrderState.DONE);
         return (
-            order.package.price + order.toTrial + order.toProceed,
-            order.currency
+            order.invoice.paidByBuyer(),
+            order.invoice.currency
         );
     }
 
@@ -98,8 +95,8 @@ library OrderLogic {
         checkState(order, DataTypes.OrderState.CONFIRMED);
         order.setState(DataTypes.OrderState.DONE);
          return (
-            order.package.price + order.toTrial + order.toProceed,
-            order.currency
+            order.invoice.paidByBuyer(),
+            order.invoice.currency
         );
     }
 
@@ -109,31 +106,33 @@ library OrderLogic {
         mapping(uint256 => DataTypes.Order) storage orders
     )
         external
-        returns (uint256, uint256, uint256, uint256, uint256, IERC20 currency)
+        returns (DataTypes.Invoice memory, uint256, uint256)
     {
         DataTypes.Order storage order = getOrderById(orderId, orders);
         checkOrderBuyer(order, buyerId);
         checkState(order, DataTypes.OrderState.CONFIRMED);
         order.setState(DataTypes.OrderState.DONE);
         return (
-            order.package.price,
-            order.toTrial,
-            order.toProceed,
+            order.invoice,
             order.sellerId,
-            order.sellerFeesVersion,
-            order.currency
+            order.invoice.receivedBySeller()
         );
     }
 
-    function calcOrderPrice(
-        DataTypes.OrderPriceParams memory params,
-        uint256 orderPrice
-    ) external pure returns (uint256, uint256, uint256) {
-        uint256 toTrial = orderPrice.percentMul(params.trialPercent) +
-            params.trialFlat;
-        uint256 toProceed = orderPrice.percentMul(params.trialPercent) +
-            params.trialFlat;
-        return (toTrial, toProceed, orderPrice + toTrial + toProceed);
+    function executeDispute(
+        uint256 orderId,
+        uint256 buyerId,
+        uint256 sellerId,
+        uint256 disputeId,
+        mapping(uint256 => DataTypes.Order) storage orders
+    ) external returns (bool) {
+        DataTypes.Order storage order = getOrderById(orderId, orders);
+        checkOrderBuyer(order, buyerId);
+        checkOrderSeller(order, sellerId);
+        checkState(order, DataTypes.OrderState.CONFIRMED);
+        order.setState(DataTypes.OrderState.DISPUTED);
+        order.setDisputeId(disputeId);
+        return (true);
     }
 
     function format(
@@ -144,18 +143,15 @@ library OrderLogic {
             OutputTypes.OrderOutput({
                 metadata: order.metadata,
                 brief: order.brief,
-                sellerFeesVersion: order.sellerFeesVersion,
-                toTrial: order.toTrial,
-                toProceed: order.toProceed,
                 orderId: id,
-                createdAt: order.createdAt,
                 buyerId: order.buyerId,
                 sellerId: order.sellerId,
                 gigId: order.gigId,
+                disputeId: order.disputeId,
                 reviewIds: order.reviewIds.values(),
-                package: order.package,
-                state: order.state,
-                currency: order.currency
+                disputed: order.disputed,
+                invoice: order.invoice,
+                state: order.state
             })
         );
     }
@@ -180,4 +176,5 @@ library OrderLogic {
     ) internal view {
         require(order.isState(state), Errors.INVALID_ORDER_STATE);
     }
+
 }

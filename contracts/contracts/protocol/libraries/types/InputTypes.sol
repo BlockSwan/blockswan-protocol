@@ -21,9 +21,8 @@ library InputTypes {
     }
 
     struct OrderFeesInput {
-        uint256 sellerFeesVersion;
-        uint256 toTrial;
-        uint256 toProceed;
+        DataTypes.FeeParams buyerFees;
+        DataTypes.FeeParams sellerFees;   
     }
 
     struct OrderRelationInput {
@@ -42,12 +41,21 @@ library InputTypes {
     }
 
     struct ExecuteCreateOrderInput {
+        uint256 price;
         string metadata;
         string brief;
         OrderFeesInput fees;
         OrderRelationInput relations;
-        DataTypes.Package package;
         IERC20 currency;
+    }
+
+    struct ExecuteCreateDisputeInput {
+        uint256 newId;
+        uint256 orderId;
+        uint256 sellerId;
+        uint256 buyerId;
+        uint256 maxVotes;
+        uint256 totalFeesForJurors;
     }
 
     struct BecomeBuyerInput {

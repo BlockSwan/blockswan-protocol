@@ -20,6 +20,7 @@ import {IProtocolConfigurator} from "../../interfaces/IProtocolConfigurator.sol"
 import {IAddressProvider} from "../../interfaces/IAddressProvider.sol";
 import {IUser} from "../../interfaces/IUser.sol";
 import {IBSWAN} from "../../interfaces/IBSWAN.sol";
+import {IDispute} from "../../interfaces/IDispute.sol";
 import {IGig} from "../../interfaces/IGig.sol";
 
 /**
@@ -100,7 +101,7 @@ contract Order is OrderStorage, ProviderContract {
         _createOrder(
             caller,
             metadata,
-            package,
+            package.price,
             InputTypes.OrderRelationInput({
                 newId: newId,
                 buyerId: input.buyerId,
@@ -142,45 +143,33 @@ contract Order is OrderStorage, ProviderContract {
 
 
     function payOrder(uint256 orderId, uint256 buyerId) external {
-        address buyer = _msgSender();
+        address buyerAddress = _msgSender();
+        
         IUser UserContract = IUser(fetchContract(RegistryKeys.USER));
         require(
-            isCallerUser(buyer, buyerId, UserContract),
+            isCallerUser(buyerAddress, buyerId, UserContract),
             Errors.CALLER_NOT_BUYER_ID
         );
         (
-            uint256 orderPrice,
-            uint256 trialRefund,
-            uint256 proceedFees,
-            uint256 sellerId,
-            uint256 sellerFeesVersion,
-            IERC20 currency
+            DataTypes.Invoice memory invoice, uint256 sellerId, uint256 toSeller
         ) = OrderLogic.executePayOrder(orderId, buyerId, _orders);
-        _transfer(trialRefund, buyer, currency);
-        // get the retribution params
+        address sellerAddress= UserContract.getAddressById(sellerId);
         DataTypes.RetributionParams
             memory retributionParams = getProtocolRetributionParams();
         // process payment for buyer proceed fees
         _processOrderPayment(
-            proceedFees,
-            buyer,
+            invoice.buyerFees,
+            buyerAddress,
             retributionParams,
             UserContract
         );
-        (, uint256 toProceed, ) = OrderLogic.calcOrderPrice(
-            IProtocolConfigurator(
-                fetchContract(RegistryKeys.PROTOCOL_CONFIGURATOR)
-            ).getSellerOrderFees(sellerFeesVersion),
-            orderPrice
-        );
-        address sellerAccount = UserContract.getAddressById(sellerId);
-        _transfer(orderPrice - toProceed, sellerAccount, currency);
-        _processOrderPayment(
-            toProceed,
-            sellerAccount,
+         _processOrderPayment(
+            invoice.sellerFees,
+            sellerAddress,
             retributionParams,
             UserContract
         );
+        _transfer(toSeller, sellerAddress, invoice.currency);
     }
 
     function refundOrder(uint256 orderId, uint256 sellerId, uint256 buyerId) external{
@@ -193,6 +182,20 @@ contract Order is OrderStorage, ProviderContract {
         );
         (uint256 orderPrice, IERC20 currency) = OrderLogic.executeRefundOrder(orderId, sellerId, buyerId,_orders);
          _transfer(orderPrice, buyer, currency);
+    }
+
+    function dispute(uint256 orderId, uint256 sellerId, uint256 buyerId ) external {
+        address caller = _msgSender();
+        IUser UserContract = IUser(fetchContract(RegistryKeys.USER));
+        IDispute DisputeContract = IDispute(fetchContract(RegistryKeys.DISPUTE));
+
+        require(
+            isCallerUser(caller, sellerId, UserContract) ||
+                isCallerUser(caller, buyerId, UserContract),
+            Errors.NOT_ORDER_ACTOR
+        ); 
+        uint256 newDisputeId =  DisputeContract.createDispute(orderId);
+        OrderLogic.executeDispute(orderId, buyerId, sellerId, newDisputeId, _orders);
     }
 
     function _processOrderPayment(
@@ -215,9 +218,14 @@ contract Order is OrderStorage, ProviderContract {
             );
         
         IBSWAN dat = IBSWAN(fetchContract(RegistryKeys.DAT));
-        dat.pay(inviter0, rewards.inviter0Rewards);
-        dat.pay(inviter1, rewards.inviter1Rewards);
-        dat.pay(address(0), rewards.remainingRewards);
+        _pay(InputTypes.ProcessPaymentInput({
+            caller: address(this),
+            inviter0: inviter0,
+            inviter1: inviter1,
+         inviter0Rewards: rewards.inviter0Rewards,
+         inviter1Rewards: rewards.inviter1Rewards,
+         remainingRewards: rewards.remainingRewards
+        }), dat);
         _giveXP(XPKeys.PAY_ORDER, account);
     }
 
@@ -237,43 +245,36 @@ contract Order is OrderStorage, ProviderContract {
     function _createOrder(
         address caller,
         string memory metadata,
-        DataTypes.Package memory package,
+        uint256 price,
         InputTypes.OrderRelationInput memory relations,
         InputTypes.CreateOrderInput memory input
     ) internal {
-        // get the order creation params
-        (
-            DataTypes.OrderPriceParams memory orderParams,
-            uint256 sellerFeesVersion
-        ) = IProtocolConfigurator(
+        IProtocolConfigurator ProtocolConfigurator = IProtocolConfigurator(
                 fetchContract(RegistryKeys.PROTOCOL_CONFIGURATOR)
-            ).getOrderCreationParams();
+            );
+        DataTypes.FeeParams memory buyerFeeParams  = ProtocolConfigurator.getOrderCreationParams();
+        DataTypes.FeeParams memory sellerFeeParams  = ProtocolConfigurator.getSellerOrderFees();
 
-        (uint256 toTrial, uint256 toProceed, uint256 total) = OrderLogic
-            .calcOrderPrice(orderParams, package.price);
-
-        IERC20 currency = IERC20(
-            IBSWAN(fetchContract(RegistryKeys.DAT)).currency()
-        );
-
-        OrderLogic.executeCreateOrder(
+        IERC20 currency =  IERC20(
+                    IBSWAN(fetchContract(RegistryKeys.DAT)).currency()
+                );
+        (, uint256 paidByBuyer) = OrderLogic.executeCreateOrder(
             _orderIds,
             _orders,
             InputTypes.ExecuteCreateOrderInput({
+                price: price,
                 metadata: metadata,
                 brief: input.brief,
                 fees: InputTypes.OrderFeesInput({
-                    sellerFeesVersion: sellerFeesVersion,
-                    toTrial: toTrial,
-                    toProceed: toProceed
+                    buyerFees: buyerFeeParams,
+                    sellerFees: sellerFeeParams
                 }),
                 relations: relations,
-                package: package,
                 currency: currency
             })
         );
         // send fund to contract
-        _sendFundToContract(total, caller, currency);
+        _sendFundToContract(paidByBuyer, caller, currency);
     }
 
     function _sendFundToContract(
@@ -295,4 +296,6 @@ contract Order is OrderStorage, ProviderContract {
     ) public view returns (bool) {
         return UserContract.getIdByAddress(caller) == userId;
     }
+
+    
 }
