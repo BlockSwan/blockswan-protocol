@@ -22,6 +22,8 @@ import {SortitionSumTreeFactory} from "../../../imports/kleros/contracts/Sortiti
  */
 library DisputeLogic {
     using EnumerableSet for EnumerableSet.UintSet;
+    using EnumerableSet for EnumerableSet.AddressSet;
+
     using DisputeDataLogic for DataTypes.Dispute;
     using RoundLogic for DataTypes.Round;
     using Counters for Counters.Counter;
@@ -45,43 +47,50 @@ library DisputeLogic {
             params.newId,
             disputes
         );
-        newDispute.setOrderId(params.orderId);
-        newDispute.setBuyerId(params.buyerId);
-        newDispute.setSellerId(params.sellerId);
-        RoundLogic.init(
+        newDispute.setProcecutorId(params.procecutorId);
+        newDispute.setDefendantId(params.defendantId);
+        newDispute.setTimestamps(
+            params.delaysUntil[0],
+            params.delaysUntil[1],
+            params.delaysUntil[2],
+            params.delaysUntil[3]
+        );
+        newDispute.setCreated();
+        RoundLogic.addRound(
             newDispute.rounds,
             params.maxVotes,
-            params.totalFeesForJurors
+            params.totalFeesForJurors,
+            params.drawnJurors
         );
         return added;
     }
 
-    function updateStakeBalance(
-        SortitionSumTreeFactory.SortitionSumTrees storage tree,
-        address account,
-        bytes32 treeKey,
-        uint256 amount
-    ) external {
-        tree.set(treeKey, amount, bytes32(uint256(uint160(account))));
+    function executeSendEvidence(
+        mapping(uint256 => DataTypes.Dispute) storage disputes,
+        InputTypes.ExecuteSendEvidenceInput memory params
+    ) external returns (bool) {
+        DataTypes.Dispute storage dispute = getDisputeById(
+            params.disputeId,
+            disputes
+        );
+        DataTypes.Round storage round = dispute.getLatestRound();
+        require(dispute.isEvidencePeriod(), Errors.DS_EVIDENCE_PERIOD_OVER);
+        round.submitEvidence(params.evidence);
+        return true;
     }
 
-    // @return A random number less than the _max
-    function random(
-        uint256 entropy,
-        uint256 max
-    ) internal pure returns (uint256) {
-        require(max > 0, "max must be greater than 0");
-        return uint256(keccak256(abi.encodePacked(entropy))) % max;
-    }
-
-    function randomlyDrawJuror(
-        SortitionSumTreeFactory.SortitionSumTrees storage tree,
-        bytes32 treeKey,
-        uint256 bound
-    ) public view returns (address) {
-        bytes32 entropy = blockhash(1);
-        uint256 rng = random(uint256(entropy), bound);
-        return address(uint160(uint256(tree.draw(treeKey, rng))));
+    function calcDisputeDelaysFromBlock(
+        uint256 evidenceUntil,
+        uint256 commitUntil,
+        uint256 voteUntil,
+        uint256 appealUntil
+    ) public view returns (uint256[] memory delays) {
+        uint256 blockTimestamp = block.timestamp;
+        delays = new uint256[](4);
+        delays[0] = blockTimestamp + evidenceUntil;
+        delays[1] = delays[0] + commitUntil;
+        delays[2] = delays[1] + voteUntil;
+        delays[3] = delays[2] + appealUntil;
     }
 
     function format(
@@ -90,11 +99,13 @@ library DisputeLogic {
     ) external view returns (OutputTypes.DisputeOutput memory) {
         return (
             OutputTypes.DisputeOutput({
+                createdAt: dispute.createdAt,
                 disputeId: id,
                 orderId: dispute.orderId,
-                buyerId: dispute.buyerId,
-                sellerId: dispute.sellerId,
+                procecutorId: dispute.procecutorId,
+                defendantId: dispute.defendantId,
                 ruling: dispute.ruling,
+                timestamps: dispute.timestamps,
                 state: dispute.state,
                 rounds: RoundLogic.formatAll(dispute.rounds)
             })

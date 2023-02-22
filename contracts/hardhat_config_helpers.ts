@@ -17,8 +17,8 @@ const DEFAULT_NAMED_ACCOUNTS = {
     protocolAdmin: 0,
 }
 
-const DEFAULT_BLOCK_GAS_LIMIT = 12450000
-const DEFAULT_GAS_PRICE = 8000000000
+const DEFAULT_BLOCK_GAS_LIMIT = 12450000 * 5
+const DEFAULT_GAS_PRICE = 8000000000 * 5
 
 const GAS_PRICE_API = {
     eth: 'https://api.etherscan.io/api?module=proxy&action=eth_gasPrice',

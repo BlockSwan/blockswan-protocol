@@ -4,17 +4,14 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 import {EnumerableSet} from "../../../imports/openzeppelin/contracts/EnumerableSet.sol";
-import {EnumerableMap} from "../../../imports/openzeppelin/contracts/EnumerableMap.sol";
 import {IERC20} from "../../../imports/openzeppelin/contracts/IERC20.sol";
-import {Counters} from "../../../imports/openzeppelin/contracts/Counters.sol";
 import {InputTypes} from "../types/InputTypes.sol";
 import {DataTypes} from "../types/DataTypes.sol";
 import {OutputTypes} from "../types/OutputTypes.sol";
 import {Errors} from "../helpers/Errors.sol";
 import {PercentageMath} from "../../../imports/aave/contracts/PercentageMath.sol";
-import {RoundLogic} from "./RoundLogic.sol";
-import {DisputeDataLogic} from "./DisputeDataLogic.sol";
 import {SortitionSumTreeFactory} from "../../../imports/kleros/contracts/SortitionSumTreeFactory.sol";
+import {JuryDataLogic} from "./JuryDataLogic.sol";
 
 /**
  * @title Jury logic library
@@ -24,21 +21,9 @@ import {SortitionSumTreeFactory} from "../../../imports/kleros/contracts/Sortiti
 
 library JuryLogic {
     using EnumerableSet for EnumerableSet.AddressSet;
-    using EnumerableMap for EnumerableMap.AddressToUintMap;
-    using DisputeDataLogic for DataTypes.Dispute;
-    using RoundLogic for DataTypes.Round;
-    using Counters for Counters.Counter;
     using PercentageMath for uint256;
-    using SortitionSumTreeFactory for SortitionSumTreeFactory.SortitionSumTrees;
-
-    function updateStakeBalance(
-        SortitionSumTreeFactory.SortitionSumTrees storage tree,
-        address account,
-        bytes32 treeKey,
-        uint256 amount
-    ) internal {
-        tree.set(treeKey, amount, bytes32(uint256(uint160(account))));
-    }
+    using JuryDataLogic for address;
+    using JuryDataLogic for SortitionSumTreeFactory.SortitionSumTrees;
 
     // @return A random number less than the _max
     function random(
@@ -49,35 +34,36 @@ library JuryLogic {
         return uint256(keccak256(abi.encodePacked(entropy))) % max;
     }
 
+    function createEntropy(
+        uint256 disputeId,
+        uint256 roundId,
+        uint256 jurorNumber
+    ) internal view returns (uint256) {
+        return
+            uint256(
+                keccak256(
+                    abi.encodePacked(
+                        block.difficulty,
+                        block.timestamp,
+                        disputeId,
+                        roundId,
+                        jurorNumber,
+                        blockhash(block.number)
+                    )
+                )
+            );
+    }
+
     function randomlyDrawJuror(
         SortitionSumTreeFactory.SortitionSumTrees storage tree,
         bytes32 treeKey,
-        uint256 bound
+        uint256 disputeId,
+        uint256 roundId,
+        uint256 intHash
     ) public view returns (address) {
-        bytes32 entropy = blockhash(1);
-        uint256 rng = random(uint256(entropy), bound);
-        return address(uint160(uint256(tree.draw(treeKey, rng))));
-    }
-
-    function incrStake(
-        address juror,
-        uint256 amount,
-        bytes32 treeKey,
-        EnumerableMap.AddressToUintMap storage jurorStakedToken,
-        EnumerableMap.AddressToUintMap storage jurorFreezedToken,
-        SortitionSumTreeFactory.SortitionSumTrees storage tree
-    ) internal returns (bool) {
-        uint256 newStake;
-        (bool exisiting, uint256 currentStake) = jurorStakedToken.tryGet(juror);
-        if (exisiting) {
-            newStake = currentStake + amount;
-        } else {
-            newStake = amount;
-            jurorFreezedToken.set(juror, 0);
-        }
-        jurorStakedToken.set(juror, newStake);
-        updateStakeBalance(tree, juror, treeKey, newStake);
-        return true;
+        uint256 entropy = createEntropy(disputeId, roundId, intHash);
+        uint256 rng = random(entropy, tree.total(treeKey));
+        return tree.draw(treeKey, rng);
     }
 
     function executeDepositStake(
@@ -85,21 +71,13 @@ library JuryLogic {
         address juror,
         bytes32 treeKey,
         EnumerableSet.AddressSet storage jurorSet,
-        EnumerableMap.AddressToUintMap storage jurorStakedToken,
-        EnumerableMap.AddressToUintMap storage jurorFreezedToken,
+        mapping(address => uint256) storage jurorStakedToken,
         SortitionSumTreeFactory.SortitionSumTrees storage tree
     ) external returns (bool) {
         if (!(jurorSet.contains(juror))) {
             jurorSet.add(juror);
         }
-        incrStake(
-            juror,
-            amount,
-            treeKey,
-            jurorStakedToken,
-            jurorFreezedToken,
-            tree
-        );
+        juror.incrementStake(amount, treeKey, jurorStakedToken, tree);
         return true;
     }
 
@@ -108,27 +86,69 @@ library JuryLogic {
         address juror,
         bytes32 treeKey,
         EnumerableSet.AddressSet storage jurorSet,
-        EnumerableMap.AddressToUintMap storage jurorStakedToken,
+        mapping(address => uint256) storage jurorStakedToken,
         SortitionSumTreeFactory.SortitionSumTrees storage tree
     ) external returns (bool) {
-        uint256 newStake = jurorStakedToken.get(juror) - amount;
-        jurorStakedToken.set(juror, newStake);
-        updateStakeBalance(tree, juror, treeKey, newStake);
-        if (newStake == 0) {
+        juror.decrementStake(amount, treeKey, jurorStakedToken, tree);
+        if (jurorStakedToken[juror] == 0) {
             jurorSet.remove(juror);
         }
         return true;
     }
 
+    function executeFreezeTokens(
+        uint256 amount,
+        address juror,
+        bytes32 treeKey,
+        mapping(address => uint256) storage jurorStakedToken,
+        mapping(address => uint256) storage jurorFreezedToken,
+        SortitionSumTreeFactory.SortitionSumTrees storage tree
+    ) external returns (bool) {
+        console.log("juror: %s", juror);
+        console.log("stake: %d", jurorStakedToken[juror]);
+        console.log("amount: %d", amount);
+        juror.decrementStake(amount, treeKey, jurorStakedToken, tree);
+        console.log("newStake: %d", jurorStakedToken[juror]);
+        console.log("freezedStake: %d", jurorFreezedToken[juror]);
+        // uint256 newFreeze = jurorFreezedToken.get(juror) + amount;
+        //console.log("newFreeze: %d", newFreeze);
+        //console.log("get(juror): %d", jurorFreezedToken.get(juror));
+
+        //       jurorFreezedToken.set(juror, newFreeze);
+
+        return true;
+    }
+
+    function executeUnfreezeTokens(
+        uint256 amount,
+        address juror,
+        bytes32 treeKey,
+        mapping(address => uint256) storage jurorStakedToken,
+        mapping(address => uint256) storage jurorFreezedToken,
+        SortitionSumTreeFactory.SortitionSumTrees storage tree
+    ) external returns (bool) {
+        uint256 newFreeze = jurorFreezedToken[juror] - amount;
+        jurorFreezedToken[juror] = newFreeze;
+        juror.incrementStake(amount, treeKey, jurorStakedToken, tree);
+        return true;
+    }
+
+    function calcTokenToFreeze(
+        uint256 minStake,
+        uint256 alpha
+    ) public pure returns (uint256) {
+        return PercentageMath.percentMul(minStake, alpha);
+    }
+
     function readJuror(
         address juror,
-        EnumerableMap.AddressToUintMap storage jurorStakedToken,
-        EnumerableMap.AddressToUintMap storage jurorFreezedToken
+        mapping(address => uint256) storage jurorStakedToken,
+        mapping(address => uint256) storage jurorFreezedToken
     ) external view returns (DataTypes.Juror memory) {
         return (
             DataTypes.Juror({
-                stakedTokens: jurorStakedToken.get(juror),
-                freezedTokens: jurorFreezedToken.get(juror)
+                stakedTokens: jurorStakedToken[juror],
+                freezedTokens: jurorFreezedToken[juror]
             })
         );
     }

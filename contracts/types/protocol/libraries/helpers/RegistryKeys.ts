@@ -28,6 +28,7 @@ export interface RegistryKeysInterface extends utils.Interface {
     "DATA_PROVIDER()": FunctionFragment;
     "DISPUTE()": FunctionFragment;
     "GIG()": FunctionFragment;
+    "JURY()": FunctionFragment;
     "ORDER()": FunctionFragment;
     "PROTOCOL_CONFIGURATOR()": FunctionFragment;
     "TREE_KEY()": FunctionFragment;
@@ -43,6 +44,7 @@ export interface RegistryKeysInterface extends utils.Interface {
       | "DATA_PROVIDER"
       | "DISPUTE"
       | "GIG"
+      | "JURY"
       | "ORDER"
       | "PROTOCOL_CONFIGURATOR"
       | "TREE_KEY"
@@ -62,6 +64,7 @@ export interface RegistryKeysInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "DISPUTE", values?: undefined): string;
   encodeFunctionData(functionFragment: "GIG", values?: undefined): string;
+  encodeFunctionData(functionFragment: "JURY", values?: undefined): string;
   encodeFunctionData(functionFragment: "ORDER", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "PROTOCOL_CONFIGURATOR",
@@ -83,6 +86,7 @@ export interface RegistryKeysInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "DISPUTE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "GIG", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "JURY", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ORDER", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "PROTOCOL_CONFIGURATOR",
@@ -134,6 +138,8 @@ export interface RegistryKeys extends BaseContract {
 
     GIG(overrides?: CallOverrides): Promise<[string]>;
 
+    JURY(overrides?: CallOverrides): Promise<[string]>;
+
     ORDER(overrides?: CallOverrides): Promise<[string]>;
 
     PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<[string]>;
@@ -157,6 +163,8 @@ export interface RegistryKeys extends BaseContract {
 
   GIG(overrides?: CallOverrides): Promise<string>;
 
+  JURY(overrides?: CallOverrides): Promise<string>;
+
   ORDER(overrides?: CallOverrides): Promise<string>;
 
   PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<string>;
@@ -179,6 +187,8 @@ export interface RegistryKeys extends BaseContract {
     DISPUTE(overrides?: CallOverrides): Promise<string>;
 
     GIG(overrides?: CallOverrides): Promise<string>;
+
+    JURY(overrides?: CallOverrides): Promise<string>;
 
     ORDER(overrides?: CallOverrides): Promise<string>;
 
@@ -206,6 +216,8 @@ export interface RegistryKeys extends BaseContract {
 
     GIG(overrides?: CallOverrides): Promise<BigNumber>;
 
+    JURY(overrides?: CallOverrides): Promise<BigNumber>;
+
     ORDER(overrides?: CallOverrides): Promise<BigNumber>;
 
     PROTOCOL_CONFIGURATOR(overrides?: CallOverrides): Promise<BigNumber>;
@@ -229,6 +241,8 @@ export interface RegistryKeys extends BaseContract {
     DISPUTE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     GIG(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    JURY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ORDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

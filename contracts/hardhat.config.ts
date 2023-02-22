@@ -54,6 +54,7 @@ const config: HardhatUserConfig = {
             allowUnlimitedContractSize: true,
             saveDeployments: true,
             throwOnCallFailures: true,
+            blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
             gasPrice: DEFAULT_GAS_PRICE,
             gas: DEFAULT_BLOCK_GAS_LIMIT,
             accounts: accounts.map(

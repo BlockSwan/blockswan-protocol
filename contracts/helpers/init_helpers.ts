@@ -4,6 +4,7 @@ import { isValidAddress } from '../utilities/utils'
 import {
     getACLManager,
     getDAT,
+    getDelaysTimestamp,
     getDispute,
     getGig,
     getJury,
@@ -34,6 +35,8 @@ import {
     SignerWithAddress,
 } from './types'
 import { LOG_ACTIONS } from './envs'
+import { time } from '@nomicfoundation/hardhat-network-helpers'
+import { calcDisputeDelaysArrays } from '../utilities/helpers'
 
 const updateDATconfig = async (newOwner?: string) => {
     const dat = (await getDAT()) as BSWAN
@@ -307,6 +310,23 @@ const setupXPKeys = async (xpAddress: string | undefined) => {
     })
 }
 
+const calcDisputeDelaysFromBlock = async (
+    blockNumber?: number
+): Promise<number[]> => {
+    const ProtocolConfigurator = await getProtocolConfigurator()
+    const delaysTimestamps = await getDelaysTimestamp(
+        ProtocolConfigurator.address
+    )
+    const block = blockNumber ? blockNumber : await time.latestBlock()
+    return calcDisputeDelaysArrays({
+        blockNumber: block,
+        evidenceDelay: Number(delaysTimestamps.evidence),
+        commitDelay: Number(delaysTimestamps.commit),
+        voteDelay: Number(delaysTimestamps.vote),
+        appealDelay: Number(delaysTimestamps.appeal),
+    })
+}
+
 export {
     updateDATconfig,
     addMarketplaceToRegistry,
@@ -328,4 +348,5 @@ export {
     maxApproveDispute,
     maxApproveJury,
     updateDisputeParams,
+    calcDisputeDelaysFromBlock,
 }

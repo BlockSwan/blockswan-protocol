@@ -46,6 +46,7 @@ export interface JuryInterface extends utils.Interface {
     "MAX_UINT()": FunctionFragment;
     "approve(address)": FunctionFragment;
     "depositStake(uint256)": FunctionFragment;
+    "drawJurors(uint256,uint256,uint256)": FunctionFragment;
     "fetchContract(bytes32)": FunctionFragment;
     "hasProtocolRole(bytes32,address)": FunctionFragment;
     "isGigOwner(uint256,uint256,address)": FunctionFragment;
@@ -67,6 +68,7 @@ export interface JuryInterface extends utils.Interface {
       | "MAX_UINT"
       | "approve"
       | "depositStake"
+      | "drawJurors"
       | "fetchContract"
       | "hasProtocolRole"
       | "isGigOwner"
@@ -97,6 +99,14 @@ export interface JuryInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "depositStake",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "drawJurors",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "fetchContract",
@@ -159,6 +169,7 @@ export interface JuryInterface extends utils.Interface {
     functionFragment: "depositStake",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "drawJurors", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "fetchContract",
     data: BytesLike
@@ -258,6 +269,13 @@ export interface Jury extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    drawJurors(
+      numberOfJurors: PromiseOrValue<BigNumberish>,
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -330,6 +348,13 @@ export interface Jury extends BaseContract {
 
   depositStake(
     toStake: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  drawJurors(
+    numberOfJurors: PromiseOrValue<BigNumberish>,
+    disputeId: PromiseOrValue<BigNumberish>,
+    roundId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -407,6 +432,13 @@ export interface Jury extends BaseContract {
       toStake: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    drawJurors(
+      numberOfJurors: PromiseOrValue<BigNumberish>,
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string[]>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
@@ -491,6 +523,13 @@ export interface Jury extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    drawJurors(
+      numberOfJurors: PromiseOrValue<BigNumberish>,
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -566,6 +605,13 @@ export interface Jury extends BaseContract {
 
     depositStake(
       toStake: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    drawJurors(
+      numberOfJurors: PromiseOrValue<BigNumberish>,
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

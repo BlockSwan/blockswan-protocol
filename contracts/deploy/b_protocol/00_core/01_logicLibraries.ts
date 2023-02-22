@@ -102,12 +102,19 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             },
         })
 
+        let JuryDataLogic = await deploy('JuryDataLogic', {
+            from: deployer,
+            ...COMMON_DEPLOY_PARAMS,
+            libraries: {
+                SortitionSumTreeFactory: SortitionTree.address,
+            },
+        })
+
         await deploy('JuryLogic', {
             from: deployer,
             ...COMMON_DEPLOY_PARAMS,
             libraries: {
-                RoundLogic: RoundLogic.address,
-                RoundDataLogic: RoundDataLogic.address,
+                JuryDataLogic: JuryDataLogic.address,
                 SortitionSumTreeFactory: SortitionTree.address,
             },
         })

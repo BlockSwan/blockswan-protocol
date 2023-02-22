@@ -14,8 +14,12 @@ import {
     getXP,
     getJury,
 } from '../../helpers/contract_getters'
-import { TestEnv } from '../../helpers/types'
-import { getNamedSigners, getUnnamedSigners } from '../../utilities/signers'
+import { SignerWithAddress, TestEnv } from '../../helpers/types'
+import {
+    getNamedSigners,
+    getUnnamedSigners,
+    getXRandomSigners,
+} from '../../utilities/signers'
 
 const makeSuite = deployments.createFixture(
     async ({ deployments, ethers }, _options) => {
@@ -32,6 +36,7 @@ const makeSuite = deployments.createFixture(
         testEnv.aclAdmin = namedSigners.aclAdmin
 
         testEnv.users = unnamedSigners
+        testEnv.judges = await getXRandomSigners(15)
         testEnv.XP = await getXP()
         testEnv.dat = await getDAT()
         testEnv.mUSDC = await getMockUSDC()

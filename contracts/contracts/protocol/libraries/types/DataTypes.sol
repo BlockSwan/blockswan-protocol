@@ -24,7 +24,7 @@ library DataTypes {
         COMMIT,
         VOTE,
         APPEAL,
-       EXECUTION 
+        EXECUTION 
     }
 
     struct DelayTimestamp {
@@ -34,6 +34,8 @@ library DataTypes {
         uint256 vote;
         uint256 appeal;
     }
+
+
 
     struct User {
         string metadata;
@@ -89,7 +91,7 @@ library DataTypes {
     }
 
     struct Evidence {
-        address account;
+        uint256 userId;
         bytes32 role;
         string metadata;
         string log;
@@ -99,6 +101,7 @@ library DataTypes {
         address account;
         bytes32 commit;
         uint256 choice;
+        uint256 weight;
         string justification;
         bool voted;
     }
@@ -119,16 +122,19 @@ library DataTypes {
         Counters.Counter totalVoted;
         Counters.Counter totalCommited;
         EnumerableSet.UintSet counts;
+        EnumerableSet.UintSet evidenceSubmitters;
         Vote[] votes;
-        Evidence[2] evidences;
-        EnumerableSet.AddressSet drawnJurors;
+        Evidence[] evidences;
+        address[] drawnJurors;
     }
 
     struct Dispute {
+        uint256 createdAt;
         uint256 orderId;
-        uint256 sellerId;
-        uint256 buyerId;
+        uint256 procecutorId;
+        uint256 defendantId;
         uint256 ruling;
+        uint256[] timestamps;
         DisputeState state;
         Round[] rounds;
     }

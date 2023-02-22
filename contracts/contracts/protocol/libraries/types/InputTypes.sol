@@ -52,10 +52,12 @@ library InputTypes {
     struct ExecuteCreateDisputeInput {
         uint256 newId;
         uint256 orderId;
-        uint256 sellerId;
-        uint256 buyerId;
+        uint256 procecutorId;
+        uint256 defendantId;
         uint256 maxVotes;
         uint256 totalFeesForJurors;
+        uint256[] delaysUntil;
+        address[] drawnJurors;
     }
 
     struct BecomeBuyerInput {
@@ -84,4 +86,11 @@ library InputTypes {
         uint256 inviter1Rewards;
         uint256 remainingRewards;
     }
+
+    struct ExecuteSendEvidenceInput {
+        uint256 disputeId;
+        uint256 roundId;
+        DataTypes.Evidence evidence;   
+    }
+    
 }

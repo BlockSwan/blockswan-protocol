@@ -33,6 +33,16 @@ const _abi = [
         name: "orderId",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "sellerId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "buyerId",
+        type: "uint256",
+      },
     ],
     name: "createDispute",
     outputs: [
@@ -126,6 +136,11 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
+            name: "createdAt",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
             name: "disputeId",
             type: "uint256",
           },
@@ -136,18 +151,23 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "sellerId",
+            name: "procecutorId",
             type: "uint256",
           },
           {
             internalType: "uint256",
-            name: "buyerId",
+            name: "defendantId",
             type: "uint256",
           },
           {
             internalType: "uint256",
             name: "ruling",
             type: "uint256",
+          },
+          {
+            internalType: "uint256[]",
+            name: "timestamps",
+            type: "uint256[]",
           },
           {
             internalType: "enum DataTypes.DisputeState",
@@ -207,6 +227,11 @@ const _abi = [
                 type: "uint256[]",
               },
               {
+                internalType: "uint256[]",
+                name: "evidenceSubmitters",
+                type: "uint256[]",
+              },
+              {
                 components: [
                   {
                     internalType: "address",
@@ -221,6 +246,11 @@ const _abi = [
                   {
                     internalType: "uint256",
                     name: "choice",
+                    type: "uint256",
+                  },
+                  {
+                    internalType: "uint256",
+                    name: "weight",
                     type: "uint256",
                   },
                   {
@@ -241,9 +271,9 @@ const _abi = [
               {
                 components: [
                   {
-                    internalType: "address",
-                    name: "account",
-                    type: "address",
+                    internalType: "uint256",
+                    name: "userId",
+                    type: "uint256",
                   },
                   {
                     internalType: "bytes32",
@@ -261,9 +291,9 @@ const _abi = [
                     type: "string",
                   },
                 ],
-                internalType: "struct DataTypes.Evidence[2]",
+                internalType: "struct DataTypes.Evidence[]",
                 name: "evidences",
-                type: "tuple[2]",
+                type: "tuple[]",
               },
               {
                 internalType: "address[]",

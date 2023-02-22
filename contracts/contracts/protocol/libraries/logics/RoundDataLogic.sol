@@ -58,8 +58,36 @@ library RoundDataLogic {
         address[] memory drawnJurors
     ) external returns (bool) {
         for (uint256 i = 0; i < drawnJurors.length; i++) {
-            round.drawnJurors.add(drawnJurors[i]);
+            round.drawnJurors.push(drawnJurors[i]);
         }
+        console.log("round drawn jurors lengt: %d", round.drawnJurors.length);
         return true;
+    }
+
+    function getJurorWeight(
+        DataTypes.Round storage round,
+        address juror
+    ) internal view returns (uint256 weight) {
+        for (uint256 i = 0; i < round.drawnJurors.length; i++) {
+            if (round.drawnJurors[i] == juror) {
+                weight += 1;
+            }
+        }
+    }
+
+    function addEvidence(
+        DataTypes.Round storage round,
+        DataTypes.Evidence memory evidence
+    ) external returns (bool) {
+        round.evidences.push(evidence);
+        round.evidenceSubmitters.add(evidence.userId);
+        return true;
+    }
+
+    function hasSubmittedEvidence(
+        DataTypes.Round storage round,
+        uint256 userId
+    ) internal view returns (bool) {
+        return round.evidenceSubmitters.contains(userId);
     }
 }

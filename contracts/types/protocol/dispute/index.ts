@@ -2,4 +2,3 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { Dispute } from "./Dispute";
-export type { DisputeStorage } from "./DisputeStorage";

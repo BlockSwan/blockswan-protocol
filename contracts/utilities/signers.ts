@@ -32,10 +32,20 @@ const getRandomSigner = async (): Promise<SignerWithAddress> => {
         to: wallet.address,
         value: ethers.utils.parseEther('1'),
     })
+    let address = await wallet.getAddress()
     return {
         signer: wallet,
-        address: await wallet.getAddress(),
+        address: address,
     }
+}
+
+const getXRandomSigners = async (amount: number) => {
+    const signers = []
+    for (let i = 0; i < amount; i++) {
+        let newSigner = await getRandomSigner()
+        signers.push(newSigner)
+    }
+    return signers
 }
 
 const getNamedSigners = async (): Promise<any> => {
@@ -66,4 +76,5 @@ export {
     getNamedSigners,
     getUnnamedSigners,
     getRandomSigner,
+    getXRandomSigners,
 }

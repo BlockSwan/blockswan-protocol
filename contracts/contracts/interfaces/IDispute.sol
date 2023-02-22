@@ -18,10 +18,7 @@ interface IDispute {
      * @param disputeId The new dispute id
    
      */
-    event NewDispute(
-        uint256 indexed orderId,
-        uint256 indexed disputeId
-    );
+    event NewDispute(uint256 indexed orderId, uint256 indexed disputeId);
 
     /**
      * @notice Returns the dispute data.
@@ -50,10 +47,13 @@ interface IDispute {
     /**
      * @notice Create a new dispute
      * @param orderId the order from which the dispute has been created
+     * @param sellerId the seller id
+     * @param buyerId the buyer id
      * @return the new dispute id
      **/
     function createDispute(
-        uint256 orderId
+        uint256 orderId,
+        uint256 sellerId,
+        uint256 buyerId
     ) external returns (uint256);
-
 }

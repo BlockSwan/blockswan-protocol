@@ -26,6 +26,14 @@ enum OrderState {
     // UPDATING
 }
 
+enum DisputeState {
+    EVIDENCE,
+    COMMIT,
+    VOTE,
+    APPEAL,
+    EXECUTION,
+}
+
 type Balance = {
     USDC: number
     BSWAN: number
@@ -110,6 +118,7 @@ export type TestEnv = {
     registryOwner: Signer
     aclAdmin: Signer
     users: SignerWithAddress[]
+    judges: SignerWithAddress[]
 
     // contracts
     dat: BSWAN
@@ -167,6 +176,13 @@ enum ProtocolErrors {
     NOT_ORDER_BUYER = '22', // The id provided is not the order buyer
     INVALID_ORDER_STATE = '23', // The function can't be called under the current order state
     SELF_REFUND_DELAY_NOT_OVER = '24', // The self refund delay is not over
+    NOT_ORDER_ACTOR = '25', // The account address calling the function is not matching with the buyerId nor sellerId.
+    DISPUTE_NOT_CREATED = '26', // The dispute has not been created yet
+    // Jury
+    JURY_STAKE_NOT_ENOUGH = '27', // The jury stake is not enough
+    FAILED_TO_STAKE_JURY = '28', // The jury stake failed
+    FAILED_TO_WITHDRAW_JURY = '29', // The jury withdraw failed
+    ONLY_PROVIDER_ALLOWED = '36', // Only the provider can call this function
 }
 
 type UserInput = [string, number]
@@ -201,4 +217,5 @@ export {
     DelayTimestamp,
     OrderState,
     DisputeParams,
+    DisputeState,
 }

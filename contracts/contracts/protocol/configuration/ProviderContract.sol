@@ -48,7 +48,7 @@ contract ProviderContract is Ownable, IProviderContract {
     modifier onlyProvider(bytes32 _name) {
         require(
             _msgSender() == fetchContract(_name),
-            "Requires msg.sender is from contract address registered to _name"
+            Errors.ONLY_PROVIDER_ALLOWED
         );
         _;
     }
@@ -161,11 +161,13 @@ contract ProviderContract is Ownable, IProviderContract {
         IERC20(erc20).approve(dat, MAX_UINT);
     }
 
-
-    function _pay(InputTypes.ProcessPaymentInput memory params, IBSWAN dat) internal {
+    function _pay(
+        InputTypes.ProcessPaymentInput memory params,
+        IBSWAN dat
+    ) internal {
         dat.pay(params.inviter0, params.inviter0Rewards);
         dat.pay(params.inviter1, params.inviter1Rewards);
-        dat.pay(address(0), params.remainingRewards); 
+        dat.pay(address(0), params.remainingRewards);
     }
 
     function _processPayment(
@@ -182,8 +184,6 @@ contract ProviderContract is Ownable, IProviderContract {
         );
         _pay(params, dat);
     }
-
-   
 
     function _giveXP(bytes32 _key, address _to) internal {
         IXP(fetchContract(RegistryKeys.XP)).mint(_key, _to);

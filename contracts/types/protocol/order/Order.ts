@@ -133,6 +133,7 @@ export interface OrderInterface extends utils.Interface {
     "getOrderById(uint256)": FunctionFragment;
     "getOrderCount()": FunctionFragment;
     "getOrderList()": FunctionFragment;
+    "getUserIdByAddress(address,address)": FunctionFragment;
     "hasProtocolRole(bytes32,address)": FunctionFragment;
     "isCallerUser(address,uint256,address)": FunctionFragment;
     "isGigOwner(uint256,uint256,address)": FunctionFragment;
@@ -163,6 +164,7 @@ export interface OrderInterface extends utils.Interface {
       | "getOrderById"
       | "getOrderCount"
       | "getOrderList"
+      | "getUserIdByAddress"
       | "hasProtocolRole"
       | "isCallerUser"
       | "isGigOwner"
@@ -233,6 +235,10 @@ export interface OrderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getOrderList",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserIdByAddress",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "hasProtocolRole",
@@ -331,6 +337,10 @@ export interface OrderInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getOrderList",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserIdByAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -478,6 +488,12 @@ export interface Order extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[OutputTypes.OrderOutputStructOutput[]]>;
 
+    getUserIdByAddress(
+      caller: PromiseOrValue<string>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     hasProtocolRole(
       _role: PromiseOrValue<BytesLike>,
       account: PromiseOrValue<string>,
@@ -604,6 +620,12 @@ export interface Order extends BaseContract {
     overrides?: CallOverrides
   ): Promise<OutputTypes.OrderOutputStructOutput[]>;
 
+  getUserIdByAddress(
+    caller: PromiseOrValue<string>,
+    UserContract: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   hasProtocolRole(
     _role: PromiseOrValue<BytesLike>,
     account: PromiseOrValue<string>,
@@ -729,6 +751,12 @@ export interface Order extends BaseContract {
     getOrderList(
       overrides?: CallOverrides
     ): Promise<OutputTypes.OrderOutputStructOutput[]>;
+
+    getUserIdByAddress(
+      caller: PromiseOrValue<string>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     hasProtocolRole(
       _role: PromiseOrValue<BytesLike>,
@@ -862,6 +890,12 @@ export interface Order extends BaseContract {
 
     getOrderList(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getUserIdByAddress(
+      caller: PromiseOrValue<string>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     hasProtocolRole(
       _role: PromiseOrValue<BytesLike>,
       account: PromiseOrValue<string>,
@@ -988,6 +1022,12 @@ export interface Order extends BaseContract {
     getOrderCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getOrderList(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getUserIdByAddress(
+      caller: PromiseOrValue<string>,
+      UserContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     hasProtocolRole(
       _role: PromiseOrValue<BytesLike>,

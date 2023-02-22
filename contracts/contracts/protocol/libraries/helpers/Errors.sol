@@ -51,4 +51,17 @@ library Errors {
     string public constant JURY_STAKE_NOT_ENOUGH = "27"; // The jury stake is not enough
     string public constant FAILED_TO_STAKE_JURY = "28"; // The jury stake failed
     string public constant FAILED_TO_WITHDRAW_JURY = "29"; // The jury withdraw failed
+
+    // Round
+    string public constant EVIDENCE_ALREADY_SUBMITTED = "30"; // The evidence has already been submitted
+    string public constant EVIDENCE_NOT_SUBMITTED = "31"; // The evidence has not been submitted
+
+    // Dispute
+    string public constant DS_EVIDENCE_PERIOD_OVER = "32"; // The evidence period is over
+    // string public constant DS_VOTING_PERIOD_OVER = "33"; // The voting period is over
+    //string public constant DS_VOTING_PERIOD_NOT_OVER = "34"; // The voting period is not over
+    //string public constant DS_VOTING_PERIOD_NOT_STARTED = "35"; // The voting period has not started yet
+
+    // REgirstry 
+    string public constant ONLY_PROVIDER_ALLOWED = "36"; // Only the provider can call this function
 }

@@ -25,13 +25,31 @@ library RoundLogic {
     using PercentageMath for uint256;
     using RoundDataLogic for DataTypes.Round;
 
-    function init(
+    // add a round
+    function addRound(
         DataTypes.Round[] storage rounds,
         uint256 maxVotes,
-        uint256 totalFeesForJurors
+        uint256 totalFeesForJurors,
+        address[] memory drawnJurors
     ) external returns (bool) {
-        rounds[0].setMaxVotes(maxVotes);
-        rounds[0].setTotalFeesForJurors(totalFeesForJurors);
+        rounds.push();
+        DataTypes.Round storage newRound = rounds[rounds.length - 1];
+        newRound.setMaxVotes(maxVotes);
+        newRound.setTotalFeesForJurors(totalFeesForJurors);
+        newRound.setDrawnJurors(drawnJurors);
+        console.log("drawnJurors length: %d", drawnJurors.length);
+        return true;
+    }
+
+    function submitEvidence(
+        DataTypes.Round storage round,
+        DataTypes.Evidence memory evidence
+    ) external returns (bool) {
+        require(
+            !round.hasSubmittedEvidence(evidence.userId),
+            Errors.EVIDENCE_ALREADY_SUBMITTED
+        );
+        round.addEvidence(evidence);
         return true;
     }
 
@@ -51,9 +69,10 @@ library RoundLogic {
                 totalVoted: round.totalVoted.current(),
                 totalCommited: round.totalCommited.current(),
                 counts: round.counts.values(),
+                evidenceSubmitters: round.evidenceSubmitters.values(),
                 votes: round.votes,
                 evidences: round.evidences,
-                drawnJurors: round.drawnJurors.values()
+                drawnJurors: round.drawnJurors
             })
         );
     }

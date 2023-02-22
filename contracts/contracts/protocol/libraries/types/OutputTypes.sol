@@ -75,17 +75,20 @@ library OutputTypes {
         uint256 totalVoted;
         uint256 totalCommited;
         uint256[] counts;
+        uint256[] evidenceSubmitters;
         DataTypes.Vote[] votes;
-        DataTypes.Evidence[2] evidences;
+        DataTypes.Evidence[] evidences;
         address[] drawnJurors;
     }
 
     struct DisputeOutput {
+        uint256 createdAt;
         uint256 disputeId;
         uint256 orderId;
-        uint256 sellerId;
-        uint256 buyerId;
+        uint256 procecutorId;
+        uint256   defendantId;
         uint256 ruling;
+        uint256[] timestamps;
         DataTypes.DisputeState state;
         RoundOutput[] rounds;
     }
@@ -98,6 +101,13 @@ library OutputTypes {
         uint256 failedSell;
         DataTypes.Review[] reviews;
         DataTypes.Package[] packages;
+    }
+
+    struct CalcDisputeDelaysFromBlock {
+          uint256 evidenceUntil;
+            uint256 commitUntil;
+            uint256 voteUntil;
+            uint256 appealUntil;
     }
 
     struct PopulatedUser {

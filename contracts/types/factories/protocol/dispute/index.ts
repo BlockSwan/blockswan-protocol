@@ -2,4 +2,3 @@
 /* tslint:disable */
 /* eslint-disable */
 export { Dispute__factory } from "./Dispute__factory";
-export { DisputeStorage__factory } from "./DisputeStorage__factory";

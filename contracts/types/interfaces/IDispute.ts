@@ -42,6 +42,7 @@ export declare namespace DataTypes {
     account: PromiseOrValue<string>;
     commit: PromiseOrValue<BytesLike>;
     choice: PromiseOrValue<BigNumberish>;
+    weight: PromiseOrValue<BigNumberish>;
     justification: PromiseOrValue<string>;
     voted: PromiseOrValue<boolean>;
   };
@@ -50,25 +51,27 @@ export declare namespace DataTypes {
     string,
     string,
     BigNumber,
+    BigNumber,
     string,
     boolean
   ] & {
     account: string;
     commit: string;
     choice: BigNumber;
+    weight: BigNumber;
     justification: string;
     voted: boolean;
   };
 
   export type EvidenceStruct = {
-    account: PromiseOrValue<string>;
+    userId: PromiseOrValue<BigNumberish>;
     role: PromiseOrValue<BytesLike>;
     metadata: PromiseOrValue<string>;
     log: PromiseOrValue<string>;
   };
 
-  export type EvidenceStructOutput = [string, string, string, string] & {
-    account: string;
+  export type EvidenceStructOutput = [BigNumber, string, string, string] & {
+    userId: BigNumber;
     role: string;
     metadata: string;
     log: string;
@@ -130,8 +133,9 @@ export declare namespace OutputTypes {
     totalVoted: PromiseOrValue<BigNumberish>;
     totalCommited: PromiseOrValue<BigNumberish>;
     counts: PromiseOrValue<BigNumberish>[];
+    evidenceSubmitters: PromiseOrValue<BigNumberish>[];
     votes: DataTypes.VoteStruct[];
-    evidences: [DataTypes.EvidenceStruct, DataTypes.EvidenceStruct];
+    evidences: DataTypes.EvidenceStruct[];
     drawnJurors: PromiseOrValue<string>[];
   };
 
@@ -146,8 +150,9 @@ export declare namespace OutputTypes {
     BigNumber,
     BigNumber,
     BigNumber[],
+    BigNumber[],
     DataTypes.VoteStructOutput[],
-    [DataTypes.EvidenceStructOutput, DataTypes.EvidenceStructOutput],
+    DataTypes.EvidenceStructOutput[],
     string[]
   ] & {
     roundId: BigNumber;
@@ -160,17 +165,20 @@ export declare namespace OutputTypes {
     totalVoted: BigNumber;
     totalCommited: BigNumber;
     counts: BigNumber[];
+    evidenceSubmitters: BigNumber[];
     votes: DataTypes.VoteStructOutput[];
-    evidences: [DataTypes.EvidenceStructOutput, DataTypes.EvidenceStructOutput];
+    evidences: DataTypes.EvidenceStructOutput[];
     drawnJurors: string[];
   };
 
   export type DisputeOutputStruct = {
+    createdAt: PromiseOrValue<BigNumberish>;
     disputeId: PromiseOrValue<BigNumberish>;
     orderId: PromiseOrValue<BigNumberish>;
-    sellerId: PromiseOrValue<BigNumberish>;
-    buyerId: PromiseOrValue<BigNumberish>;
+    procecutorId: PromiseOrValue<BigNumberish>;
+    defendantId: PromiseOrValue<BigNumberish>;
     ruling: PromiseOrValue<BigNumberish>;
+    timestamps: PromiseOrValue<BigNumberish>[];
     state: PromiseOrValue<BigNumberish>;
     rounds: OutputTypes.RoundOutputStruct[];
   };
@@ -181,14 +189,18 @@ export declare namespace OutputTypes {
     BigNumber,
     BigNumber,
     BigNumber,
+    BigNumber,
+    BigNumber[],
     number,
     OutputTypes.RoundOutputStructOutput[]
   ] & {
+    createdAt: BigNumber;
     disputeId: BigNumber;
     orderId: BigNumber;
-    sellerId: BigNumber;
-    buyerId: BigNumber;
+    procecutorId: BigNumber;
+    defendantId: BigNumber;
     ruling: BigNumber;
+    timestamps: BigNumber[];
     state: number;
     rounds: OutputTypes.RoundOutputStructOutput[];
   };
@@ -196,7 +208,7 @@ export declare namespace OutputTypes {
 
 export interface IDisputeInterface extends utils.Interface {
   functions: {
-    "createDispute(uint256)": FunctionFragment;
+    "createDispute(uint256,uint256,uint256)": FunctionFragment;
     "getDisputeById(uint256)": FunctionFragment;
     "getDisputeList()": FunctionFragment;
     "getDisputesCount()": FunctionFragment;
@@ -212,7 +224,11 @@ export interface IDisputeInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "createDispute",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "getDisputeById",
@@ -291,6 +307,8 @@ export interface IDispute extends BaseContract {
   functions: {
     createDispute(
       orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -308,6 +326,8 @@ export interface IDispute extends BaseContract {
 
   createDispute(
     orderId: PromiseOrValue<BigNumberish>,
+    sellerId: PromiseOrValue<BigNumberish>,
+    buyerId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -325,6 +345,8 @@ export interface IDispute extends BaseContract {
   callStatic: {
     createDispute(
       orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -354,6 +376,8 @@ export interface IDispute extends BaseContract {
   estimateGas: {
     createDispute(
       orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -370,6 +394,8 @@ export interface IDispute extends BaseContract {
   populateTransaction: {
     createDispute(
       orderId: PromiseOrValue<BigNumberish>,
+      sellerId: PromiseOrValue<BigNumberish>,
+      buyerId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

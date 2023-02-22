@@ -20,6 +20,13 @@ library DisputeDataLogic {
     using Counters for Counters.Counter;
     using EnumerableSet for EnumerableSet.UintSet;
 
+    function setCreated(
+        DataTypes.Dispute storage dispute
+    ) external returns (bool) {
+        dispute.createdAt = block.timestamp;
+        return true;
+    }
+
     function setOrderId(
         DataTypes.Dispute storage dispute,
         uint256 orderId
@@ -28,19 +35,19 @@ library DisputeDataLogic {
         return true;
     }
 
-    function setBuyerId(
+    function setProcecutorId(
         DataTypes.Dispute storage dispute,
-        uint256 buyerId
+        uint256 procecutorId
     ) external returns (bool) {
-        dispute.buyerId = buyerId;
+        dispute.procecutorId = procecutorId;
         return true;
     }
 
-    function setSellerId(
+    function setDefendantId(
         DataTypes.Dispute storage dispute,
-        uint256 sellerId
+        uint256 defendantId
     ) external returns (bool) {
-        dispute.sellerId = sellerId;
+        dispute.defendantId = defendantId;
         return true;
     }
 
@@ -60,18 +67,33 @@ library DisputeDataLogic {
         return true;
     }
 
-    function isSeller(
+    function setTimestamps(
         DataTypes.Dispute storage dispute,
-        uint256 userId
-    ) external view returns (bool) {
-        return (dispute.sellerId == userId);
+        uint256 evidenceUntil,
+        uint256 commitUntil,
+        uint256 voteUntil,
+        uint256 appealUntil
+    ) external returns (bool) {
+        delete dispute.timestamps;
+        dispute.timestamps.push(evidenceUntil);
+        dispute.timestamps.push(commitUntil);
+        dispute.timestamps.push(voteUntil);
+        dispute.timestamps.push(appealUntil);
+        return true;
     }
 
-    function isBuyer(
+    function isProcecutor(
         DataTypes.Dispute storage dispute,
         uint256 userId
     ) external view returns (bool) {
-        return (dispute.buyerId == userId);
+        return (dispute.procecutorId == userId);
+    }
+
+    function isDefendant(
+        DataTypes.Dispute storage dispute,
+        uint256 userId
+    ) external view returns (bool) {
+        return (dispute.defendantId == userId);
     }
 
     function isState(
@@ -79,5 +101,47 @@ library DisputeDataLogic {
         DataTypes.DisputeState state
     ) external view returns (bool) {
         return (dispute.state == state);
+    }
+
+    function getRound(
+        DataTypes.Dispute storage dispute,
+        uint256 roundId
+    ) external view returns (DataTypes.Round storage) {
+        return dispute.rounds[roundId];
+    }
+
+    // get the latest round
+    function getLatestRound(
+        DataTypes.Dispute storage dispute
+    ) external view returns (DataTypes.Round storage) {
+        DataTypes.Round[] storage rounds = dispute.rounds;
+        return rounds[rounds.length - 1];
+    }
+
+    function isEvidencePeriod(
+        DataTypes.Dispute storage dispute
+    ) external view returns (bool) {
+        return (block.timestamp < dispute.timestamps[0]);
+    }
+
+    function isCommitPeriod(
+        DataTypes.Dispute storage dispute
+    ) external view returns (bool) {
+        return (block.timestamp >= dispute.timestamps[0] &&
+            block.timestamp < dispute.timestamps[1]);
+    }
+
+    function isVotePeriod(
+        DataTypes.Dispute storage dispute
+    ) external view returns (bool) {
+        return (block.timestamp >= dispute.timestamps[1] &&
+            block.timestamp < dispute.timestamps[2]);
+    }
+
+    function isAppealPeriod(
+        DataTypes.Dispute storage dispute
+    ) external view returns (bool) {
+        return (block.timestamp >= dispute.timestamps[2] &&
+            block.timestamp < dispute.timestamps[3]);
     }
 }

@@ -29,6 +29,9 @@ export interface ErrorsInterface extends utils.Interface {
     "CALLER_NOT_SELLER_ID()": FunctionFragment;
     "CONTRACT_NAME_ALREADY_USED()": FunctionFragment;
     "DISPUTE_NOT_CREATED()": FunctionFragment;
+    "DS_EVIDENCE_PERIOD_OVER()": FunctionFragment;
+    "EVIDENCE_ALREADY_SUBMITTED()": FunctionFragment;
+    "EVIDENCE_NOT_SUBMITTED()": FunctionFragment;
     "FAILED_BECOMING_BUYER()": FunctionFragment;
     "FAILED_BECOMING_SELLER()": FunctionFragment;
     "FAILED_TO_STAKE_JURY()": FunctionFragment;
@@ -46,6 +49,7 @@ export interface ErrorsInterface extends utils.Interface {
     "NOT_ORDER_SELLER()": FunctionFragment;
     "NO_MATCHING_XP_KEY()": FunctionFragment;
     "ONLY_BUYER()": FunctionFragment;
+    "ONLY_PROVIDER_ALLOWED()": FunctionFragment;
     "ONLY_SELLER()": FunctionFragment;
     "RESTRICTED_TO_BUYER()": FunctionFragment;
     "RESTRICTED_TO_SELLER()": FunctionFragment;
@@ -62,6 +66,9 @@ export interface ErrorsInterface extends utils.Interface {
       | "CALLER_NOT_SELLER_ID"
       | "CONTRACT_NAME_ALREADY_USED"
       | "DISPUTE_NOT_CREATED"
+      | "DS_EVIDENCE_PERIOD_OVER"
+      | "EVIDENCE_ALREADY_SUBMITTED"
+      | "EVIDENCE_NOT_SUBMITTED"
       | "FAILED_BECOMING_BUYER"
       | "FAILED_BECOMING_SELLER"
       | "FAILED_TO_STAKE_JURY"
@@ -79,6 +86,7 @@ export interface ErrorsInterface extends utils.Interface {
       | "NOT_ORDER_SELLER"
       | "NO_MATCHING_XP_KEY"
       | "ONLY_BUYER"
+      | "ONLY_PROVIDER_ALLOWED"
       | "ONLY_SELLER"
       | "RESTRICTED_TO_BUYER"
       | "RESTRICTED_TO_SELLER"
@@ -112,6 +120,18 @@ export interface ErrorsInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "DISPUTE_NOT_CREATED",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "DS_EVIDENCE_PERIOD_OVER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "EVIDENCE_ALREADY_SUBMITTED",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "EVIDENCE_NOT_SUBMITTED",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -183,6 +203,10 @@ export interface ErrorsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "ONLY_PROVIDER_ALLOWED",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "ONLY_SELLER",
     values?: undefined
   ): string;
@@ -229,6 +253,18 @@ export interface ErrorsInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "DISPUTE_NOT_CREATED",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "DS_EVIDENCE_PERIOD_OVER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "EVIDENCE_ALREADY_SUBMITTED",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "EVIDENCE_NOT_SUBMITTED",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -296,6 +332,10 @@ export interface ErrorsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "ONLY_BUYER", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "ONLY_PROVIDER_ALLOWED",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "ONLY_SELLER",
     data: BytesLike
@@ -365,6 +405,12 @@ export interface Errors extends BaseContract {
 
     DISPUTE_NOT_CREATED(overrides?: CallOverrides): Promise<[string]>;
 
+    DS_EVIDENCE_PERIOD_OVER(overrides?: CallOverrides): Promise<[string]>;
+
+    EVIDENCE_ALREADY_SUBMITTED(overrides?: CallOverrides): Promise<[string]>;
+
+    EVIDENCE_NOT_SUBMITTED(overrides?: CallOverrides): Promise<[string]>;
+
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<[string]>;
 
     FAILED_BECOMING_SELLER(overrides?: CallOverrides): Promise<[string]>;
@@ -399,6 +445,8 @@ export interface Errors extends BaseContract {
 
     ONLY_BUYER(overrides?: CallOverrides): Promise<[string]>;
 
+    ONLY_PROVIDER_ALLOWED(overrides?: CallOverrides): Promise<[string]>;
+
     ONLY_SELLER(overrides?: CallOverrides): Promise<[string]>;
 
     RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<[string]>;
@@ -423,6 +471,12 @@ export interface Errors extends BaseContract {
   CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<string>;
 
   DISPUTE_NOT_CREATED(overrides?: CallOverrides): Promise<string>;
+
+  DS_EVIDENCE_PERIOD_OVER(overrides?: CallOverrides): Promise<string>;
+
+  EVIDENCE_ALREADY_SUBMITTED(overrides?: CallOverrides): Promise<string>;
+
+  EVIDENCE_NOT_SUBMITTED(overrides?: CallOverrides): Promise<string>;
 
   FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<string>;
 
@@ -458,6 +512,8 @@ export interface Errors extends BaseContract {
 
   ONLY_BUYER(overrides?: CallOverrides): Promise<string>;
 
+  ONLY_PROVIDER_ALLOWED(overrides?: CallOverrides): Promise<string>;
+
   ONLY_SELLER(overrides?: CallOverrides): Promise<string>;
 
   RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<string>;
@@ -482,6 +538,12 @@ export interface Errors extends BaseContract {
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<string>;
 
     DISPUTE_NOT_CREATED(overrides?: CallOverrides): Promise<string>;
+
+    DS_EVIDENCE_PERIOD_OVER(overrides?: CallOverrides): Promise<string>;
+
+    EVIDENCE_ALREADY_SUBMITTED(overrides?: CallOverrides): Promise<string>;
+
+    EVIDENCE_NOT_SUBMITTED(overrides?: CallOverrides): Promise<string>;
 
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<string>;
 
@@ -517,6 +579,8 @@ export interface Errors extends BaseContract {
 
     ONLY_BUYER(overrides?: CallOverrides): Promise<string>;
 
+    ONLY_PROVIDER_ALLOWED(overrides?: CallOverrides): Promise<string>;
+
     ONLY_SELLER(overrides?: CallOverrides): Promise<string>;
 
     RESTRICTED_TO_BUYER(overrides?: CallOverrides): Promise<string>;
@@ -548,6 +612,12 @@ export interface Errors extends BaseContract {
     CONTRACT_NAME_ALREADY_USED(overrides?: CallOverrides): Promise<BigNumber>;
 
     DISPUTE_NOT_CREATED(overrides?: CallOverrides): Promise<BigNumber>;
+
+    DS_EVIDENCE_PERIOD_OVER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    EVIDENCE_ALREADY_SUBMITTED(overrides?: CallOverrides): Promise<BigNumber>;
+
+    EVIDENCE_NOT_SUBMITTED(overrides?: CallOverrides): Promise<BigNumber>;
 
     FAILED_BECOMING_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -582,6 +652,8 @@ export interface Errors extends BaseContract {
     NO_MATCHING_XP_KEY(overrides?: CallOverrides): Promise<BigNumber>;
 
     ONLY_BUYER(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ONLY_PROVIDER_ALLOWED(overrides?: CallOverrides): Promise<BigNumber>;
 
     ONLY_SELLER(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -620,6 +692,18 @@ export interface Errors extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     DISPUTE_NOT_CREATED(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    DS_EVIDENCE_PERIOD_OVER(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    EVIDENCE_ALREADY_SUBMITTED(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    EVIDENCE_NOT_SUBMITTED(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -678,6 +762,10 @@ export interface Errors extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     ONLY_BUYER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    ONLY_PROVIDER_ALLOWED(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     ONLY_SELLER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

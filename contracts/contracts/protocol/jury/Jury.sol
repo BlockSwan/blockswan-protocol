@@ -84,7 +84,6 @@ contract Jury is JuryStorage, ProviderContract {
             TREE_KEY,
             _jurorSet,
             _jurorStakedToken,
-            _jurorFreezedToken,
             _sortitionTree
         );
         require(
@@ -104,7 +103,7 @@ contract Jury is JuryStorage, ProviderContract {
     function withdrawStake(uint256 toWithdraw) external returns (bool) {
         address caller = _msgSender();
         require(
-            _jurorStakedToken.get(caller) >= toWithdraw,
+            _jurorStakedToken[caller] >= toWithdraw,
             Errors.JURY_STAKE_NOT_ENOUGH
         );
         JuryLogic.executeWithdrawStake(
@@ -121,6 +120,53 @@ contract Jury is JuryStorage, ProviderContract {
             Errors.FAILED_TO_WITHDRAW_JURY
         );
         return true;
+    }
+
+    /**
+     * @notice Randomly draws X jurors from the jurors pool
+     * @param numberOfJurors The number of jurors to draw
+     * @return jurors The list of jurors address
+     */
+
+    function drawJurors(
+        uint256 numberOfJurors,
+        uint256 disputeId,
+        uint256 roundId
+    )
+        external
+        onlyProvider(RegistryKeys.DISPUTE)
+        returns (address[] memory jurors)
+    {
+        DataTypes.DisputeParams memory disputeParams = getDisputeParams();
+        jurors = new address[](numberOfJurors);
+        for (uint256 i = 0; i < numberOfJurors; i++) {
+            jurors[i] = JuryLogic.randomlyDrawJuror(
+                _sortitionTree,
+                TREE_KEY,
+                disputeId,
+                roundId,
+                i
+            );
+            console.log("DOING: %s", jurors[i]);
+            _freezeTokens(
+                jurors[i],
+                JuryLogic.calcTokenToFreeze(
+                    disputeParams.minStake,
+                    disputeParams.alpha
+                )
+            );
+        }
+    }
+
+    function _freezeTokens(address juror, uint256 amount) internal {
+        JuryLogic.executeFreezeTokens(
+            amount,
+            juror,
+            TREE_KEY,
+            _jurorStakedToken,
+            _jurorFreezedToken,
+            _sortitionTree
+        );
     }
 
     function getDisputeParams()
