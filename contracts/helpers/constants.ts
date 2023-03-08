@@ -15,6 +15,7 @@ import {
     UserInput,
     DisputeParams,
 } from './types'
+import { DataTypes } from '../types/interfaces/IDispute'
 
 // ----------------
 // UTILS
@@ -78,7 +79,7 @@ const USD_ADDRESS = '0x10F7Fc1F91Ba351f9C629c5947AD69bD03C05b96'
 const MIN_INVESTMENT = '1000000' // 1 USDC (6decimals)
 const BUY_SLOPE_NUM = '1'
 const BUY_SLOPE_DEN = '100000000'
-const RESERVE_BASIS_POINTS = '1000' // 10%
+const RESERVE_BASIS_POINTS = '5000' // 50%
 const COMMITMENT_BASIS_POINTS = '1000' // 10%
 
 // REGISTRY ADDRESSES
@@ -239,9 +240,23 @@ const ORDER_TEST2: OrderInput = {
     brief: 'brief2',
 }
 
+const EVIDENCE_TEST0: DataTypes.EvidenceStruct = {
+    userId: 0,
+    role: BUYER_ROLE,
+    metadata: 'my evidence',
+}
+
+const EVIDENCE_TEST1: DataTypes.EvidenceStruct = {
+    userId: 1,
+    role: SELLER_ROLE,
+    metadata: 'my evidence',
+}
+
 const DEFAULT_BALANCE: Balance = {
     USDC: 0,
     BSWAN: 0,
+    stakedBSWAN: 0,
+    freezedBSWAN: 0,
 }
 
 // ----------------
@@ -328,4 +343,6 @@ export {
     EMPTY_PACKAGE,
     TEN_PERCENTAGE,
     ONE_HUNDRED_USDC,
+    EVIDENCE_TEST0,
+    EVIDENCE_TEST1,
 }

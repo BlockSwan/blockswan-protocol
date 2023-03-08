@@ -199,7 +199,8 @@ contract Order is OrderStorage, ProviderContract {
     function dispute(
         uint256 orderId,
         uint256 sellerId,
-        uint256 buyerId
+        uint256 buyerId,
+        DataTypes.Evidence memory evidence
     ) external {
         address caller = _msgSender();
         IUser UserContract = IUser(fetchContract(RegistryKeys.USER));
@@ -207,6 +208,7 @@ contract Order is OrderStorage, ProviderContract {
             fetchContract(RegistryKeys.DISPUTE)
         );
         uint256 callerId = UserContract.getIdByAddress(caller);
+        uint256 defendantId = callerId == sellerId ? buyerId : sellerId;
         require(
             callerId == sellerId || callerId == buyerId,
             Errors.NOT_ORDER_ACTOR
@@ -214,7 +216,9 @@ contract Order is OrderStorage, ProviderContract {
         uint256 newDisputeId = DisputeContract.createDispute(
             orderId,
             callerId,
-            callerId == sellerId ? buyerId : sellerId
+            defendantId,
+            caller,
+            evidence
         );
         OrderLogic.executeDispute(
             orderId,
@@ -223,6 +227,40 @@ contract Order is OrderStorage, ProviderContract {
             newDisputeId,
             _orders
         );
+    }
+
+    function rule(
+        uint256 winningChoice,
+        uint256 orderId,
+        uint256 procecutorId,
+        uint256 defendantId
+    ) external onlyProvider(RegistryKeys.DISPUTE) returns (bool) {
+        IUser UserContract = IUser(fetchContract(RegistryKeys.USER));
+        DataTypes.Invoice memory invoice = getOrderById(orderId).invoice;
+        DataTypes.RetributionParams
+            memory retribParams = getProtocolRetributionParams();
+        address defendant = UserContract.getAddressById(defendantId);
+        address procecutor = UserContract.getAddressById(procecutorId);
+        (uint256 toProcecutor, uint256 toDefendant) = OrderLogic
+            .calcRulingValues(
+                winningChoice,
+                invoice.price - invoice.sellerFees
+            );
+        _transfer(toProcecutor, procecutor, invoice.currency);
+        _transfer(toDefendant, defendant, invoice.currency);
+        _processOrderPayment(
+            invoice.sellerFees,
+            procecutor,
+            retribParams,
+            UserContract
+        );
+        _processOrderPayment(
+            invoice.buyerFees,
+            procecutor,
+            retribParams,
+            UserContract
+        );
+        return true;
     }
 
     function _processOrderPayment(
@@ -288,8 +326,9 @@ contract Order is OrderStorage, ProviderContract {
             .getSellerOrderFees();
 
         IERC20 currency = IERC20(
-            IBSWAN(fetchContract(RegistryKeys.DAT)).currency()
+            address(IBSWAN(fetchContract(RegistryKeys.DAT)).currency())
         );
+
         (, uint256 paidByBuyer) = OrderLogic.executeCreateOrder(
             _orderIds,
             _orders,

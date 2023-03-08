@@ -81,6 +81,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IJury__factory>;
     getContractFactory(
+      name: "IOrder",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IOrder__factory>;
+    getContractFactory(
       name: "IProtocolConfigurator",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IProtocolConfigurator__factory>;
@@ -141,6 +145,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Jury__factory>;
     getContractFactory(
+      name: "Choices",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Choices__factory>;
+    getContractFactory(
       name: "Errors",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Errors__factory>;
@@ -172,6 +180,22 @@ declare module "hardhat/types/runtime" {
       name: "JuryLogic",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.JuryLogic__factory>;
+    getContractFactory(
+      name: "OrderLogic",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OrderLogic__factory>;
+    getContractFactory(
+      name: "RoundDataLogic",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.RoundDataLogic__factory>;
+    getContractFactory(
+      name: "RoundLogic",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.RoundLogic__factory>;
+    getContractFactory(
+      name: "VoteLogic",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VoteLogic__factory>;
     getContractFactory(
       name: "Order",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -271,6 +295,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IJury>;
     getContractAt(
+      name: "IOrder",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IOrder>;
+    getContractAt(
       name: "IProtocolConfigurator",
       address: string,
       signer?: ethers.Signer
@@ -346,6 +375,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Jury>;
     getContractAt(
+      name: "Choices",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Choices>;
+    getContractAt(
       name: "Errors",
       address: string,
       signer?: ethers.Signer
@@ -385,6 +419,26 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.JuryLogic>;
+    getContractAt(
+      name: "OrderLogic",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OrderLogic>;
+    getContractAt(
+      name: "RoundDataLogic",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.RoundDataLogic>;
+    getContractAt(
+      name: "RoundLogic",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.RoundLogic>;
+    getContractAt(
+      name: "VoteLogic",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VoteLogic>;
     getContractAt(
       name: "Order",
       address: string,

@@ -5,7 +5,7 @@ const COINMARKETCAP_API_KEY = String(process.env.COINMARKETCAP_API_KEY)
 const POLYGONSCAN_API_KEY = String(process.env.POLYGONSCAN_API_KEY)
 
 const HARDHAT_CHAINID = 31337
-const COVERAGE_CHAINID = 1337
+const COVERAGE_CHAINID = 31337 //1337
 
 const DEFAULT_NAMED_ACCOUNTS = {
     /*
@@ -17,8 +17,8 @@ const DEFAULT_NAMED_ACCOUNTS = {
     protocolAdmin: 0,
 }
 
-const DEFAULT_BLOCK_GAS_LIMIT = 12450000 * 5
-const DEFAULT_GAS_PRICE = 8000000000 * 5
+const DEFAULT_BLOCK_GAS_LIMIT = 12450000 * 8
+const DEFAULT_GAS_PRICE = 8000000000
 
 const GAS_PRICE_API = {
     eth: 'https://api.etherscan.io/api?module=proxy&action=eth_gasPrice',

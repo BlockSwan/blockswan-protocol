@@ -52,6 +52,18 @@ export declare namespace InputTypes {
 }
 
 export declare namespace DataTypes {
+  export type EvidenceStruct = {
+    userId: PromiseOrValue<BigNumberish>;
+    role: PromiseOrValue<BytesLike>;
+    metadata: PromiseOrValue<string>;
+  };
+
+  export type EvidenceStructOutput = [BigNumber, string, string] & {
+    userId: BigNumber;
+    role: string;
+    metadata: string;
+  };
+
   export type InvoiceStruct = {
     price: PromiseOrValue<BigNumberish>;
     buyerFees: PromiseOrValue<BigNumberish>;
@@ -126,7 +138,7 @@ export interface OrderInterface extends utils.Interface {
     "autoRefund(uint256,uint256)": FunctionFragment;
     "confirmOrder(uint256,uint256)": FunctionFragment;
     "createOrder((uint256,uint256,uint256,uint256,string))": FunctionFragment;
-    "dispute(uint256,uint256,uint256)": FunctionFragment;
+    "dispute(uint256,uint256,uint256,(uint256,bytes32,string))": FunctionFragment;
     "fetchContract(bytes32)": FunctionFragment;
     "getInvitersByAddress(address,address)": FunctionFragment;
     "getInvitersById(uint256)": FunctionFragment;
@@ -144,6 +156,7 @@ export interface OrderInterface extends utils.Interface {
     "payOrder(uint256,uint256)": FunctionFragment;
     "refundOrder(uint256,uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "rule(uint256,uint256,uint256,uint256)": FunctionFragment;
     "setProvider(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
@@ -175,6 +188,7 @@ export interface OrderInterface extends utils.Interface {
       | "payOrder"
       | "refundOrder"
       | "renounceOwnership"
+      | "rule"
       | "setProvider"
       | "transferOwnership"
   ): FunctionFragment;
@@ -209,7 +223,8 @@ export interface OrderInterface extends utils.Interface {
     values: [
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
+      PromiseOrValue<BigNumberish>,
+      DataTypes.EvidenceStruct
     ]
   ): string;
   encodeFunctionData(
@@ -285,6 +300,15 @@ export interface OrderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "rule",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "setProvider",
@@ -371,6 +395,7 @@ export interface OrderInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "rule", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setProvider",
     data: BytesLike
@@ -458,6 +483,7 @@ export interface Order extends BaseContract {
       orderId: PromiseOrValue<BigNumberish>,
       sellerId: PromiseOrValue<BigNumberish>,
       buyerId: PromiseOrValue<BigNumberish>,
+      evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -547,6 +573,14 @@ export interface Order extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    rule(
+      winningChoice: PromiseOrValue<BigNumberish>,
+      orderId: PromiseOrValue<BigNumberish>,
+      procecutorId: PromiseOrValue<BigNumberish>,
+      defendantId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     setProvider(
       _providerAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -590,6 +624,7 @@ export interface Order extends BaseContract {
     orderId: PromiseOrValue<BigNumberish>,
     sellerId: PromiseOrValue<BigNumberish>,
     buyerId: PromiseOrValue<BigNumberish>,
+    evidence: DataTypes.EvidenceStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -679,6 +714,14 @@ export interface Order extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  rule(
+    winningChoice: PromiseOrValue<BigNumberish>,
+    orderId: PromiseOrValue<BigNumberish>,
+    procecutorId: PromiseOrValue<BigNumberish>,
+    defendantId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   setProvider(
     _providerAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -722,6 +765,7 @@ export interface Order extends BaseContract {
       orderId: PromiseOrValue<BigNumberish>,
       sellerId: PromiseOrValue<BigNumberish>,
       buyerId: PromiseOrValue<BigNumberish>,
+      evidence: DataTypes.EvidenceStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -807,6 +851,14 @@ export interface Order extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    rule(
+      winningChoice: PromiseOrValue<BigNumberish>,
+      orderId: PromiseOrValue<BigNumberish>,
+      procecutorId: PromiseOrValue<BigNumberish>,
+      defendantId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     setProvider(
       _providerAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -862,6 +914,7 @@ export interface Order extends BaseContract {
       orderId: PromiseOrValue<BigNumberish>,
       sellerId: PromiseOrValue<BigNumberish>,
       buyerId: PromiseOrValue<BigNumberish>,
+      evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -949,6 +1002,14 @@ export interface Order extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    rule(
+      winningChoice: PromiseOrValue<BigNumberish>,
+      orderId: PromiseOrValue<BigNumberish>,
+      procecutorId: PromiseOrValue<BigNumberish>,
+      defendantId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setProvider(
       _providerAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -995,6 +1056,7 @@ export interface Order extends BaseContract {
       orderId: PromiseOrValue<BigNumberish>,
       sellerId: PromiseOrValue<BigNumberish>,
       buyerId: PromiseOrValue<BigNumberish>,
+      evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1079,6 +1141,14 @@ export interface Order extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    rule(
+      winningChoice: PromiseOrValue<BigNumberish>,
+      orderId: PromiseOrValue<BigNumberish>,
+      procecutorId: PromiseOrValue<BigNumberish>,
+      defendantId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

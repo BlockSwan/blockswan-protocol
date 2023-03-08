@@ -7,6 +7,8 @@ import type {
   BigNumberish,
   BytesLike,
   CallOverrides,
+  ContractTransaction,
+  Overrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -23,21 +25,50 @@ import type {
 
 export interface IJuryInterface extends utils.Interface {
   functions: {
-    "drawJurors(uint256,uint256,uint256)": FunctionFragment;
+    "drawJurors(uint256)": FunctionFragment;
+    "freezeTokens(address[])": FunctionFragment;
+    "rewardJuror(uint256,address)": FunctionFragment;
+    "unfreezeTokens(uint256,address)": FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: "drawJurors"): FunctionFragment;
+  getFunction(
+    nameOrSignatureOrTopic:
+      | "drawJurors"
+      | "freezeTokens"
+      | "rewardJuror"
+      | "unfreezeTokens"
+  ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "drawJurors",
-    values: [
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "freezeTokens",
+    values: [PromiseOrValue<string>[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "rewardJuror",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "unfreezeTokens",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(functionFragment: "drawJurors", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "freezeTokens",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "rewardJuror",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unfreezeTokens",
+    data: BytesLike
+  ): Result;
 
   events: {};
 }
@@ -71,26 +102,71 @@ export interface IJury extends BaseContract {
   functions: {
     drawJurors(
       numberOfJurors: PromiseOrValue<BigNumberish>,
-      disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string[]] & { jurors: string[] }>;
+
+    freezeTokens(
+      accounts: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    rewardJuror(
+      amount: PromiseOrValue<BigNumberish>,
+      juror: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    unfreezeTokens(
+      amount: PromiseOrValue<BigNumberish>,
+      account: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   drawJurors(
     numberOfJurors: PromiseOrValue<BigNumberish>,
-    disputeId: PromiseOrValue<BigNumberish>,
-    roundId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string[]>;
+
+  freezeTokens(
+    accounts: PromiseOrValue<string>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  rewardJuror(
+    amount: PromiseOrValue<BigNumberish>,
+    juror: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  unfreezeTokens(
+    amount: PromiseOrValue<BigNumberish>,
+    account: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     drawJurors(
       numberOfJurors: PromiseOrValue<BigNumberish>,
-      disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string[]>;
+
+    freezeTokens(
+      accounts: PromiseOrValue<string>[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    rewardJuror(
+      amount: PromiseOrValue<BigNumberish>,
+      juror: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    unfreezeTokens(
+      amount: PromiseOrValue<BigNumberish>,
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {};
@@ -98,18 +174,48 @@ export interface IJury extends BaseContract {
   estimateGas: {
     drawJurors(
       numberOfJurors: PromiseOrValue<BigNumberish>,
-      disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    freezeTokens(
+      accounts: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    rewardJuror(
+      amount: PromiseOrValue<BigNumberish>,
+      juror: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    unfreezeTokens(
+      amount: PromiseOrValue<BigNumberish>,
+      account: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     drawJurors(
       numberOfJurors: PromiseOrValue<BigNumberish>,
-      disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    freezeTokens(
+      accounts: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    rewardJuror(
+      amount: PromiseOrValue<BigNumberish>,
+      juror: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unfreezeTokens(
+      amount: PromiseOrValue<BigNumberish>,
+      account: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

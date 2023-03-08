@@ -19,12 +19,12 @@ library DataTypes {
         DONE
     }
 
-    enum DisputeState{
+    enum DisputeState {
         EVIDENCE,
         COMMIT,
         VOTE,
         APPEAL,
-        EXECUTION 
+        EXECUTION
     }
 
     struct DelayTimestamp {
@@ -34,8 +34,6 @@ library DataTypes {
         uint256 vote;
         uint256 appeal;
     }
-
-
 
     struct User {
         string metadata;
@@ -94,7 +92,6 @@ library DataTypes {
         uint256 userId;
         bytes32 role;
         string metadata;
-        string log;
     }
 
     struct Vote {
@@ -103,7 +100,7 @@ library DataTypes {
         uint256 choice;
         uint256 weight;
         string justification;
-        bool voted;
+        bool hasVoted;
     }
 
     struct Juror {
@@ -112,33 +109,36 @@ library DataTypes {
     }
 
     struct Round {
+        uint256 procecutorId;
+        uint256 defendantId;
         uint256 appealFeeRewards;
         uint256 maxVotes;
         uint256 tokensAtStakePerJuror;
         uint256 totalFeesForJurors;
         uint256 penalties;
         uint256 winningChoice;
-        Counters.Counter totalRepartitions;
-        Counters.Counter totalVoted;
-        Counters.Counter totalCommited;
-        EnumerableSet.UintSet counts;
+        uint256 totalRepartitions;
+        uint256 totalVoted;
+        uint256 totalCommited;
+        uint256 appealedBy;
+        uint256[11] counts;
         EnumerableSet.UintSet evidenceSubmitters;
+        EnumerableSet.AddressSet judgesClaimed;
         Vote[] votes;
         Evidence[] evidences;
         address[] drawnJurors;
+        bool closed;
     }
 
     struct Dispute {
         uint256 createdAt;
         uint256 orderId;
-        uint256 procecutorId;
-        uint256 defendantId;
         uint256 ruling;
+        uint256 ruledAt;
         uint256[] timestamps;
         DisputeState state;
         Round[] rounds;
     }
-
 
     struct Review {
         uint256 authorId;

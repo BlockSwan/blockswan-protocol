@@ -35,13 +35,6 @@ library OrderDataLogic {
         return true;
     }
 
-   
-  
-
-   
-
-  
-
     function setBuyerId(
         DataTypes.Order storage order,
         uint256 buyerId
@@ -68,7 +61,7 @@ library OrderDataLogic {
 
     function setInvoice(
         DataTypes.Order storage order,
-        DataTypes.Invoice memory invoice 
+        DataTypes.Invoice memory invoice
     ) external returns (bool) {
         order.invoice = invoice;
         return true;
@@ -81,7 +74,6 @@ library OrderDataLogic {
         order.state = state;
         return true;
     }
-
 
     function setDisputeId(
         DataTypes.Order storage order,
@@ -107,7 +99,7 @@ library OrderDataLogic {
         order.reviewIds.remove(reviewId);
         return true;
     }
-  
+
     function isSeller(
         DataTypes.Order storage order,
         uint256 userId

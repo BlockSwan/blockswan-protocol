@@ -46,14 +46,18 @@ interface IDispute {
 
     /**
      * @notice Create a new dispute
-     * @param orderId the order from which the dispute has been created
-     * @param sellerId the seller id
-     * @param buyerId the buyer id
+     * @param orderId The order id
+     * @param procecutorId The procecutor id
+     * @param defendantId The defendant id
+     * @param caller The caller address
+     * @param evidence The evidence data
      * @return the new dispute id
      **/
     function createDispute(
         uint256 orderId,
-        uint256 sellerId,
-        uint256 buyerId
+        uint256 procecutorId,
+        uint256 defendantId,
+        address caller,
+        DataTypes.Evidence memory evidence
     ) external returns (uint256);
 }

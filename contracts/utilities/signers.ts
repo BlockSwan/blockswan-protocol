@@ -30,7 +30,7 @@ const getRandomSigner = async (): Promise<SignerWithAddress> => {
     // send ETH to the new wallet so it can perform a tx
     await addr1.sendTransaction({
         to: wallet.address,
-        value: ethers.utils.parseEther('1'),
+        value: ethers.utils.parseEther('200000'),
     })
     let address = await wallet.getAddress()
     return {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.0;
 
-//import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 import {IERC20} from "../../imports/openzeppelin/contracts/IERC20.sol";
 import {ERC20} from "../../imports/openzeppelin/contracts/ERC20.sol";
@@ -253,6 +253,7 @@ contract BSWAN is ERC20, Pausable, Ownable, IBSWAN {
 
         // Calculate the tokenValue for this investment
         uint256 tokenValue = estimateBuyValue(_currencyValue);
+
         require(tokenValue >= _minTokensBought, "PRICE_SLIPPAGE");
 
         emit Buy(msg.sender, _to, _currencyValue, tokenValue);

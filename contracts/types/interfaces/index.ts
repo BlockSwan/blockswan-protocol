@@ -7,6 +7,7 @@ export type { IBSWAN } from "./IBSWAN";
 export type { IDispute } from "./IDispute";
 export type { IGig } from "./IGig";
 export type { IJury } from "./IJury";
+export type { IOrder } from "./IOrder";
 export type { IProtocolConfigurator } from "./IProtocolConfigurator";
 export type { IProviderContract } from "./IProviderContract";
 export type { IProviderRegistry } from "./IProviderRegistry";

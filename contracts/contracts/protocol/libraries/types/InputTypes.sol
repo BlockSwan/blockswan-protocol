@@ -22,7 +22,7 @@ library InputTypes {
 
     struct OrderFeesInput {
         DataTypes.FeeParams buyerFees;
-        DataTypes.FeeParams sellerFees;   
+        DataTypes.FeeParams sellerFees;
     }
 
     struct OrderRelationInput {
@@ -56,7 +56,16 @@ library InputTypes {
         uint256 defendantId;
         uint256 maxVotes;
         uint256 totalFeesForJurors;
-        uint256[] delaysUntil;
+        uint256 tokensAtStakePerJuror;
+        uint256 evidenceUntil;
+        address[] drawnJurors;
+    }
+
+    struct ExecuteNextRoundInput {
+        uint256 evidenceUntil;
+        uint256 maxVotes;
+        uint256 totalFeesForJurors;
+        uint256 tokensAtStakePerJuror;
         address[] drawnJurors;
     }
 
@@ -87,10 +96,23 @@ library InputTypes {
         uint256 remainingRewards;
     }
 
-    struct ExecuteSendEvidenceInput {
-        uint256 disputeId;
-        uint256 roundId;
-        DataTypes.Evidence evidence;   
+    struct AddRoundInput {
+        uint256 totalFeesForJurors;
+        uint256 tokensAtStakePerJuror;
+        uint256 maxVotes;
+        uint256 procecutorId;
+        uint256 defendantId;
+        address[] drawnJurors;
     }
-    
+
+    struct ClaimAsJudgeInput {
+        address account;
+        uint256 min;
+        uint256 max;
+        uint256 winningChoice;
+        uint256 amountOfCorrectVotes;
+        uint256 tokensAtStakePerJuror;
+        uint256 totalFeesForJurors;
+        uint256 penalties;
+    }
 }

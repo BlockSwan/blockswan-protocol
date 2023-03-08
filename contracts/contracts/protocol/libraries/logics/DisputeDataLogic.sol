@@ -35,27 +35,12 @@ library DisputeDataLogic {
         return true;
     }
 
-    function setProcecutorId(
-        DataTypes.Dispute storage dispute,
-        uint256 procecutorId
-    ) external returns (bool) {
-        dispute.procecutorId = procecutorId;
-        return true;
-    }
-
-    function setDefendantId(
-        DataTypes.Dispute storage dispute,
-        uint256 defendantId
-    ) external returns (bool) {
-        dispute.defendantId = defendantId;
-        return true;
-    }
-
     function setRuling(
         DataTypes.Dispute storage dispute,
         uint256 ruling
     ) external returns (bool) {
         dispute.ruling = ruling;
+        dispute.ruledAt = block.timestamp;
         return true;
     }
 
@@ -67,33 +52,19 @@ library DisputeDataLogic {
         return true;
     }
 
-    function setTimestamps(
+    function addTimestamp(
         DataTypes.Dispute storage dispute,
-        uint256 evidenceUntil,
-        uint256 commitUntil,
-        uint256 voteUntil,
-        uint256 appealUntil
+        uint256 delay
     ) external returns (bool) {
-        delete dispute.timestamps;
-        dispute.timestamps.push(evidenceUntil);
-        dispute.timestamps.push(commitUntil);
-        dispute.timestamps.push(voteUntil);
-        dispute.timestamps.push(appealUntil);
+        dispute.timestamps.push(block.timestamp + delay);
         return true;
     }
 
-    function isProcecutor(
-        DataTypes.Dispute storage dispute,
-        uint256 userId
-    ) external view returns (bool) {
-        return (dispute.procecutorId == userId);
-    }
-
-    function isDefendant(
-        DataTypes.Dispute storage dispute,
-        uint256 userId
-    ) external view returns (bool) {
-        return (dispute.defendantId == userId);
+    function deleteTimestamps(
+        DataTypes.Dispute storage dispute
+    ) external returns (bool) {
+        delete dispute.timestamps;
+        return true;
     }
 
     function isState(
@@ -103,19 +74,18 @@ library DisputeDataLogic {
         return (dispute.state == state);
     }
 
-    function getRound(
-        DataTypes.Dispute storage dispute,
-        uint256 roundId
-    ) external view returns (DataTypes.Round storage) {
-        return dispute.rounds[roundId];
-    }
-
-    // get the latest round
     function getLatestRound(
         DataTypes.Dispute storage dispute
     ) external view returns (DataTypes.Round storage) {
         DataTypes.Round[] storage rounds = dispute.rounds;
         return rounds[rounds.length - 1];
+    }
+
+    function getRound(
+        DataTypes.Dispute storage dispute,
+        uint256 roundId
+    ) external view returns (DataTypes.Round storage) {
+        return dispute.rounds[roundId];
     }
 
     function isEvidencePeriod(

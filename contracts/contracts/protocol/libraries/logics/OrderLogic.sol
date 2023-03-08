@@ -43,7 +43,12 @@ library OrderLogic {
             params.relations.newId,
             orders
         );
-        order.invoice.create(params.price, params.currency, params.fees.buyerFees, params.fees.sellerFees);
+        order.invoice.create(
+            params.price,
+            params.currency,
+            params.fees.buyerFees,
+            params.fees.sellerFees
+        );
         order.setMetadata(params.metadata);
         order.setBrief(params.brief);
         order.setBuyerId(params.relations.buyerId);
@@ -73,41 +78,32 @@ library OrderLogic {
         checkOrderBuyer(order, buyerId);
         checkState(order, DataTypes.OrderState.UNCONFIRMED);
         require(
-             block.timestamp > order.invoice.createdAt + selfRefundDelay,
+            block.timestamp > order.invoice.createdAt + selfRefundDelay,
             Errors.SELF_REFUND_DELAY_NOT_OVER
         );
         order.setState(DataTypes.OrderState.DONE);
-        return (
-            order.invoice.paidByBuyer(),
-            order.invoice.currency
-        );
+        return (order.invoice.paidByBuyer(), order.invoice.currency);
     }
 
     function executeRefundOrder(
-        uint256 orderId, 
+        uint256 orderId,
         uint256 sellerId,
-        uint256 buyerId,  
+        uint256 buyerId,
         mapping(uint256 => DataTypes.Order) storage orders
-    ) external returns (uint256, IERC20){
+    ) external returns (uint256, IERC20) {
         DataTypes.Order storage order = getOrderById(orderId, orders);
         checkOrderSeller(order, sellerId);
         checkOrderBuyer(order, buyerId);
         checkState(order, DataTypes.OrderState.CONFIRMED);
         order.setState(DataTypes.OrderState.DONE);
-         return (
-            order.invoice.paidByBuyer(),
-            order.invoice.currency
-        );
+        return (order.invoice.paidByBuyer(), order.invoice.currency);
     }
 
     function executePayOrder(
         uint256 orderId,
         uint256 buyerId,
         mapping(uint256 => DataTypes.Order) storage orders
-    )
-        external
-        returns (DataTypes.Invoice memory, uint256, uint256)
-    {
+    ) external returns (DataTypes.Invoice memory, uint256, uint256) {
         DataTypes.Order storage order = getOrderById(orderId, orders);
         checkOrderBuyer(order, buyerId);
         checkState(order, DataTypes.OrderState.CONFIRMED);
@@ -156,6 +152,14 @@ library OrderLogic {
         );
     }
 
+    function calcRulingValues(
+        uint256 winningChoice,
+        uint256 amount
+    ) external pure returns (uint256 toProcecutor, uint256 toDefendant) {
+        toProcecutor = PercentageMath.percentMul(amount, winningChoice * 1e3);
+        toDefendant = amount - toProcecutor;
+    }
+
     function checkOrderSeller(
         DataTypes.Order storage order,
         uint256 sellerId
@@ -176,5 +180,4 @@ library OrderLogic {
     ) internal view {
         require(order.isState(state), Errors.INVALID_ORDER_STATE);
     }
-
 }

@@ -16,14 +16,31 @@ interface IJury {
      * @notice Randomly draws X jurors from the jurors pool
      * using entropy made with the blockhash and the disputeId among other things.
      * @param numberOfJurors The number of jurors to draw
-     * @param disputeId The dispute id
-     * @param roundId The round id
+   
      * @return jurors The list of jurors address
      */
 
     function drawJurors(
-        uint256 numberOfJurors,
-        uint256 disputeId,
-        uint256 roundId
+        uint256 numberOfJurors
     ) external view returns (address[] memory jurors);
+
+    /**
+     *
+     * @param accounts The list of jurors to freeze
+     */
+
+    function freezeTokens(address[] memory accounts) external;
+
+    /**
+     * @param amount The amount to unfreeze
+     * @param account The juror to unfreeze
+     */
+
+    function unfreezeTokens(uint256 amount, address account) external;
+
+    /**
+     * @param amount The amount of tokens added to the stake
+     * @param juror The juror to reward
+     */
+    function rewardJuror(uint256 amount, address juror) external;
 }

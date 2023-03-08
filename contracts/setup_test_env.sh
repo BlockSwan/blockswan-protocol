@@ -8,9 +8,10 @@ echo "[BASH] Setting up testnet enviroment"
 
 if [ ! "$COVERAGE" = true ]; then
     # remove hardhat and artifacts cache
+     echo "cleaning hardhat cache"
       npm run clean
 
-     # compile @blockswan contracts
+     echo "compile @blockswan contracts"
       npm run compile
 else
      echo "[BASH] Skipping compilation to keep coverage artifacts"

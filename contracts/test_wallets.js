@@ -1,4 +1,4 @@
-const balance = '1000000000000000000000000'
+const balance = '10000000000000000000000000000000'
 
 module.exports = {
     accounts: [

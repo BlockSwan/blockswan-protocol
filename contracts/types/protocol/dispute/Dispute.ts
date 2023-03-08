@@ -28,13 +28,47 @@ import type {
 } from "../../common";
 
 export declare namespace DataTypes {
+  export type EvidenceStruct = {
+    userId: PromiseOrValue<BigNumberish>;
+    role: PromiseOrValue<BytesLike>;
+    metadata: PromiseOrValue<string>;
+  };
+
+  export type EvidenceStructOutput = [BigNumber, string, string] & {
+    userId: BigNumber;
+    role: string;
+    metadata: string;
+  };
+
+  export type DelayTimestampStruct = {
+    selfRefund: PromiseOrValue<BigNumberish>;
+    evidence: PromiseOrValue<BigNumberish>;
+    commit: PromiseOrValue<BigNumberish>;
+    vote: PromiseOrValue<BigNumberish>;
+    appeal: PromiseOrValue<BigNumberish>;
+  };
+
+  export type DelayTimestampStructOutput = [
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    selfRefund: BigNumber;
+    evidence: BigNumber;
+    commit: BigNumber;
+    vote: BigNumber;
+    appeal: BigNumber;
+  };
+
   export type VoteStruct = {
     account: PromiseOrValue<string>;
     commit: PromiseOrValue<BytesLike>;
     choice: PromiseOrValue<BigNumberish>;
     weight: PromiseOrValue<BigNumberish>;
     justification: PromiseOrValue<string>;
-    voted: PromiseOrValue<boolean>;
+    hasVoted: PromiseOrValue<boolean>;
   };
 
   export type VoteStructOutput = [
@@ -50,27 +84,16 @@ export declare namespace DataTypes {
     choice: BigNumber;
     weight: BigNumber;
     justification: string;
-    voted: boolean;
-  };
-
-  export type EvidenceStruct = {
-    userId: PromiseOrValue<BigNumberish>;
-    role: PromiseOrValue<BytesLike>;
-    metadata: PromiseOrValue<string>;
-    log: PromiseOrValue<string>;
-  };
-
-  export type EvidenceStructOutput = [BigNumber, string, string, string] & {
-    userId: BigNumber;
-    role: string;
-    metadata: string;
-    log: string;
+    hasVoted: boolean;
   };
 }
 
 export declare namespace OutputTypes {
   export type RoundOutputStruct = {
     roundId: PromiseOrValue<BigNumberish>;
+    procecutorId: PromiseOrValue<BigNumberish>;
+    defendantId: PromiseOrValue<BigNumberish>;
+    appealFeeRewards: PromiseOrValue<BigNumberish>;
     tokensAtStakePerJuror: PromiseOrValue<BigNumberish>;
     totalFeesForJurors: PromiseOrValue<BigNumberish>;
     maxVotes: PromiseOrValue<BigNumberish>;
@@ -81,9 +104,12 @@ export declare namespace OutputTypes {
     totalCommited: PromiseOrValue<BigNumberish>;
     counts: PromiseOrValue<BigNumberish>[];
     evidenceSubmitters: PromiseOrValue<BigNumberish>[];
+    appealedBy: PromiseOrValue<BigNumberish>;
     votes: DataTypes.VoteStruct[];
     evidences: DataTypes.EvidenceStruct[];
     drawnJurors: PromiseOrValue<string>[];
+    judgesClaimed: PromiseOrValue<string>[];
+    closed: PromiseOrValue<boolean>;
   };
 
   export type RoundOutputStructOutput = [
@@ -96,13 +122,22 @@ export declare namespace OutputTypes {
     BigNumber,
     BigNumber,
     BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
     BigNumber[],
     BigNumber[],
+    BigNumber,
     DataTypes.VoteStructOutput[],
     DataTypes.EvidenceStructOutput[],
-    string[]
+    string[],
+    string[],
+    boolean
   ] & {
     roundId: BigNumber;
+    procecutorId: BigNumber;
+    defendantId: BigNumber;
+    appealFeeRewards: BigNumber;
     tokensAtStakePerJuror: BigNumber;
     totalFeesForJurors: BigNumber;
     maxVotes: BigNumber;
@@ -113,25 +148,26 @@ export declare namespace OutputTypes {
     totalCommited: BigNumber;
     counts: BigNumber[];
     evidenceSubmitters: BigNumber[];
+    appealedBy: BigNumber;
     votes: DataTypes.VoteStructOutput[];
     evidences: DataTypes.EvidenceStructOutput[];
     drawnJurors: string[];
+    judgesClaimed: string[];
+    closed: boolean;
   };
 
   export type DisputeOutputStruct = {
     createdAt: PromiseOrValue<BigNumberish>;
     disputeId: PromiseOrValue<BigNumberish>;
     orderId: PromiseOrValue<BigNumberish>;
-    procecutorId: PromiseOrValue<BigNumberish>;
-    defendantId: PromiseOrValue<BigNumberish>;
     ruling: PromiseOrValue<BigNumberish>;
+    ruledAt: PromiseOrValue<BigNumberish>;
     timestamps: PromiseOrValue<BigNumberish>[];
     state: PromiseOrValue<BigNumberish>;
     rounds: OutputTypes.RoundOutputStruct[];
   };
 
   export type DisputeOutputStructOutput = [
-    BigNumber,
     BigNumber,
     BigNumber,
     BigNumber,
@@ -144,9 +180,8 @@ export declare namespace OutputTypes {
     createdAt: BigNumber;
     disputeId: BigNumber;
     orderId: BigNumber;
-    procecutorId: BigNumber;
-    defendantId: BigNumber;
     ruling: BigNumber;
+    ruledAt: BigNumber;
     timestamps: BigNumber[];
     state: number;
     rounds: OutputTypes.RoundOutputStructOutput[];
@@ -158,22 +193,31 @@ export interface DisputeInterface extends utils.Interface {
     "ADDRESSES_PROVIDER()": FunctionFragment;
     "ADDRESS_PROVIDER()": FunctionFragment;
     "MAX_UINT()": FunctionFragment;
+    "appeal(uint256)": FunctionFragment;
     "approve(address)": FunctionFragment;
-    "createDispute(uint256,uint256,uint256)": FunctionFragment;
+    "claimAppealFeeRewards(uint256,uint256)": FunctionFragment;
+    "claimAsJudge(uint256,uint256)": FunctionFragment;
+    "claimRuling(uint256)": FunctionFragment;
+    "commitVote(uint256,uint256,string)": FunctionFragment;
+    "createDispute(uint256,uint256,uint256,address,(uint256,bytes32,string))": FunctionFragment;
     "fetchContract(bytes32)": FunctionFragment;
+    "getDelayTimestamp(address)": FunctionFragment;
     "getDisputeById(uint256)": FunctionFragment;
     "getDisputeCount()": FunctionFragment;
     "getDisputeList()": FunctionFragment;
-    "getNewDelays(address)": FunctionFragment;
+    "getOrderPrice(uint256)": FunctionFragment;
     "hasProtocolRole(bytes32,address)": FunctionFragment;
     "isCallerUser(address,uint256,address)": FunctionFragment;
     "isGigOwner(uint256,uint256,address)": FunctionFragment;
     "isStillBuyer(address)": FunctionFragment;
     "isStillSeller(address)": FunctionFragment;
     "kill()": FunctionFragment;
+    "nextRound(uint256,(uint256,bytes32,string))": FunctionFragment;
     "owner()": FunctionFragment;
+    "passPhase(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "sendEvidence(uint256,uint256,(uint256,bytes32,string,string))": FunctionFragment;
+    "revealVote(uint256,uint256,string,string)": FunctionFragment;
+    "sendEvidence(uint256,address,(uint256,bytes32,string))": FunctionFragment;
     "setProvider(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
@@ -183,21 +227,30 @@ export interface DisputeInterface extends utils.Interface {
       | "ADDRESSES_PROVIDER"
       | "ADDRESS_PROVIDER"
       | "MAX_UINT"
+      | "appeal"
       | "approve"
+      | "claimAppealFeeRewards"
+      | "claimAsJudge"
+      | "claimRuling"
+      | "commitVote"
       | "createDispute"
       | "fetchContract"
+      | "getDelayTimestamp"
       | "getDisputeById"
       | "getDisputeCount"
       | "getDisputeList"
-      | "getNewDelays"
+      | "getOrderPrice"
       | "hasProtocolRole"
       | "isCallerUser"
       | "isGigOwner"
       | "isStillBuyer"
       | "isStillSeller"
       | "kill"
+      | "nextRound"
       | "owner"
+      | "passPhase"
       | "renounceOwnership"
+      | "revealVote"
       | "sendEvidence"
       | "setProvider"
       | "transferOwnership"
@@ -213,20 +266,50 @@ export interface DisputeInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "MAX_UINT", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "appeal",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "approve",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimAppealFeeRewards",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimAsJudge",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimRuling",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "commitVote",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "createDispute",
     values: [
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      DataTypes.EvidenceStruct
     ]
   ): string;
   encodeFunctionData(
     functionFragment: "fetchContract",
     values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getDelayTimestamp",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getDisputeById",
@@ -241,8 +324,8 @@ export interface DisputeInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getNewDelays",
-    values: [PromiseOrValue<string>]
+    functionFragment: "getOrderPrice",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "hasProtocolRole",
@@ -273,16 +356,33 @@ export interface DisputeInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "kill", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "nextRound",
+    values: [PromiseOrValue<BigNumberish>, DataTypes.EvidenceStruct]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "passPhase",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "sendEvidence",
+    functionFragment: "revealVote",
     values: [
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "sendEvidence",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
       DataTypes.EvidenceStruct
     ]
   ): string;
@@ -304,13 +404,31 @@ export interface DisputeInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "MAX_UINT", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "appeal", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "claimAppealFeeRewards",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "claimAsJudge",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "claimRuling",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "commitVote", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createDispute",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "fetchContract",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getDelayTimestamp",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -326,7 +444,7 @@ export interface DisputeInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getNewDelays",
+    functionFragment: "getOrderPrice",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -347,11 +465,14 @@ export interface DisputeInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "kill", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "nextRound", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "passPhase", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "revealVote", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "sendEvidence",
     data: BytesLike
@@ -417,8 +538,37 @@ export interface Dispute extends BaseContract {
 
     MAX_UINT(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    appeal(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     approve(
       erc20: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    claimAppealFeeRewards(
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    claimAsJudge(
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    claimRuling(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    commitVote(
+      disputeId: PromiseOrValue<BigNumberish>,
+      choice: PromiseOrValue<BigNumberish>,
+      salt: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -426,6 +576,8 @@ export interface Dispute extends BaseContract {
       orderId: PromiseOrValue<BigNumberish>,
       procecutorId: PromiseOrValue<BigNumberish>,
       defendantId: PromiseOrValue<BigNumberish>,
+      caller: PromiseOrValue<string>,
+      evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -433,6 +585,15 @@ export interface Dispute extends BaseContract {
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getDelayTimestamp(
+      protocolConfigurator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [DataTypes.DelayTimestampStructOutput] & {
+        delayTimestamp: DataTypes.DelayTimestampStructOutput;
+      }
+    >;
 
     getDisputeById(
       disputeId: PromiseOrValue<BigNumberish>,
@@ -445,10 +606,10 @@ export interface Dispute extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[OutputTypes.DisputeOutputStructOutput[]]>;
 
-    getNewDelays(
-      protocolConfigurator: PromiseOrValue<string>,
+    getOrderPrice(
+      orderId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[BigNumber[]] & { delays: BigNumber[] }>;
+    ): Promise<[BigNumber] & { price: BigNumber }>;
 
     hasProtocolRole(
       _role: PromiseOrValue<BytesLike>,
@@ -484,15 +645,34 @@ export interface Dispute extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    nextRound(
+      disputeId: PromiseOrValue<BigNumberish>,
+      evidence: DataTypes.EvidenceStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
+
+    passPhase(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    revealVote(
+      disputeId: PromiseOrValue<BigNumberish>,
+      choice: PromiseOrValue<BigNumberish>,
+      salt: PromiseOrValue<string>,
+      justification: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     sendEvidence(
       disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
+      caller: PromiseOrValue<string>,
       evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -514,8 +694,37 @@ export interface Dispute extends BaseContract {
 
   MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
 
+  appeal(
+    disputeId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   approve(
     erc20: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  claimAppealFeeRewards(
+    disputeId: PromiseOrValue<BigNumberish>,
+    roundId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  claimAsJudge(
+    disputeId: PromiseOrValue<BigNumberish>,
+    roundId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  claimRuling(
+    disputeId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  commitVote(
+    disputeId: PromiseOrValue<BigNumberish>,
+    choice: PromiseOrValue<BigNumberish>,
+    salt: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -523,6 +732,8 @@ export interface Dispute extends BaseContract {
     orderId: PromiseOrValue<BigNumberish>,
     procecutorId: PromiseOrValue<BigNumberish>,
     defendantId: PromiseOrValue<BigNumberish>,
+    caller: PromiseOrValue<string>,
+    evidence: DataTypes.EvidenceStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -530,6 +741,11 @@ export interface Dispute extends BaseContract {
     _name: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getDelayTimestamp(
+    protocolConfigurator: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<DataTypes.DelayTimestampStructOutput>;
 
   getDisputeById(
     disputeId: PromiseOrValue<BigNumberish>,
@@ -542,10 +758,10 @@ export interface Dispute extends BaseContract {
     overrides?: CallOverrides
   ): Promise<OutputTypes.DisputeOutputStructOutput[]>;
 
-  getNewDelays(
-    protocolConfigurator: PromiseOrValue<string>,
+  getOrderPrice(
+    orderId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<BigNumber[]>;
+  ): Promise<BigNumber>;
 
   hasProtocolRole(
     _role: PromiseOrValue<BytesLike>,
@@ -581,15 +797,34 @@ export interface Dispute extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  nextRound(
+    disputeId: PromiseOrValue<BigNumberish>,
+    evidence: DataTypes.EvidenceStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   owner(overrides?: CallOverrides): Promise<string>;
+
+  passPhase(
+    disputeId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  revealVote(
+    disputeId: PromiseOrValue<BigNumberish>,
+    choice: PromiseOrValue<BigNumberish>,
+    salt: PromiseOrValue<string>,
+    justification: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   sendEvidence(
     disputeId: PromiseOrValue<BigNumberish>,
-    roundId: PromiseOrValue<BigNumberish>,
+    caller: PromiseOrValue<string>,
     evidence: DataTypes.EvidenceStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -611,8 +846,37 @@ export interface Dispute extends BaseContract {
 
     MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
 
+    appeal(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     approve(
       erc20: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    claimAppealFeeRewards(
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    claimAsJudge(
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    claimRuling(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    commitVote(
+      disputeId: PromiseOrValue<BigNumberish>,
+      choice: PromiseOrValue<BigNumberish>,
+      salt: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -620,6 +884,8 @@ export interface Dispute extends BaseContract {
       orderId: PromiseOrValue<BigNumberish>,
       procecutorId: PromiseOrValue<BigNumberish>,
       defendantId: PromiseOrValue<BigNumberish>,
+      caller: PromiseOrValue<string>,
+      evidence: DataTypes.EvidenceStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -627,6 +893,11 @@ export interface Dispute extends BaseContract {
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getDelayTimestamp(
+      protocolConfigurator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<DataTypes.DelayTimestampStructOutput>;
 
     getDisputeById(
       disputeId: PromiseOrValue<BigNumberish>,
@@ -639,10 +910,10 @@ export interface Dispute extends BaseContract {
       overrides?: CallOverrides
     ): Promise<OutputTypes.DisputeOutputStructOutput[]>;
 
-    getNewDelays(
-      protocolConfigurator: PromiseOrValue<string>,
+    getOrderPrice(
+      orderId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
+    ): Promise<BigNumber>;
 
     hasProtocolRole(
       _role: PromiseOrValue<BytesLike>,
@@ -676,13 +947,32 @@ export interface Dispute extends BaseContract {
 
     kill(overrides?: CallOverrides): Promise<void>;
 
+    nextRound(
+      disputeId: PromiseOrValue<BigNumberish>,
+      evidence: DataTypes.EvidenceStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     owner(overrides?: CallOverrides): Promise<string>;
+
+    passPhase(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    revealVote(
+      disputeId: PromiseOrValue<BigNumberish>,
+      choice: PromiseOrValue<BigNumberish>,
+      salt: PromiseOrValue<string>,
+      justification: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     sendEvidence(
       disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
+      caller: PromiseOrValue<string>,
       evidence: DataTypes.EvidenceStruct,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -716,8 +1006,37 @@ export interface Dispute extends BaseContract {
 
     MAX_UINT(overrides?: CallOverrides): Promise<BigNumber>;
 
+    appeal(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     approve(
       erc20: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    claimAppealFeeRewards(
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    claimAsJudge(
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    claimRuling(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    commitVote(
+      disputeId: PromiseOrValue<BigNumberish>,
+      choice: PromiseOrValue<BigNumberish>,
+      salt: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -725,11 +1044,18 @@ export interface Dispute extends BaseContract {
       orderId: PromiseOrValue<BigNumberish>,
       procecutorId: PromiseOrValue<BigNumberish>,
       defendantId: PromiseOrValue<BigNumberish>,
+      caller: PromiseOrValue<string>,
+      evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getDelayTimestamp(
+      protocolConfigurator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -742,8 +1068,8 @@ export interface Dispute extends BaseContract {
 
     getDisputeList(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getNewDelays(
-      protocolConfigurator: PromiseOrValue<string>,
+    getOrderPrice(
+      orderId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -781,15 +1107,34 @@ export interface Dispute extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    nextRound(
+      disputeId: PromiseOrValue<BigNumberish>,
+      evidence: DataTypes.EvidenceStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    passPhase(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    revealVote(
+      disputeId: PromiseOrValue<BigNumberish>,
+      choice: PromiseOrValue<BigNumberish>,
+      salt: PromiseOrValue<string>,
+      justification: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     sendEvidence(
       disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
+      caller: PromiseOrValue<string>,
       evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -814,8 +1159,37 @@ export interface Dispute extends BaseContract {
 
     MAX_UINT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    appeal(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     approve(
       erc20: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    claimAppealFeeRewards(
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    claimAsJudge(
+      disputeId: PromiseOrValue<BigNumberish>,
+      roundId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    claimRuling(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    commitVote(
+      disputeId: PromiseOrValue<BigNumberish>,
+      choice: PromiseOrValue<BigNumberish>,
+      salt: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -823,11 +1197,18 @@ export interface Dispute extends BaseContract {
       orderId: PromiseOrValue<BigNumberish>,
       procecutorId: PromiseOrValue<BigNumberish>,
       defendantId: PromiseOrValue<BigNumberish>,
+      caller: PromiseOrValue<string>,
+      evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getDelayTimestamp(
+      protocolConfigurator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -840,8 +1221,8 @@ export interface Dispute extends BaseContract {
 
     getDisputeList(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getNewDelays(
-      protocolConfigurator: PromiseOrValue<string>,
+    getOrderPrice(
+      orderId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -879,15 +1260,34 @@ export interface Dispute extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    nextRound(
+      disputeId: PromiseOrValue<BigNumberish>,
+      evidence: DataTypes.EvidenceStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    passPhase(
+      disputeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    revealVote(
+      disputeId: PromiseOrValue<BigNumberish>,
+      choice: PromiseOrValue<BigNumberish>,
+      salt: PromiseOrValue<string>,
+      justification: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     sendEvidence(
       disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
+      caller: PromiseOrValue<string>,
       evidence: DataTypes.EvidenceStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

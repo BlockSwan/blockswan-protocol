@@ -46,8 +46,9 @@ export interface JuryInterface extends utils.Interface {
     "MAX_UINT()": FunctionFragment;
     "approve(address)": FunctionFragment;
     "depositStake(uint256)": FunctionFragment;
-    "drawJurors(uint256,uint256,uint256)": FunctionFragment;
+    "drawJurors(uint256)": FunctionFragment;
     "fetchContract(bytes32)": FunctionFragment;
+    "freezeTokens(address[])": FunctionFragment;
     "hasProtocolRole(bytes32,address)": FunctionFragment;
     "isGigOwner(uint256,uint256,address)": FunctionFragment;
     "isStillBuyer(address)": FunctionFragment;
@@ -56,8 +57,10 @@ export interface JuryInterface extends utils.Interface {
     "owner()": FunctionFragment;
     "readJuror(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "rewardJuror(uint256,address)": FunctionFragment;
     "setProvider(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "unfreezeTokens(uint256,address)": FunctionFragment;
     "withdrawStake(uint256)": FunctionFragment;
   };
 
@@ -70,6 +73,7 @@ export interface JuryInterface extends utils.Interface {
       | "depositStake"
       | "drawJurors"
       | "fetchContract"
+      | "freezeTokens"
       | "hasProtocolRole"
       | "isGigOwner"
       | "isStillBuyer"
@@ -78,8 +82,10 @@ export interface JuryInterface extends utils.Interface {
       | "owner"
       | "readJuror"
       | "renounceOwnership"
+      | "rewardJuror"
       | "setProvider"
       | "transferOwnership"
+      | "unfreezeTokens"
       | "withdrawStake"
   ): FunctionFragment;
 
@@ -102,15 +108,15 @@ export interface JuryInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "drawJurors",
-    values: [
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "fetchContract",
     values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "freezeTokens",
+    values: [PromiseOrValue<string>[]]
   ): string;
   encodeFunctionData(
     functionFragment: "hasProtocolRole",
@@ -143,12 +149,20 @@ export interface JuryInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "rewardJuror",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setProvider",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "unfreezeTokens",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawStake",
@@ -175,6 +189,10 @@ export interface JuryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "freezeTokens",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "hasProtocolRole",
     data: BytesLike
   ): Result;
@@ -195,11 +213,19 @@ export interface JuryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "rewardJuror",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setProvider",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "unfreezeTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -271,15 +297,18 @@ export interface Jury extends BaseContract {
 
     drawJurors(
       numberOfJurors: PromiseOrValue<BigNumberish>,
-      disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[string[]] & { jurors: string[] }>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    freezeTokens(
+      accounts: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     hasProtocolRole(
       _role: PromiseOrValue<BytesLike>,
@@ -319,6 +348,12 @@ export interface Jury extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    rewardJuror(
+      amount: PromiseOrValue<BigNumberish>,
+      juror: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     setProvider(
       _providerAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -326,6 +361,12 @@ export interface Jury extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    unfreezeTokens(
+      amount: PromiseOrValue<BigNumberish>,
+      account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -353,15 +394,18 @@ export interface Jury extends BaseContract {
 
   drawJurors(
     numberOfJurors: PromiseOrValue<BigNumberish>,
-    disputeId: PromiseOrValue<BigNumberish>,
-    roundId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<string[]>;
 
   fetchContract(
     _name: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  freezeTokens(
+    accounts: PromiseOrValue<string>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   hasProtocolRole(
     _role: PromiseOrValue<BytesLike>,
@@ -401,6 +445,12 @@ export interface Jury extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  rewardJuror(
+    amount: PromiseOrValue<BigNumberish>,
+    juror: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   setProvider(
     _providerAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -408,6 +458,12 @@ export interface Jury extends BaseContract {
 
   transferOwnership(
     newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  unfreezeTokens(
+    amount: PromiseOrValue<BigNumberish>,
+    account: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -435,8 +491,6 @@ export interface Jury extends BaseContract {
 
     drawJurors(
       numberOfJurors: PromiseOrValue<BigNumberish>,
-      disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string[]>;
 
@@ -444,6 +498,11 @@ export interface Jury extends BaseContract {
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    freezeTokens(
+      accounts: PromiseOrValue<string>[],
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     hasProtocolRole(
       _role: PromiseOrValue<BytesLike>,
@@ -479,6 +538,12 @@ export interface Jury extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    rewardJuror(
+      amount: PromiseOrValue<BigNumberish>,
+      juror: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setProvider(
       _providerAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -486,6 +551,12 @@ export interface Jury extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    unfreezeTokens(
+      amount: PromiseOrValue<BigNumberish>,
+      account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -525,14 +596,17 @@ export interface Jury extends BaseContract {
 
     drawJurors(
       numberOfJurors: PromiseOrValue<BigNumberish>,
-      disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    freezeTokens(
+      accounts: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     hasProtocolRole(
@@ -573,6 +647,12 @@ export interface Jury extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    rewardJuror(
+      amount: PromiseOrValue<BigNumberish>,
+      juror: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setProvider(
       _providerAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -580,6 +660,12 @@ export interface Jury extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    unfreezeTokens(
+      amount: PromiseOrValue<BigNumberish>,
+      account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -610,14 +696,17 @@ export interface Jury extends BaseContract {
 
     drawJurors(
       numberOfJurors: PromiseOrValue<BigNumberish>,
-      disputeId: PromiseOrValue<BigNumberish>,
-      roundId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     fetchContract(
       _name: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    freezeTokens(
+      accounts: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     hasProtocolRole(
@@ -658,6 +747,12 @@ export interface Jury extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    rewardJuror(
+      amount: PromiseOrValue<BigNumberish>,
+      juror: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     setProvider(
       _providerAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -665,6 +760,12 @@ export interface Jury extends BaseContract {
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unfreezeTokens(
+      amount: PromiseOrValue<BigNumberish>,
+      account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

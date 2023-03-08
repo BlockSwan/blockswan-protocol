@@ -4,19 +4,19 @@ import { expect } from 'chai'
 import makeDispute from '../fixtures/makeDispute'
 import { calcDisputeDelaysFromBlock } from '../../helpers/init_helpers'
 import { time } from '@nomicfoundation/hardhat-network-helpers'
-import { DISPUTE_PARAMS } from '../../helpers/constants'
-import { calcTotalFeesForJurors } from '../../utilities/helpers'
+import { DISPUTE_PARAMS, EVIDENCE_TEST0 } from '../../helpers/constants'
+import { getDelaysTimestamp } from '../../helpers/contract_getters'
 
 describe('Dispute: createDispute', () => {
-    xdescribe('it should revert if', () => {
-        it(' called by a Order Registry contract', async () => {
-            const { Dispute } = (await makeDispute({})).testEnv
-            await expect(Dispute.createDispute(0, 1, 2)).to.be.revertedWith(
-                ProtocolErrors.ONLY_PROVIDER_ALLOWED
-            )
+    describe('it should revert if', () => {
+        it('not called by a Order Registry contract', async () => {
+            const { Dispute, users } = (await makeDispute({})).testEnv
+            await expect(
+                Dispute.createDispute(0, 1, 2, users[0].address, EVIDENCE_TEST0)
+            ).to.be.revertedWith(ProtocolErrors.ONLY_PROVIDER_ALLOWED)
         })
     })
-    xit('should add a new disputeId to the disputeIds set ', async () => {
+    it('should add a new disputeId to the disputeIds set ', async () => {
         const { testEnv, disputeData } = await makeDispute({})
         const { Dispute } = testEnv
         const disputeCount = await Dispute.getDisputeCount()
@@ -25,27 +25,14 @@ describe('Dispute: createDispute', () => {
         expect(disputeList.length).to.be.eq(1)
         expect(disputeList).to.deep.include(disputeData)
     })
-    xdescribe('buyer raises a dispute', () => {
-        it('procecutor id should be the buyer id', async () => {
-            const { disputeData, orderData } = await makeDispute({
-                caller: 'buyer',
-            })
-            expect(disputeData.procecutorId).to.be.equal(orderData.buyerId)
-        })
-        it('defendant id should be the seller id ', async () => {
-            const { disputeData, orderData } = await makeDispute({
-                caller: 'buyer',
-            })
-            expect(orderData.sellerId).to.be.equal(disputeData.defendantId)
-        })
+    describe('buyer raises a dispute', () => {
         it('should have the correct delays', async () => {
-            const { disputeData } = await makeDispute({
-                caller: 'buyer',
-            })
-            let delays: number[] = await calcDisputeDelaysFromBlock(
-                disputeData.createdAt.toNumber()
+            const { disputeData } = await makeDispute({})
+            let delay = await getDelaysTimestamp()
+            expect(disputeData.timestamps[0]).to.be.equal(
+                Number(delay.evidence) + Number(disputeData.createdAt)
             )
-            expect(disputeData.timestamps).to.be.deep.equal(delays)
+            expect(disputeData.timestamps.length).to.be.equal(1)
         })
         it('should have the correct createdAt timestamp', async () => {
             let timestamp = await time.latest()
@@ -62,33 +49,70 @@ describe('Dispute: createDispute', () => {
         })
     })
     describe('adding first round', async () => {
-        xit('should have the correct round number', async () => {
+        it('should have the correct round number', async () => {
             const { disputeData } = await makeDispute({})
             expect(disputeData.rounds.length).to.be.equal(1)
         })
-        xit('should have the correct maxVote', async () => {
+        it('should have the correct maxVote', async () => {
             const { disputeData } = await makeDispute({})
             expect(disputeData.rounds[0].maxVotes).to.be.equal(
                 DISPUTE_PARAMS.maxVotes
             )
         })
-        xit('should have the correct total fees for jurors', async () => {
-            const { disputeData } = await makeDispute({})
-            let fees: number = await calcTotalFeesForJurors({
-                roundNumber: 1,
-                numberOfJurors: Number(DISPUTE_PARAMS.maxVotes),
-                jurorsFee: Number(DISPUTE_PARAMS.feePerJuror),
+        it('should have the correct total fees for jurors', async () => {
+            const {
+                orderData,
+                buyer,
+                getDisputeFees,
+                signDispute,
+                getDisputeData,
+            } = await makeDispute({
+                dispute: false,
             })
-            expect(disputeData.rounds[0].totalFeesForJurors).to.be.equal(fees)
+            const { orderId, sellerId, buyerId } = orderData
+            const disputeFees = await getDisputeFees()
+            await signDispute({
+                user: buyer,
+                orderId,
+                sellerId,
+                buyerId,
+            })
+            let disputeData = await getDisputeData()
+            const { totalFeesForJurors } = disputeData.rounds[0]
+            expect(totalFeesForJurors).to.be.equal(disputeFees.BSWAN)
         })
+
         it('should have the appropriate amount of jurors', async () => {
             const { disputeData } = await makeDispute({})
-            console.log(disputeData.rounds[0].drawnJurors)
             const { drawnJurors } = disputeData.rounds[0]
-            console.log(JSON.stringify(drawnJurors, null, 2))
             expect(drawnJurors.length).to.be.equal(
                 Number(DISPUTE_PARAMS.maxVotes)
             )
+        })
+        it('procecutor id should be the buyer id', async () => {
+            const { disputeData, orderData } = await makeDispute({
+                caller: 'buyer',
+            })
+            const { rounds } = disputeData
+            const { procecutorId } = rounds[0]
+            expect(procecutorId).to.be.equal(orderData.buyerId)
+        })
+        it('defendant id should be the seller id ', async () => {
+            const { disputeData, orderData } = await makeDispute({
+                caller: 'buyer',
+            })
+            const { rounds } = disputeData
+            const { defendantId } = rounds[0]
+            expect(orderData.sellerId).to.be.equal(defendantId)
+        })
+        it("should have paid the dispute's fees to the dispute contract", async () => {
+            const { testEnv, disputeData } = await makeDispute({})
+            const { totalFeesForJurors } = disputeData.rounds[0]
+            const { dat, Dispute } = testEnv
+            let DisputeBalance = (
+                await dat.balanceOf(Dispute.address)
+            ).toNumber()
+            expect(DisputeBalance).to.be.equal(totalFeesForJurors)
         })
     })
 })

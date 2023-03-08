@@ -66,6 +66,9 @@ library OutputTypes {
 
     struct RoundOutput {
         uint256 roundId;
+        uint256 procecutorId;
+        uint256 defendantId;
+        uint256 appealFeeRewards;
         uint256 tokensAtStakePerJuror;
         uint256 totalFeesForJurors;
         uint256 maxVotes;
@@ -74,20 +77,22 @@ library OutputTypes {
         uint256 totalRepartitions;
         uint256 totalVoted;
         uint256 totalCommited;
-        uint256[] counts;
+        uint256[11] counts;
         uint256[] evidenceSubmitters;
+        uint256 appealedBy;
         DataTypes.Vote[] votes;
         DataTypes.Evidence[] evidences;
         address[] drawnJurors;
+        address[] judgesClaimed;
+        bool closed;
     }
 
     struct DisputeOutput {
         uint256 createdAt;
         uint256 disputeId;
         uint256 orderId;
-        uint256 procecutorId;
-        uint256   defendantId;
         uint256 ruling;
+        uint256 ruledAt;
         uint256[] timestamps;
         DataTypes.DisputeState state;
         RoundOutput[] rounds;
@@ -104,10 +109,10 @@ library OutputTypes {
     }
 
     struct CalcDisputeDelaysFromBlock {
-          uint256 evidenceUntil;
-            uint256 commitUntil;
-            uint256 voteUntil;
-            uint256 appealUntil;
+        uint256 evidenceUntil;
+        uint256 commitUntil;
+        uint256 voteUntil;
+        uint256 appealUntil;
     }
 
     struct PopulatedUser {
@@ -125,5 +130,13 @@ library OutputTypes {
         bool isSeller;
         bool isJudge;
         UserOutput[] inviters;
+    }
+
+    struct ExecuteClaimAsJudgeOutput {
+        bool isVoteCorrect;
+        bool isVoteInRange;
+        uint256 amountFromDisputeFees;
+        uint256 amountFromJurorsTokensAtStake;
+        uint256 tokensAtStakePerJuror;
     }
 }

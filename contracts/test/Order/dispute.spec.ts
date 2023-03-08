@@ -4,6 +4,7 @@ import { waitForTx } from '../../utilities/tx'
 import { expect } from 'chai'
 import { OrderState } from '../../helpers/types'
 import makeDispute from '../fixtures/makeDispute'
+import { EVIDENCE_TEST0 } from '../../helpers/constants'
 
 describe('Order: dispute', () => {
     describe('can dispute', () => {
@@ -33,7 +34,8 @@ describe('Order: dispute', () => {
                 Order.connect(testEnv.users[4].signer).dispute(
                     orderData.orderId,
                     orderData.sellerId,
-                    orderData.buyerId
+                    orderData.buyerId,
+                    EVIDENCE_TEST0
                 )
             ).to.be.revertedWith(ProtocolErrors.NOT_ORDER_ACTOR)
         })
@@ -46,7 +48,8 @@ describe('Order: dispute', () => {
                 Order.connect(seller.signer).dispute(
                     orderData.orderId,
                     orderData.sellerId,
-                    1
+                    1,
+                    EVIDENCE_TEST0
                 )
             ).to.be.revertedWith(ProtocolErrors.CALLER_NOT_BUYER_ID)
         })
@@ -59,7 +62,8 @@ describe('Order: dispute', () => {
                 Order.connect(buyer.signer).dispute(
                     orderData.orderId,
                     1,
-                    orderData.buyerId
+                    orderData.buyerId,
+                    EVIDENCE_TEST0
                 )
             ).to.be.revertedWith(ProtocolErrors.CALLER_NOT_SELLER_ID)
         })
@@ -78,7 +82,8 @@ describe('Order: dispute', () => {
                 Order.connect(seller.signer).dispute(
                     orderData.orderId,
                     orderData.sellerId,
-                    orderData.buyerId
+                    orderData.buyerId,
+                    EVIDENCE_TEST0
                 )
             ).to.be.revertedWith(ProtocolErrors.INVALID_ORDER_STATE)
         })

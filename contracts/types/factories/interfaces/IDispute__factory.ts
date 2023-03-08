@@ -35,13 +35,40 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "sellerId",
+        name: "procecutorId",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "buyerId",
+        name: "defendantId",
         type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "caller",
+        type: "address",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "userId",
+            type: "uint256",
+          },
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "string",
+            name: "metadata",
+            type: "string",
+          },
+        ],
+        internalType: "struct DataTypes.Evidence",
+        name: "evidence",
+        type: "tuple",
       },
     ],
     name: "createDispute",
@@ -151,17 +178,12 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "procecutorId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "defendantId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
             name: "ruling",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "ruledAt",
             type: "uint256",
           },
           {
@@ -179,6 +201,21 @@ const _abi = [
               {
                 internalType: "uint256",
                 name: "roundId",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "procecutorId",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "defendantId",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "appealFeeRewards",
                 type: "uint256",
               },
               {
@@ -222,14 +259,19 @@ const _abi = [
                 type: "uint256",
               },
               {
-                internalType: "uint256[]",
+                internalType: "uint256[11]",
                 name: "counts",
-                type: "uint256[]",
+                type: "uint256[11]",
               },
               {
                 internalType: "uint256[]",
                 name: "evidenceSubmitters",
                 type: "uint256[]",
+              },
+              {
+                internalType: "uint256",
+                name: "appealedBy",
+                type: "uint256",
               },
               {
                 components: [
@@ -260,7 +302,7 @@ const _abi = [
                   },
                   {
                     internalType: "bool",
-                    name: "voted",
+                    name: "hasVoted",
                     type: "bool",
                   },
                 ],
@@ -285,11 +327,6 @@ const _abi = [
                     name: "metadata",
                     type: "string",
                   },
-                  {
-                    internalType: "string",
-                    name: "log",
-                    type: "string",
-                  },
                 ],
                 internalType: "struct DataTypes.Evidence[]",
                 name: "evidences",
@@ -299,6 +336,16 @@ const _abi = [
                 internalType: "address[]",
                 name: "drawnJurors",
                 type: "address[]",
+              },
+              {
+                internalType: "address[]",
+                name: "judgesClaimed",
+                type: "address[]",
+              },
+              {
+                internalType: "bool",
+                name: "closed",
+                type: "bool",
               },
             ],
             internalType: "struct OutputTypes.RoundOutput[]",

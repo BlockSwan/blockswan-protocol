@@ -3,7 +3,7 @@ import hre from 'hardhat'
 
 import { EvmAddress } from '../helpers/types'
 
-export const waitForTx = async (tx: any) => await tx.wait(1)
+export const waitForTx = async (tx: any): Promise<void> => await tx?.wait(1)
 
 // export const evm_snapshot = async () => await hre.ethers.provider.send("evm_snapshot", []);
 

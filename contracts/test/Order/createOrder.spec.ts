@@ -158,14 +158,24 @@ describe('Order: createOrder', () => {
         })
 
         it('should have the correct seller fees', async () => {
-            expect(orderData.invoice.sellerFees).to.be.equal(calcFees(gigData.packages[Number(ORDER_TEST0.packageId)].price, SELLER_ORDER_FEES_PARAMS.flat, SELLER_ORDER_FEES_PARAMS.percent))
+            expect(orderData.invoice.sellerFees).to.be.equal(
+                calcFees(
+                    gigData.packages[Number(ORDER_TEST0.packageId)].price,
+                    SELLER_ORDER_FEES_PARAMS.flat,
+                    SELLER_ORDER_FEES_PARAMS.percent
+                )
+            )
         })
-         it('should have the correct buyer fees', async () => {
-            expect(orderData.invoice.buyerFees).to.be.equal(calcFees(gigData.packages[Number(ORDER_TEST0.packageId)].price, ORDER_CREATION_PARAMS.flat, ORDER_CREATION_PARAMS.percent))
+        it('should have the correct buyer fees', async () => {
+            expect(orderData.invoice.buyerFees).to.be.equal(
+                calcFees(
+                    gigData.packages[Number(ORDER_TEST0.packageId)].price,
+                    ORDER_CREATION_PARAMS.flat,
+                    ORDER_CREATION_PARAMS.percent
+                )
+            )
         })
 
-
-        
         describe('Relations', () => {
             it('orderId should be present at the gig level', async () => {
                 expect(gigData.orderIds).to.deep.include(orderData.orderId)

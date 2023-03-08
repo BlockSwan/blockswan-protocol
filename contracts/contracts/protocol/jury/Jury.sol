@@ -59,9 +59,7 @@ contract Jury is JuryStorage, ProviderContract {
     function readJuror(
         address account
     ) public view returns (DataTypes.Juror memory) {
-        return (
-            JuryLogic.readJuror(account, _jurorStakedToken, _jurorFreezedToken)
-        );
+        return (JuryLogic.readJuror(account, _jurors));
     }
 
     /**
@@ -83,7 +81,7 @@ contract Jury is JuryStorage, ProviderContract {
             caller,
             TREE_KEY,
             _jurorSet,
-            _jurorStakedToken,
+            _jurors,
             _sortitionTree
         );
         require(
@@ -103,7 +101,7 @@ contract Jury is JuryStorage, ProviderContract {
     function withdrawStake(uint256 toWithdraw) external returns (bool) {
         address caller = _msgSender();
         require(
-            _jurorStakedToken[caller] >= toWithdraw,
+            readJuror(caller).stakedTokens >= toWithdraw,
             Errors.JURY_STAKE_NOT_ENOUGH
         );
         JuryLogic.executeWithdrawStake(
@@ -111,7 +109,7 @@ contract Jury is JuryStorage, ProviderContract {
             caller,
             TREE_KEY,
             _jurorSet,
-            _jurorStakedToken,
+            _jurors,
             _sortitionTree
         );
         IBSWAN dat = IBSWAN(fetchContract(RegistryKeys.DAT));
@@ -129,42 +127,68 @@ contract Jury is JuryStorage, ProviderContract {
      */
 
     function drawJurors(
-        uint256 numberOfJurors,
-        uint256 disputeId,
-        uint256 roundId
-    )
-        external
-        onlyProvider(RegistryKeys.DISPUTE)
-        returns (address[] memory jurors)
-    {
-        DataTypes.DisputeParams memory disputeParams = getDisputeParams();
+        uint256 numberOfJurors
+    ) external view returns (address[] memory jurors) {
         jurors = new address[](numberOfJurors);
+        uint256 minStake = getDisputeParams().minStake;
         for (uint256 i = 0; i < numberOfJurors; i++) {
-            jurors[i] = JuryLogic.randomlyDrawJuror(
+            address drawnJuror = JuryLogic.randomlyDrawJuror(
                 _sortitionTree,
                 TREE_KEY,
-                disputeId,
-                roundId,
                 i
             );
-            console.log("DOING: %s", jurors[i]);
-            _freezeTokens(
-                jurors[i],
-                JuryLogic.calcTokenToFreeze(
-                    disputeParams.minStake,
-                    disputeParams.alpha
-                )
-            );
+            while (readJuror(drawnJuror).stakedTokens < minStake) {
+                drawnJuror = JuryLogic.randomlyDrawJuror(
+                    _sortitionTree,
+                    TREE_KEY,
+                    i
+                );
+            }
+            jurors[i] = drawnJuror;
         }
+        return jurors;
     }
 
-    function _freezeTokens(address juror, uint256 amount) internal {
+    function freezeTokens(
+        address[] memory accounts
+    ) external onlyProvider(RegistryKeys.DISPUTE) {
+        DataTypes.DisputeParams memory disputeParams = getDisputeParams();
+        uint256 toFreeze = JuryLogic.calcTokenToFreeze(
+            disputeParams.minStake,
+            disputeParams.alpha
+        );
         JuryLogic.executeFreezeTokens(
+            toFreeze,
+            accounts,
+            TREE_KEY,
+            _jurors,
+            _sortitionTree
+        );
+    }
+
+    function unfreezeTokens(
+        uint256 amount,
+        address account
+    ) external onlyProvider(RegistryKeys.DISPUTE) {
+        JuryLogic.executeUnfreezeTokens(
+            amount,
+            account,
+            TREE_KEY,
+            _jurors,
+            _sortitionTree
+        );
+    }
+
+    function rewardJuror(
+        uint256 amount,
+        address juror
+    ) external onlyProvider(RegistryKeys.DISPUTE) {
+        JuryLogic.executeDepositStake(
             amount,
             juror,
             TREE_KEY,
-            _jurorStakedToken,
-            _jurorFreezedToken,
+            _jurorSet,
+            _jurors,
             _sortitionTree
         );
     }

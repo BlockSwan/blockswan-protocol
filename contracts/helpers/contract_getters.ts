@@ -256,12 +256,14 @@ const getDisputeLibraries = async () => {
     const RoundLogic = await hre.deployments.get('RoundLogic')
     const inviterLogic = await hre.deployments.get('InviterLogic')
     const SortitionTree = await hre.deployments.get('SortitionSumTreeFactory')
+    const JuryLogic = await hre.deployments.get('JuryLogic')
     return {
         DisputeLogic: DisputeLogicArtifact.address,
         DisputeDataLogic: DisputeDataLogicArtifact.address,
         RoundLogic: RoundLogic.address,
         InviterLogic: inviterLogic.address,
         SortitionSumTreeFactory: SortitionTree.address,
+        JuryLogic: JuryLogic.address,
     }
 }
 

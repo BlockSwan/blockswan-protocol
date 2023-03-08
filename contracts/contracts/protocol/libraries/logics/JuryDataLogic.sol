@@ -47,52 +47,44 @@ library JuryDataLogic {
     }
 
     function incrementStake(
-        address juror,
+        DataTypes.Juror storage juror,
+        address account,
         uint256 amount,
         bytes32 treeKey,
-        mapping(address => uint256) storage jurorStakedToken,
         SortitionSumTreeFactory.SortitionSumTrees storage tree
     ) internal returns (bool) {
-        jurorStakedToken[juror] += amount;
-        updateTree(tree, juror, treeKey, jurorStakedToken[juror]);
-        console.log(
-            "increment: jurorStakedToken[juror] = %s",
-            jurorStakedToken[juror]
-        );
+        juror.stakedTokens += amount;
+        updateTree(tree, account, treeKey, juror.stakedTokens);
+
         return true;
     }
 
     function decrementStake(
-        address juror,
+        DataTypes.Juror storage juror,
+        address account,
         uint256 amount,
         bytes32 treeKey,
-        mapping(address => uint256) storage jurorStakedToken,
         SortitionSumTreeFactory.SortitionSumTrees storage tree
     ) internal returns (bool) {
-        jurorStakedToken[juror] -= amount;
-        updateTree(tree, juror, treeKey, jurorStakedToken[juror]);
-        console.log(
-            "decrementStake: jurorStakedToken[juror] = %s",
-            jurorStakedToken[juror]
-        );
+        juror.stakedTokens -= amount;
+        updateTree(tree, account, treeKey, juror.stakedTokens);
+
         return true;
     }
 
     function incremementFreeze(
-        address juror,
-        uint256 amount,
-        mapping(address => uint256) storage jurorFreezedToken
+        DataTypes.Juror storage juror,
+        uint256 amount
     ) internal returns (bool) {
-        jurorFreezedToken[juror] += amount;
+        juror.freezedTokens += amount;
         return true;
     }
 
     function decrementFreeze(
-        address juror,
-        uint256 amount,
-        mapping(address => uint256) storage jurorFreezedToken
+        DataTypes.Juror storage juror,
+        uint256 amount
     ) internal returns (bool) {
-        jurorFreezedToken[juror] -= amount;
+        juror.freezedTokens -= amount;
         return true;
     }
 }

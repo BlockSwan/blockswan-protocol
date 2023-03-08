@@ -33,7 +33,11 @@ const config: HardhatUserConfig = {
             optimizer: {
                 enabled: true,
                 runs: 200,
+                details: {
+                    yul: true,
+                },
             },
+            viaIR: false,
         },
     },
     gasReporter: {
@@ -56,6 +60,7 @@ const config: HardhatUserConfig = {
             throwOnCallFailures: true,
             blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
             gasPrice: DEFAULT_GAS_PRICE,
+            initialBaseFeePerGas: 7,
             gas: DEFAULT_BLOCK_GAS_LIMIT,
             accounts: accounts.map(
                 ({
@@ -77,8 +82,13 @@ const config: HardhatUserConfig = {
         coverage: {
             url: 'http://localhost:8555',
             chainId: COVERAGE_CHAINID,
-            throwOnTransactionFailures: true,
+            allowUnlimitedContractSize: true,
+            // throwOnTransactionFailures: true,
             throwOnCallFailures: true,
+            blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
+            gasPrice: DEFAULT_GAS_PRICE,
+            initialBaseFeePerGas: 7,
+            gas: 'auto', // DEFAULT_BLOCK_GAS_LIMIT,
         },
     },
     namedAccounts: {

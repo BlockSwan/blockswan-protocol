@@ -24,6 +24,7 @@ library JuryLogic {
     using PercentageMath for uint256;
     using JuryDataLogic for address;
     using JuryDataLogic for SortitionSumTreeFactory.SortitionSumTrees;
+    using JuryDataLogic for DataTypes.Juror;
 
     // @return A random number less than the _max
     function random(
@@ -34,21 +35,22 @@ library JuryLogic {
         return uint256(keccak256(abi.encodePacked(entropy))) % max;
     }
 
-    function createEntropy(
-        uint256 disputeId,
-        uint256 roundId,
-        uint256 jurorNumber
-    ) internal view returns (uint256) {
+    function getJurorByAddress(
+        address account,
+        mapping(address => DataTypes.Juror) storage jurors
+    ) internal view returns (DataTypes.Juror storage) {
+        return jurors[account];
+    }
+
+    function createEntropy(uint256 intHash) internal view returns (uint256) {
         return
             uint256(
                 keccak256(
                     abi.encodePacked(
                         block.difficulty,
                         block.timestamp,
-                        disputeId,
-                        roundId,
-                        jurorNumber,
-                        blockhash(block.number)
+                        blockhash(block.number),
+                        intHash
                     )
                 )
             );
@@ -57,79 +59,74 @@ library JuryLogic {
     function randomlyDrawJuror(
         SortitionSumTreeFactory.SortitionSumTrees storage tree,
         bytes32 treeKey,
-        uint256 disputeId,
-        uint256 roundId,
         uint256 intHash
-    ) public view returns (address) {
-        uint256 entropy = createEntropy(disputeId, roundId, intHash);
+    ) public view returns (address drawnJuror) {
+        uint256 entropy = createEntropy(intHash);
         uint256 rng = random(entropy, tree.total(treeKey));
-        return tree.draw(treeKey, rng);
+        drawnJuror = tree.draw(treeKey, rng);
     }
 
     function executeDepositStake(
         uint256 amount,
-        address juror,
+        address account,
         bytes32 treeKey,
         EnumerableSet.AddressSet storage jurorSet,
-        mapping(address => uint256) storage jurorStakedToken,
+        mapping(address => DataTypes.Juror) storage jurors,
         SortitionSumTreeFactory.SortitionSumTrees storage tree
     ) external returns (bool) {
-        if (!(jurorSet.contains(juror))) {
-            jurorSet.add(juror);
+        if (!(jurorSet.contains(account))) {
+            jurorSet.add(account);
         }
-        juror.incrementStake(amount, treeKey, jurorStakedToken, tree);
+        DataTypes.Juror storage juror = getJurorByAddress(account, jurors);
+        juror.incrementStake(account, amount, treeKey, tree);
         return true;
     }
 
     function executeWithdrawStake(
         uint256 amount,
-        address juror,
+        address account,
         bytes32 treeKey,
         EnumerableSet.AddressSet storage jurorSet,
-        mapping(address => uint256) storage jurorStakedToken,
+        mapping(address => DataTypes.Juror) storage jurors,
         SortitionSumTreeFactory.SortitionSumTrees storage tree
     ) external returns (bool) {
-        juror.decrementStake(amount, treeKey, jurorStakedToken, tree);
-        if (jurorStakedToken[juror] == 0) {
-            jurorSet.remove(juror);
+        DataTypes.Juror storage juror = getJurorByAddress(account, jurors);
+        juror.decrementStake(account, amount, treeKey, tree);
+        if (juror.stakedTokens == 0) {
+            jurorSet.remove(account);
         }
         return true;
     }
 
     function executeFreezeTokens(
         uint256 amount,
-        address juror,
+        address[] memory accounts,
         bytes32 treeKey,
-        mapping(address => uint256) storage jurorStakedToken,
-        mapping(address => uint256) storage jurorFreezedToken,
+        mapping(address => DataTypes.Juror) storage jurors,
         SortitionSumTreeFactory.SortitionSumTrees storage tree
     ) external returns (bool) {
-        console.log("juror: %s", juror);
-        console.log("stake: %d", jurorStakedToken[juror]);
-        console.log("amount: %d", amount);
-        juror.decrementStake(amount, treeKey, jurorStakedToken, tree);
-        console.log("newStake: %d", jurorStakedToken[juror]);
-        console.log("freezedStake: %d", jurorFreezedToken[juror]);
-        // uint256 newFreeze = jurorFreezedToken.get(juror) + amount;
-        //console.log("newFreeze: %d", newFreeze);
-        //console.log("get(juror): %d", jurorFreezedToken.get(juror));
+        for (uint256 i = 0; i < accounts.length; i++) {
+            address account = accounts[i];
 
-        //       jurorFreezedToken.set(juror, newFreeze);
-
+            DataTypes.Juror storage juror = getJurorByAddress(account, jurors);
+            uint256 newFreeze = juror.freezedTokens + amount;
+            juror.freezedTokens = newFreeze;
+            juror.decrementStake(account, amount, treeKey, tree);
+        }
         return true;
     }
 
     function executeUnfreezeTokens(
         uint256 amount,
-        address juror,
+        address account,
         bytes32 treeKey,
-        mapping(address => uint256) storage jurorStakedToken,
-        mapping(address => uint256) storage jurorFreezedToken,
+        mapping(address => DataTypes.Juror) storage jurors,
         SortitionSumTreeFactory.SortitionSumTrees storage tree
     ) external returns (bool) {
-        uint256 newFreeze = jurorFreezedToken[juror] - amount;
-        jurorFreezedToken[juror] = newFreeze;
-        juror.incrementStake(amount, treeKey, jurorStakedToken, tree);
+        DataTypes.Juror storage juror = getJurorByAddress(account, jurors);
+        uint256 newFreeze = juror.freezedTokens - amount;
+        juror.freezedTokens = newFreeze;
+        juror.incrementStake(account, amount, treeKey, tree);
         return true;
     }
 
@@ -141,15 +138,9 @@ library JuryLogic {
     }
 
     function readJuror(
-        address juror,
-        mapping(address => uint256) storage jurorStakedToken,
-        mapping(address => uint256) storage jurorFreezedToken
-    ) external view returns (DataTypes.Juror memory) {
-        return (
-            DataTypes.Juror({
-                stakedTokens: jurorStakedToken[juror],
-                freezedTokens: jurorFreezedToken[juror]
-            })
-        );
+        address account,
+        mapping(address => DataTypes.Juror) storage jurors
+    ) public view returns (DataTypes.Juror memory juror) {
+        juror = jurors[account];
     }
 }

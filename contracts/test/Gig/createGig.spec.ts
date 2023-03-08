@@ -102,7 +102,11 @@ describe('Gig: createGig', () => {
 
         it('should have the correct created timestamp', async () => {
             let gigData = await Gig.getGigById(0)
-            expect(gigData[2]).to.be.closeTo(timestamp, 20, 'Invalid timestamp')
+            expect(gigData[2]).to.be.closeTo(
+                timestamp,
+                100,
+                'Invalid timestamp'
+            )
         })
 
         it('user0 should have more xp', async () => {

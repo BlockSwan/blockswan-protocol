@@ -9,14 +9,16 @@ import { TestEnv } from '../../helpers/types'
 import { waitForTx } from '../../utilities/tx'
 import makeSuite from '../fixtures/makeSuite'
 
-describe('DAT: _to', () => {
+describe('DAT: updateConfig', () => {
     let testEnv = {} as TestEnv
 
     beforeEach(async () => {
         testEnv = await makeSuite()
-        waitForTx(testEnv.mUSDC.mint('10000000000000000'))
-        waitForTx(testEnv.mUSDC.transfer(testEnv.dat.address, 100000000))
-        waitForTx(testEnv.mUSDC.approve(testEnv.dat.address, MAX_UINT_AMOUNT))
+        waitForTx(await testEnv.mUSDC.mint('10000000000000000'))
+        waitForTx(await testEnv.mUSDC.transfer(testEnv.dat.address, 100000000))
+        waitForTx(
+            await testEnv.mUSDC.approve(testEnv.dat.address, MAX_UINT_AMOUNT)
+        )
         waitForTx(
             await testEnv.mUSDC
                 .connect(testEnv.users[4].signer)

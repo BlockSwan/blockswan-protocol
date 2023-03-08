@@ -67,6 +67,19 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             },
         })
 
+        let VoteDataLogic = await deploy('VoteDataLogic', {
+            from: deployer,
+            ...COMMON_DEPLOY_PARAMS,
+        })
+
+        let VoteLogic = await deploy('VoteLogic', {
+            from: deployer,
+            ...COMMON_DEPLOY_PARAMS,
+            libraries: {
+                VoteDataLogic: VoteDataLogic.address,
+            },
+        })
+
         let RoundDataLogic = await deploy('RoundDataLogic', {
             from: deployer,
             ...COMMON_DEPLOY_PARAMS,
@@ -77,6 +90,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             ...COMMON_DEPLOY_PARAMS,
             libraries: {
                 RoundDataLogic: RoundDataLogic.address,
+                VoteLogic: VoteLogic.address,
             },
         })
 

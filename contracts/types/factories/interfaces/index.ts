@@ -7,6 +7,7 @@ export { IBSWAN__factory } from "./IBSWAN__factory";
 export { IDispute__factory } from "./IDispute__factory";
 export { IGig__factory } from "./IGig__factory";
 export { IJury__factory } from "./IJury__factory";
+export { IOrder__factory } from "./IOrder__factory";
 export { IProtocolConfigurator__factory } from "./IProtocolConfigurator__factory";
 export { IProviderContract__factory } from "./IProviderContract__factory";
 export { IProviderRegistry__factory } from "./IProviderRegistry__factory";

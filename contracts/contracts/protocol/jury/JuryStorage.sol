@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import {EnumerableSet} from "../../imports/openzeppelin/contracts/EnumerableSet.sol";
 import {DataTypes} from "../libraries/types/DataTypes.sol";
 import {SortitionSumTreeFactory} from "../../imports/kleros/contracts/SortitionSumTreeFactory.sol";
+import {DataTypes} from "../libraries/types/DataTypes.sol";
 
 /**
  * @title Jury storage
@@ -23,6 +24,5 @@ contract JuryStorage {
 
     // the juror mapping
     EnumerableSet.AddressSet internal _jurorSet; // The jurors.
-    mapping(address => uint256) internal _jurorStakedToken; // The jurors stake mapping (address => uint256).
-    mapping(address => uint256) internal _jurorFreezedToken; // The jurors freezed token mapping (address => uint256).
+    mapping(address => DataTypes.Juror) internal _jurors; // The jurors.
 }

@@ -33,6 +33,7 @@ import {
     FeeParams,
     RetributionParams,
     SignerWithAddress,
+    ValidInput,
 } from './types'
 import { LOG_ACTIONS } from './envs'
 import { time } from '@nomicfoundation/hardhat-network-helpers'
@@ -195,12 +196,22 @@ const updateDisputeParams = async (
 const mintUSDC = async (
     mUSDCaddress: string | undefined,
 
-    caller: SignerWithAddress
+    caller: SignerWithAddress,
+
+    factor: number = 1
 ) => {
     let USDC = await getMockUSDC(mUSDCaddress)
-    waitForTx(await USDC.connect(caller.signer).mint(ONE_THOUSAND_USDC))
+    waitForTx(
+        await USDC.connect(caller.signer).mint(
+            Number(ONE_THOUSAND_USDC) * factor
+        )
+    )
     if (LOG_ACTIONS)
-        console.log(`${caller.address} minted ${ONE_THOUSAND_USDC} mUSDC`)
+        console.log(
+            `${caller.address} minted ${
+                Number(ONE_THOUSAND_USDC) * factor
+            } mUSDC`
+        )
 }
 
 const maxApproveDAT = async (

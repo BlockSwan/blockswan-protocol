@@ -14,16 +14,6 @@ const _abi = [
         name: "numberOfJurors",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "disputeId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "roundId",
-        type: "uint256",
-      },
     ],
     name: "drawJurors",
     outputs: [
@@ -34,6 +24,55 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address[]",
+        name: "accounts",
+        type: "address[]",
+      },
+    ],
+    name: "freezeTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "juror",
+        type: "address",
+      },
+    ],
+    name: "rewardJuror",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "unfreezeTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ] as const;

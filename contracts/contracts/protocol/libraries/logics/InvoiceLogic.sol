@@ -21,30 +21,44 @@ import {PercentageMath} from "../../../imports/aave/contracts/PercentageMath.sol
 library InvoiceLogic {
     using PercentageMath for uint256;
 
-
-    function calcSellerFee(uint256 price, DataTypes.FeeParams  memory sellerFees ) public pure returns (uint256) {
-        return  price.percentMul(sellerFees.percent) + sellerFees.flat;
+    function calcSellerFee(
+        uint256 price,
+        DataTypes.FeeParams memory sellerFees
+    ) public pure returns (uint256) {
+        return price.percentMul(sellerFees.percent) + sellerFees.flat;
     }
 
-    function calcBuyerFee(uint256 price, DataTypes.FeeParams  memory buyerFees) public pure returns (uint256) {
-        return  price.percentMul(buyerFees.percent) + buyerFees.flat;
+    function calcBuyerFee(
+        uint256 price,
+        DataTypes.FeeParams memory buyerFees
+    ) public pure returns (uint256) {
+        return price.percentMul(buyerFees.percent) + buyerFees.flat;
     }
 
-    function paidByBuyer(DataTypes.Invoice storage invoice) external view returns (uint256) {
+    function paidByBuyer(
+        DataTypes.Invoice storage invoice
+    ) external view returns (uint256) {
         return invoice.price + invoice.buyerFees;
     }
 
-    function receivedBySeller(DataTypes.Invoice storage invoice) external view returns (uint256) {
+    function receivedBySeller(
+        DataTypes.Invoice storage invoice
+    ) external view returns (uint256) {
         return invoice.price - invoice.sellerFees;
     }
 
-    function create(DataTypes.Invoice storage invoice, uint256 price, IERC20 currency, DataTypes.FeeParams memory buyerFees, DataTypes.FeeParams memory sellerFees) external  returns (bool) {
+    function create(
+        DataTypes.Invoice storage invoice,
+        uint256 price,
+        IERC20 currency,
+        DataTypes.FeeParams memory buyerFees,
+        DataTypes.FeeParams memory sellerFees
+    ) external returns (bool) {
         invoice.price = price;
         invoice.buyerFees = calcBuyerFee(price, buyerFees);
         invoice.sellerFees = calcSellerFee(price, sellerFees);
         invoice.createdAt = block.timestamp;
-        invoice.currency =currency;
+        invoice.currency = currency;
         return true;
     }
-
 }

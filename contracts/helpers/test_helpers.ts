@@ -50,9 +50,13 @@ const mintAndApproveDAT = async (
 async function getBalances(user: SignerWithAddress): Promise<Balance> {
     let mUSDC = await getMockUSDC()
     let dat = await getDAT()
+    let Jury = await getJury()
+    let juror = await Jury.readJuror(user.address)
     return {
         USDC: (await mUSDC.balanceOf(user.address)).toNumber(),
         BSWAN: (await dat.balanceOf(user.address)).toNumber(),
+        stakedBSWAN: juror.stakedTokens.toNumber(),
+        freezedBSWAN: juror.freezedTokens.toNumber(),
     }
 }
 
@@ -99,6 +103,7 @@ async function setupJudges({ judges }: { judges: SignerWithAddress[] }) {
     let dat = await getDAT()
     let Jury = await getJury()
     let mUSDC = await getMockUSDC()
+    let minStake = Number(DISPUTE_PARAMS.minStake)
 
     for (let i = 0; i < judges.length; i++) {
         await setupJudge({
@@ -110,19 +115,17 @@ async function setupJudges({ judges }: { judges: SignerWithAddress[] }) {
         })
 
         let balances = await getBalances(judges[i])
-        while (balances.BSWAN < Number(DISPUTE_PARAMS.minStake)) {
-            waitForTx(await mintUSDC(mUSDC.address, judges[i]))
+        while (balances.BSWAN < minStake * 10) {
+            waitForTx(await mintUSDC(mUSDC.address, judges[i], 1000))
             waitForTx(
                 await dat
                     .connect(judges[i].signer)
-                    .buy(judges[i].address, ONE_THOUSAND_USDC, 1)
+                    .buy(judges[i].address, Number(ONE_THOUSAND_USDC) * 1000, 1)
             )
             balances = await getBalances(judges[i])
         }
         waitForTx(
-            await Jury.connect(judges[i].signer).depositStake(
-                DISPUTE_PARAMS.minStake
-            )
+            await Jury.connect(judges[i].signer).depositStake(minStake * 10)
         )
     }
 }

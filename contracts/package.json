@@ -1,32 +1,33 @@
 {
-	"version": "0.0.1",
-	"devDependencies": {
-		"@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
-		"@nomicfoundation/hardhat-toolbox": "^2.0.0",
-		"@types/prettyjson": "^0.0.30",
-		"dotenv": "^16.0.3",
-		"hardhat": "^2.12.5",
-		"hardhat-contract-sizer": "^2.7.0",
-		"hardhat-deploy": "^0.11.22",
-		"kleur": "^4.1.5",
-		"prettier": "^2.8.1",
-		"prettier-plugin-solidity": "^1.1.1",
-		"prettyjson": "^1.2.5",
-		"ts-node": "^10.9.1",
-		"typescript": "^4.9.4"
-	},
-	"scripts": {
-		"size": "npm run compile && npm run hardhat size-contracts",
-		"hardhat": "hardhat",
-		"compile": "hardhat compile",
-		"test": ". ./setup_test_env.sh && hardhat test",
-		"aTest": "hardhat test",
-		"rampage": "hardhat test ./test/rampage.spec.ts",
-		"clean": "hardhat clean && rm -rf cache",
-		"deploy": ". ./setup_test_env.sh && hardhat deploy",
-		"coverage": ". ./setup_test_env.sh && hardhat coverage"
-	},
-	"dependencies": {
-		"@nomicfoundation/hardhat-network-helpers": "^1.0.7"
-	}
+    "version": "0.0.1",
+    "devDependencies": {
+        "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
+        "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+        "@types/prettyjson": "^0.0.30",
+        "dotenv": "^16.0.3",
+        "hardhat": "^2.12.5",
+        "hardhat-contract-sizer": "^2.7.0",
+        "hardhat-deploy": "^0.11.22",
+        "kleur": "^4.1.5",
+        "prettier": "^2.8.1",
+        "prettier-plugin-solidity": "^1.1.1",
+        "prettyjson": "^1.2.5",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.4"
+    },
+    "scripts": {
+        "size": "npm run compile && npm run hardhat size-contracts",
+        "hardhat": "hardhat",
+        "compile": "hardhat compile",
+        "test": ". ./setup_test_env.sh && hardhat test",
+        "aTest": "hardhat test",
+        "rampage": "hardhat test ./test/rampage.spec.ts",
+        "clean": "hardhat clean && rm -rf cache",
+        "deploy": ". ./setup_test_env.sh && hardhat deploy",
+        "coverage": ". ./setup_test_env.sh && hardhat coverage",
+        "prettier": "prettier --write \"./contracts/**/*.sol\" \"./test/**/*.ts\" \"./scripts/**/*.ts\" \"./helpers/**/*.ts\" \"./deploy/**/*.ts\" \"./hardhat.config.ts\""
+    },
+    "dependencies": {
+        "@nomicfoundation/hardhat-network-helpers": "^1.0.7"
+    }
 }

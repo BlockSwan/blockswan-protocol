@@ -4,23 +4,16 @@ import { OutputTypes as GigOutputs } from '../../types/protocol/gig/Gig'
 import { waitForTx } from '../../utilities/tx'
 import { expect } from 'chai'
 import {
-    BUYER_ENTRY_PARAMS,
     DEFAULT_BALANCE,
-    DELAYS_TIMESTAMP,
-    GIG_CREATION_PARAMS,
     GIG_TEST0,
     GIG_TEST1,
-    ORDER_CREATION_PARAMS,
     ORDER_TEST0,
-    SELLER_ENTRY_PARAMS,
     SELLER_ORDER_FEES_PARAMS,
     USER_TEST0,
     USER_TEST1,
-    XP_VALUES,
 } from '../../helpers/constants'
 import {
     getBalances,
-    passSelfRefundDelay,
     setupBuyer,
     setupSeller,
     setupUser,
@@ -29,15 +22,13 @@ import {
     Balance,
     GigInput,
     OrderState,
-    ProtocolErrors,
     SignerWithAddress,
     TestEnv,
     UserInput,
 } from '../../helpers/types'
 import makeSuite from '../fixtures/makeSuite'
 import { time } from '@nomicfoundation/hardhat-network-helpers'
-import { gig } from '../../types/protocol'
-import { calcFees, calcOrderPrice } from '../../utilities/helpers'
+import { calcFees } from '../../utilities/helpers'
 
 describe('Order: Pay order', () => {
     let testEnv = {} as TestEnv
@@ -144,11 +135,11 @@ describe('Order: Pay order', () => {
                 signer: aclAdmin,
                 address: await aclAdmin.getAddress(),
             })
-            orderData = await Order.getOrderById(0);
+            orderData = await Order.getOrderById(0)
         })
 
         it('should have order state DONE', async () => {
-            expect(orderData.state).to.be.equal(OrderState.DONE);
+            expect(orderData.state).to.be.equal(OrderState.DONE)
         })
 
         it('should have process proceed fees ', async () => {
