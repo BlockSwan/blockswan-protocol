@@ -1,0 +1,370 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gigId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "metadata",
+        "type": "string"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeDelivery",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct DataTypes.Package[3]",
+        "name": "packages",
+        "type": "tuple[3]"
+      }
+    ],
+    "name": "GigAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gigId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "metadata",
+        "type": "string"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeDelivery",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct DataTypes.Package[3]",
+        "name": "packages",
+        "type": "tuple[3]"
+      }
+    ],
+    "name": "GigEdited",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "metadata",
+        "type": "string"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeDelivery",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.Package[3]",
+        "name": "packages",
+        "type": "tuple[3]"
+      }
+    ],
+    "name": "createGig",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "newOrderId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "gigId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "packageId",
+        "type": "uint256"
+      }
+    ],
+    "name": "createOrder",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeDelivery",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.Package",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "gigId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getGigById",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "gigId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "metadata",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "createdAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "successSell",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "failedSell",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "reviewIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "orderIds",
+            "type": "uint256[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "timeDelivery",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct DataTypes.Package[3]",
+            "name": "packages",
+            "type": "tuple[3]"
+          }
+        ],
+        "internalType": "struct OutputTypes.GigOutput",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGigList",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "gigId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "metadata",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "createdAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "successSell",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "failedSell",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "reviewIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "orderIds",
+            "type": "uint256[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "timeDelivery",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct DataTypes.Package[3]",
+            "name": "packages",
+            "type": "tuple[3]"
+          }
+        ],
+        "internalType": "struct OutputTypes.GigOutput[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGigsCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getInvitersById",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "getInvitersByUserAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

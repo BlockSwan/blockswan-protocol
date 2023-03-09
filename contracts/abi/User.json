@@ -1,0 +1,881 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "provider",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "userAddress",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "newId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "metadata",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inviterId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "wallet",
+            "type": "address"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct InputTypes.CreateUserInput",
+        "name": "userData",
+        "type": "tuple"
+      }
+    ],
+    "name": "UserAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "userAddress",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "metadata",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inviterId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyerUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyerInvites",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellerUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellerInvites",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "gigIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "offerIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "bidIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "buyerOrderIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "gigReviewsIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "userReviewsIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "reviewsIds",
+            "type": "uint256[]"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct OutputTypes.UserOutput",
+        "name": "userData",
+        "type": "tuple"
+      }
+    ],
+    "name": "UserEdited",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "ADDRESSES_PROVIDER",
+    "outputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ADDRESS_PROVIDER",
+    "outputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_UINT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "erc20",
+        "type": "address"
+      }
+    ],
+    "name": "approve",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "becomeBuyer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "becomeSeller",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "buyerId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "newOrderId",
+        "type": "uint256"
+      }
+    ],
+    "name": "createBuyerOrder",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "newGigId",
+        "type": "uint256"
+      }
+    ],
+    "name": "createGig",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "metadata",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "inviterId",
+        "type": "uint256"
+      }
+    ],
+    "name": "createUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_name",
+        "type": "bytes32"
+      }
+    ],
+    "name": "fetchContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAddressById",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "getIdByAddress",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getInvitersById",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "getInvitersByUserAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pubKey",
+        "type": "address"
+      }
+    ],
+    "name": "getUserByAddress",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "metadata",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inviterId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyerUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyerInvites",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellerUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellerInvites",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "gigIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "offerIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "bidIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "buyerOrderIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "gigReviewsIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "userReviewsIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "reviewsIds",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct OutputTypes.UserOutput",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUserById",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "metadata",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inviterId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyerUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyerInvites",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellerUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellerInvites",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "gigIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "offerIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "bidIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "buyerOrderIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "gigReviewsIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "userReviewsIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "reviewsIds",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct OutputTypes.UserOutput",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getUserList",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "metadata",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inviterId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyerUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyerInvites",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellerUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellerInvites",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "wallet",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "gigIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "offerIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "bidIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "buyerOrderIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "gigReviewsIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "userReviewsIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "reviewsIds",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct OutputTypes.UserOutput[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getUsersCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "hasProtocolRole",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "gigId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract IUser",
+        "name": "UserContract",
+        "type": "address"
+      }
+    ],
+    "name": "isGigOwner",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "gigId",
+        "type": "uint256"
+      }
+    ],
+    "name": "isGigOwner",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "isStillBuyer",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "isStillSeller",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "kill",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "_providerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setProvider",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

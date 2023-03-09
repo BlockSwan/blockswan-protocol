@@ -1,0 +1,64 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "winningChoice",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMaxRange",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "winningChoice",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMinRange",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "winningChoice",
+        "type": "uint256"
+      }
+    ],
+    "name": "getRanges",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]

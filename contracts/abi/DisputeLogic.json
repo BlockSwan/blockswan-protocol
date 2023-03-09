@@ -1,0 +1,36 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "evidenceUntil",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "commitUntil",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "voteUntil",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "appealUntil",
+        "type": "uint256"
+      }
+    ],
+    "name": "calcDisputeDelaysFromBlock",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "delays",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

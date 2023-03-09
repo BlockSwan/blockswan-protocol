@@ -1,0 +1,74 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "flat",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "percent",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.FeeParams",
+        "name": "buyerFees",
+        "type": "tuple"
+      }
+    ],
+    "name": "calcBuyerFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "flat",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "percent",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.FeeParams",
+        "name": "sellerFees",
+        "type": "tuple"
+      }
+    ],
+    "name": "calcSellerFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]

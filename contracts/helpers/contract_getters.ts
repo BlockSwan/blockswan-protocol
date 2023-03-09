@@ -73,6 +73,58 @@ const getDATconfig = async (address?: string): Promise<TrustData> => {
     return conf
 }
 
+const getAddressProvider = async (address?: string): Promise<AddressProvider> =>
+    getContract(
+        'AddressProvider',
+        address || (await hre.deployments.get(ADDRESS_PROVIDER_ID)).address
+    ) as any
+const getProviderRegistry = async (
+    address?: string
+): Promise<ProviderRegistry> =>
+    getContract(
+        'ProviderRegistry',
+        address || (await hre.deployments.get('ProviderRegistry')).address
+    ) as any
+const getACLManager = async (address?: string): Promise<ACLManager> =>
+    getContract(
+        'ACLManager',
+        address || (await hre.deployments.get(ACL_MANAGER_ID)).address
+    ) as any
+const getProtocolConfigurator = async (
+    address?: string
+): Promise<ProtocolConfigurator> =>
+    getContract(
+        'ProtocolConfigurator',
+        address || (await hre.deployments.get(PROTOCOL_CONFIGURATOR_ID)).address
+    ) as any
+const getUser = async (address?: string): Promise<User> =>
+    getContract(
+        'User',
+        address || (await hre.deployments.get(USER_IMPL_ID)).address
+    ) as any
+const getGig = async (address?: string): Promise<Gig> =>
+    getContract(
+        'Gig',
+        address || (await hre.deployments.get(GIG_IMPL_ID)).address
+    ) as any
+const getOrder = async (address?: string): Promise<Order> =>
+    getContract(
+        'Order',
+        address || (await hre.deployments.get(ORDER_IMPL_ID)).address
+    ) as any
+
+const getDispute = async (address?: string): Promise<Dispute> =>
+    getContract(
+        'Dispute',
+        address || (await hre.deployments.get(DISPUTE_IMPL_ID)).address
+    ) as any
+
+const getJury = async (address?: string): Promise<Jury> =>
+    getContract(
+        'Jury',
+        address || (await hre.deployments.get(JURY_IMPL_ID)).address
+    ) as any
+
 const getBuyerEntryParams = async (address?: string): Promise<EntryParams> => {
     const protocolConfig = await getProtocolConfigurator(address)
     const config = await protocolConfig['getBuyerEntryParams()']()
@@ -162,58 +214,6 @@ const getDisputeParams = async (address?: string): Promise<DisputeParams> => {
         maxVotes: config[3].toNumber(),
     }
 }
-
-const getAddressProvider = async (address?: string): Promise<AddressProvider> =>
-    getContract(
-        'AddressProvider',
-        address || (await hre.deployments.get(ADDRESS_PROVIDER_ID)).address
-    ) as any
-const getProviderRegistry = async (
-    address?: string
-): Promise<ProviderRegistry> =>
-    getContract(
-        'ProviderRegistry',
-        address || (await hre.deployments.get('ProviderRegistry')).address
-    ) as any
-const getACLManager = async (address?: string): Promise<ACLManager> =>
-    getContract(
-        'ACLManager',
-        address || (await hre.deployments.get(ACL_MANAGER_ID)).address
-    ) as any
-const getProtocolConfigurator = async (
-    address?: string
-): Promise<ProtocolConfigurator> =>
-    getContract(
-        'ProtocolConfigurator',
-        address || (await hre.deployments.get(PROTOCOL_CONFIGURATOR_ID)).address
-    ) as any
-const getUser = async (address?: string): Promise<User> =>
-    getContract(
-        'User',
-        address || (await hre.deployments.get(USER_IMPL_ID)).address
-    ) as any
-const getGig = async (address?: string): Promise<Gig> =>
-    getContract(
-        'Gig',
-        address || (await hre.deployments.get(GIG_IMPL_ID)).address
-    ) as any
-const getOrder = async (address?: string): Promise<Order> =>
-    getContract(
-        'Order',
-        address || (await hre.deployments.get(ORDER_IMPL_ID)).address
-    ) as any
-
-const getDispute = async (address?: string): Promise<Dispute> =>
-    getContract(
-        'Dispute',
-        address || (await hre.deployments.get(DISPUTE_IMPL_ID)).address
-    ) as any
-
-const getJury = async (address?: string): Promise<Jury> =>
-    getContract(
-        'Jury',
-        address || (await hre.deployments.get(JURY_IMPL_ID)).address
-    ) as any
 
 const getUserLibraries = async () => {
     const userLogicArtifact = await hre.deployments.get('UserLogic')

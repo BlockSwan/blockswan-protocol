@@ -3,10 +3,15 @@ import { COMMON_DEPLOY_PARAMS } from '../../../helpers/envs'
 import { DeployFunction } from 'hardhat-deploy/types'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import makeDeployment from '../../../helpers/makeDeployment'
-import { ADDRESS_PROVIDER_ID, ORDER_IMPL_ID } from '../../../helpers/deploy_ids'
+import {
+    ADDRESS_PROVIDER_ID,
+    DAT_ID,
+    ORDER_IMPL_ID,
+} from '../../../helpers/deploy_ids'
 import {
     getACLManager,
     getAddressProvider,
+    getMockUSDC,
     getOrder,
     getOrderLibraries,
 } from '../../../helpers/contract_getters'
@@ -22,6 +27,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             ADDRESS_PROVIDER_ID
         )
         const { address: mUSDCAddress } = await deployments.get('mUSDC')
+        const { address: datAddress } = await deployments.get(DAT_ID)
 
         const orderLibraries = await getOrderLibraries()
         // Deploy account contract
@@ -39,26 +45,54 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             addressProviderAddress
         )
         let aclManager = await getACLManager()
+        let mUSDCInstance = await getMockUSDC(mUSDCAddress)
 
-        // 4. set the ACL_ADMIN
-        waitForTx(
-            await addressProviderInstance.addContract(
-                ORDER,
-                orderArtifact.address
+        let order = (
+            await addressProviderInstance['getContract(bytes32)'](ORDER)
+        ).toString()
+        let isAdded = order === orderArtifact.address.toString()
+
+        if (!isAdded) {
+            console.log('adding ORDER contract')
+            waitForTx(
+                await addressProviderInstance.addContract(
+                    ORDER,
+                    orderArtifact.address
+                )
             )
-        )
+            order = (
+                await addressProviderInstance['getContract(bytes32)'](ORDER)
+            ).toString()
+        }
         deployments.log(
             `[Deployments] ORDER is registered to ${orderArtifact.address}`
         )
         let OrderInstance = await getOrder(orderArtifact.address)
+        let allowance = (
+            await mUSDCInstance.allowance(orderArtifact.address, datAddress)
+        ).toString()
+
+        if (allowance === '0') {
+            console.log("ORDER approves MAX_UINT to mUSDC for DAT's address")
+            waitForTx(await OrderInstance.approve(mUSDCAddress))
+            allowance = (
+                await mUSDCInstance.allowance(orderArtifact.address, datAddress)
+            ).toString()
+        }
         deployments.log(
-            `[Deployments] ORDER approved MAX_UINT to mUSDC at ${orderArtifact.address}`
+            `[Deployments] ORDER (${orderArtifact.address}) allowance ${allowance} mUSDC (${mUSDCAddress}) to DAT (${datAddress})`
         )
-        waitForTx(await OrderInstance.approve(mUSDCAddress))
-        // give the XP_GIVER_ROLE
-        waitForTx(
-            await aclManager.grantRole(XP_GIVER_ROLE, orderArtifact.address)
-        )
+
+        let hasXPGiverRole = await aclManager.hasRole(XP_GIVER_ROLE, order)
+
+        if (!hasXPGiverRole) {
+            console.log('adding XP_GIVER_ROLE to ORDER')
+            waitForTx(
+                await aclManager.grantRole(XP_GIVER_ROLE, orderArtifact.address)
+            )
+            hasXPGiverRole = await aclManager.hasRole(XP_GIVER_ROLE, order)
+        }
+
         deployments.log(`[Deployments] ORDER has the role XP_GIVER_ROLE`)
     })
 }

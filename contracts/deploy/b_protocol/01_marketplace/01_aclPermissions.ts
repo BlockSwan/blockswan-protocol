@@ -1,5 +1,5 @@
 import { waitForTx } from '../../../utilities/tx'
-import { COMMON_DEPLOY_PARAMS } from '../../../helpers/envs'
+import { COMMON_DEPLOY_PARAMS, MARKETPLACE_NAME } from '../../../helpers/envs'
 import { DeployFunction } from 'hardhat-deploy/types'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import makeDeployment from '../../../helpers/makeDeployment'
@@ -19,6 +19,7 @@ import {
     USER,
 } from '../../../helpers/constants'
 import { setupBuyerAdminRoles } from '../../../helpers/init_helpers'
+import { DEFAULT_BLOCK_GAS_LIMIT } from '../../../hardhat_config_helpers'
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     await makeDeployment(func.id, async () => {
@@ -36,25 +37,42 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             contract: 'ACLManager',
             args: [addressProviderAddress],
             ...COMMON_DEPLOY_PARAMS,
+            //    gasLimit: Number(DEFAULT_BLOCK_GAS_LIMIT) * 1000,
         })
+        deployments.log(
+            `[Deployments] ACLManager is deployed at ${aclManagerArtifact.address}`
+        )
 
         let addressProviderInstance = await getAddressProvider(
             addressProviderAddress
         )
         let aclManager = await getACLManager(aclManagerArtifact.address)
 
+        let isContractSet =
+            (await addressProviderInstance['getContract(bytes32)'](
+                ACL_MANAGER
+            )) === aclManagerArtifact.address
+
         // register the ACL_MANAGER
-        waitForTx(
-            await addressProviderInstance.addContract(
-                ACL_MANAGER,
-                aclManagerArtifact.address
+        if (!isContractSet) {
+            console.log(
+                `Adding contract ACL_MANAGER ${aclManagerArtifact.address} to address provider`
             )
-        )
-        // give the PROTOCOL_ADMIN_ROLE
-        waitForTx(await aclManager.grantRole(PROTOCOL_ADMIN_ROLE, aclAdmin))
-        deployments.log(
-            `[Deployments] PROTOCOL_ADMIN_ROLE granted to ${aclAdmin}`
-        )
+            waitForTx(
+                await addressProviderInstance.addContract(
+                    ACL_MANAGER,
+                    aclManagerArtifact.address
+                )
+            )
+        }
+        let hasrole = await aclManager.hasRole(PROTOCOL_ADMIN_ROLE, aclAdmin)
+
+        if (!hasrole) {
+            console.log(`Granting PROTOCOL_ADMIN_ROLE to ${aclAdmin}`)
+            waitForTx(await aclManager.grantRole(PROTOCOL_ADMIN_ROLE, aclAdmin))
+        }
+
+        hasrole = await aclManager.hasRole(PROTOCOL_ADMIN_ROLE, aclAdmin)
     })
 }
 

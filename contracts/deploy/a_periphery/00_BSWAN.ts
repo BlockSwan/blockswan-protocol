@@ -35,16 +35,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         const { deploy } = deployments
         const { deployer, protocolAdmin } = await getNamedAccounts()
 
-        console.log(bgBlue(`Using account: ${deployer}`), ' \n')
-
         const { address: mUSDC_address } = await deployments.get('mUSDC')
-        const mUsdcInstance = getMockUSDC(mUSDC_address)
+        const mUsdcInstance = await getMockUSDC(mUSDC_address)
 
         trustOptions.currency = mUSDC_address
         console.log(
-            'Deploy DAT with config:',
+            'Default DAT config:',
             '\n\n',
-            prettyjson.render(trustOptions, { noColor: true })
+            prettyjson.render(trustOptions, { noColor: true }),
+            '\n'
         )
 
         const bswanArtifact: DeployResult = await deploy(DAT_ID, {
@@ -65,27 +64,43 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             bswanArtifact.address
         )) as BSWAN
 
-        await waitForTx(
-            await (
-                await mUsdcInstance
-            ).increaseAllowance(bswanInstance.address, MAX_UINT_AMOUNT)
+        let allowance = await mUsdcInstance.allowance(
+            deployer,
+            bswanInstance.address
         )
+        let isDeployed = Number(allowance) > 0
 
-        await waitForTx(
-            await bswanInstance.updateConfig(
-                protocolAdmin,
-                trustOptions.revenueCommitmentBasisPoints,
-                trustOptions.minInvestment
+        if (!isDeployed) {
+            console.log('Deployer allowance increased to MAX_UINT')
+            waitForTx(
+                await mUsdcInstance.increaseAllowance(
+                    bswanInstance.address,
+                    MAX_UINT_AMOUNT
+                )
             )
+            console.log('DAT config updated to default config')
+            waitForTx(
+                await bswanInstance.updateConfig(
+                    protocolAdmin,
+                    trustOptions.revenueCommitmentBasisPoints,
+                    trustOptions.minInvestment
+                )
+            )
+        }
+        allowance = await mUsdcInstance.allowance(
+            deployer,
+            bswanInstance.address
         )
 
         deployments.log(
-            `[Deployment] ${bswanInstance.address} has an allowance of MAX_UINT mUSDC given by ${deployer}\n`,
-            `\n[Deployment] Updated DAT config at ${bswanInstance.address} with the following values:\n`
+            `[Deployment] Deployer (${deployer}) has given an allowance of ${allowance.toString()} mUSDC to DAT(${
+                bswanInstance.address
+            })\n`,
+            `\n[Deployment] DAT(${bswanInstance.address}) has the following config:\n`
         )
         let datValues = await getDATconfig()
         console.log(
-            bold('DAT contract:\n\n'),
+            bold('DAT config:\n\n'),
             prettyjson.render(datValues, { noColor: true })
         )
     })

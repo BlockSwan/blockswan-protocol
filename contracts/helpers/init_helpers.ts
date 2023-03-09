@@ -313,12 +313,11 @@ const maxApproveDispute = async (
 
 const setupXPKeys = async (xpAddress: string | undefined) => {
     let XP = await getXP(xpAddress)
-    XP_VALUES.forEach(async (keyValue) => {
-        console.log(`${keyValue.key} for ${keyValue.amount}`)
-        waitForTx(
-            await XP.setXpAmount(keyValue.key.toString(), keyValue.amount)
-        )
-    })
+    for (let i = 0; i < XP_VALUES.length; i++) {
+        const { key, amount } = XP_VALUES[i]
+        console.log(`Setting up ${key} for ${amount}`)
+        waitForTx(await XP.setXpAmount(key.toString(), amount))
+    }
 }
 
 const calcDisputeDelaysFromBlock = async (

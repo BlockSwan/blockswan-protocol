@@ -3,12 +3,17 @@ import { COMMON_DEPLOY_PARAMS } from '../../../helpers/envs'
 import { DeployFunction } from 'hardhat-deploy/types'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import makeDeployment from '../../../helpers/makeDeployment'
-import { ADDRESS_PROVIDER_ID, JURY_IMPL_ID } from '../../../helpers/deploy_ids'
+import {
+    ADDRESS_PROVIDER_ID,
+    DAT_ID,
+    JURY_IMPL_ID,
+} from '../../../helpers/deploy_ids'
 import {
     getACLManager,
     getAddressProvider,
     getJury,
     getJuryLibrairies,
+    getMockUSDC,
 } from '../../../helpers/contract_getters'
 import { JURY, XP_GIVER_ROLE } from '../../../helpers/constants'
 
@@ -22,7 +27,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             ADDRESS_PROVIDER_ID
         )
         const { address: mUSDCAddress } = await deployments.get('mUSDC')
-
+        const { address: datAddress } = await deployments.get(DAT_ID)
         const juryLibraries = await getJuryLibrairies()
         // Deploy account contract
         const juryArtifact = await deploy(JURY_IMPL_ID, {
@@ -39,26 +44,54 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             addressProviderAddress
         )
         let aclManager = await getACLManager()
+        let mUSDCInstance = await getMockUSDC(mUSDCAddress)
 
-        // 4. set the ACL_ADMIN
-        waitForTx(
-            await addressProviderInstance.addContract(
-                JURY,
-                juryArtifact.address
+        let jury = (
+            await addressProviderInstance['getContract(bytes32)'](JURY)
+        ).toString()
+        let isAdded = jury === juryArtifact.address.toString()
+
+        if (!isAdded) {
+            console.log('adding JURY contract')
+            waitForTx(
+                await addressProviderInstance.addContract(
+                    JURY,
+                    juryArtifact.address
+                )
             )
-        )
+            jury = (
+                await addressProviderInstance['getContract(bytes32)'](JURY)
+            ).toString()
+        }
         deployments.log(
             `[Deployments] JURY is registered to ${juryArtifact.address}`
         )
         let JuryInstance = await getJury(juryArtifact.address)
+
+        let allowance = (
+            await mUSDCInstance.allowance(juryArtifact.address, datAddress)
+        ).toString()
+
+        if (allowance === '0') {
+            console.log("JURY approves MAX_UINT to mUSDC for DAT's address")
+            waitForTx(await JuryInstance.approve(mUSDCAddress))
+            allowance = (
+                await mUSDCInstance.allowance(juryArtifact.address, datAddress)
+            ).toString()
+        }
         deployments.log(
-            `[Deployments] JURY approved MAX_UINT to mUSDC at ${juryArtifact.address}`
+            `[Deployments] JURY (${juryArtifact.address}) allowance ${allowance} mUSDC (${mUSDCAddress}) to DAT (${datAddress})`
         )
-        waitForTx(await JuryInstance.approve(mUSDCAddress))
-        // give the XP_GIVER_ROLE
-        waitForTx(
-            await aclManager.grantRole(XP_GIVER_ROLE, juryArtifact.address)
-        )
+
+        let hasXPGiverRole = await aclManager.hasRole(XP_GIVER_ROLE, jury)
+
+        if (!hasXPGiverRole) {
+            console.log('adding XP_GIVER_ROLE to JURY')
+            waitForTx(
+                await aclManager.grantRole(XP_GIVER_ROLE, juryArtifact.address)
+            )
+            hasXPGiverRole = await aclManager.hasRole(XP_GIVER_ROLE, jury)
+        }
         deployments.log(`[Deployments] JURY has the role XP_GIVER_ROLE`)
     })
 }

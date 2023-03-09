@@ -26,25 +26,58 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             addressProviderArtifact.abi,
             addressProviderArtifact.address
         )) as AddressProvider
-        // 2. Set the marketplace_id
-        await waitForTx(
-            await addressProviderInstance.setMarketplaceId(marketplaceId)
-        )
-        // 3. Add addresses_provider to Registry
-        await addMarketplaceToRegistry(
-            marketplaceId,
-            addressProviderArtifact.address
-        )
-        // 4. set the ACL_ADMIN
-        waitForTx(
-            await addressProviderInstance.addContract(ACL_ADMIN, deployer)
-        )
-        deployments.log(`[Deployments] ACL_ADMIN is registered to ${deployer}`)
 
+        let id = await addressProviderInstance.getMarketplaceId()
+        let isIdSet = id === marketplaceId
+
+        if (!isIdSet) {
+            console.log('Setting the marketplace id at AddressProvider')
+            // 2. Set the marketplace_id
+            waitForTx(
+                await addressProviderInstance.setMarketplaceId(marketplaceId)
+            )
+            console.log('Adding the marketplace to the ProviderRegistry')
+            // 3. Add addresses_provider to Registry
+            await addMarketplaceToRegistry(
+                marketplaceId,
+                addressProviderArtifact.address
+            )
+            id = await addressProviderInstance.getMarketplaceId()
+        }
+        console.log('Marketplace id: ', id)
+
+        let admin = await addressProviderInstance['getContract(bytes32)'](
+            ACL_ADMIN
+        )
+        let isAclAdminSet = admin === aclAdmin
+
+        if (!isAclAdminSet) {
+            console.log('setting the ACL_ADMIN at AddressProvider')
+            waitForTx(
+                await addressProviderInstance.addContract(ACL_ADMIN, deployer)
+            )
+            admin = await addressProviderInstance['getContract(bytes32)'](
+                ACL_ADMIN
+            )
+        }
+        deployments.log(
+            `[Deployments] ACL_ADMIN is registered to ${deployer}\n=(${admin})`
+        )
+
+        let dat = await addressProviderInstance['getContract(bytes32)'](DAT)
         // 5. register the DAT
         const { address: datAddress } = await deployments.get(DAT_ID)
-        waitForTx(await addressProviderInstance.addContract(DAT, datAddress))
-        deployments.log(`[Deployments] DAT is registered to ${datAddress}`)
+        let isDatSet = dat === datAddress
+        if (!isDatSet) {
+            console.log('setting the DAT at AddressProvider')
+            waitForTx(
+                await addressProviderInstance.addContract(DAT, datAddress)
+            )
+            dat = await addressProviderInstance['getContract(bytes32)'](DAT)
+        }
+        deployments.log(
+            `[Deployments] DAT is registered to ${datAddress}\n=(${dat})`
+        )
 
         // Deploy ProtocolDataProvider getters contract
         // // Set the ProtocolDataProvider if is not already set at addresses provider

@@ -1,0 +1,54 @@
+[
+  {
+    "inputs": [],
+    "name": "ADDRESSES_PROVIDER",
+    "outputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_name",
+        "type": "bytes32"
+      }
+    ],
+    "name": "fetchContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "kill",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "_providerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setProvider",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

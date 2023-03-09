@@ -13,8 +13,14 @@ import {
     getAddressProvider,
     getUser,
     getUserLibraries,
+    getXP,
 } from '../../../helpers/contract_getters'
-import { USER, XP, XP_GIVER_ROLE } from '../../../helpers/constants'
+import {
+    BECOME_BUYER,
+    USER,
+    XP,
+    XP_GIVER_ROLE,
+} from '../../../helpers/constants'
 import {
     setupBuyerAdminRoles,
     setupSellerAdminRoles,
@@ -44,14 +50,31 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             addressProviderAddress
         )
 
+        let xp = await addressProviderInstance['getContract(bytes32)'](XP)
+        let isAdded = xp === XPArtifact.address
+
+        if (!isAdded) {
+            console.log('Adding XP to address provider')
+            waitForTx(
+                await addressProviderInstance.addContract(
+                    XP,
+                    XPArtifact.address
+                )
+            )
+            xp = await addressProviderInstance['getContract(bytes32)'](XP)
+        }
         // Register the XP contract
-        waitForTx(
-            await addressProviderInstance.addContract(XP, XPArtifact.address)
-        )
         deployments.log(
-            `[Deployments] XP is registered to ${XPArtifact.address}`
+            `[Deployments] XP is registered to ${XPArtifact.address}-(${xp})`
         )
-        await setupXPKeys(XPArtifact.address)
+
+        let XPInstance = await getXP(XPArtifact.address)
+        const xpkey = await XPInstance.getXpAmount(BECOME_BUYER)
+
+        if (!xpkey[0]) {
+            await setupXPKeys(XPArtifact.address)
+        }
+        console.log('XP keys are set up')
     })
 }
 

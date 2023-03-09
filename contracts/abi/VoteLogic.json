@@ -1,0 +1,185 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "choice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "weight",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "salt",
+        "type": "string"
+      }
+    ],
+    "name": "commit",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "commit",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "choice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "weight",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "justification",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "hasVoted",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct DataTypes.Vote",
+        "name": "newVote",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "commit",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "choice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "weight",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "justification",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "hasVoted",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct DataTypes.Vote",
+        "name": "vote",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minRange",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxRange",
+        "type": "uint256"
+      }
+    ],
+    "name": "isBetweenRange",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "commit",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "choice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "weight",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "justification",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "hasVoted",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct DataTypes.Vote",
+        "name": "vote",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "winningChoice",
+        "type": "uint256"
+      }
+    ],
+    "name": "isVoteCorrect",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]

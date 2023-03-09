@@ -5,6 +5,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import makeDeployment from '../../../helpers/makeDeployment'
 import {
     ADDRESS_PROVIDER_ID,
+    DAT_ID,
     GIG_IMPL_ID,
     USER_IMPL_ID,
 } from '../../../helpers/deploy_ids'
@@ -12,6 +13,7 @@ import {
     getACLManager,
     getAddressProvider,
     getGigLibraries,
+    getMockUSDC,
     getUser,
     getUserLibraries,
 } from '../../../helpers/contract_getters'
@@ -31,6 +33,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             ADDRESS_PROVIDER_ID
         )
         const { address: mUSDCAddress } = await deployments.get('mUSDC')
+        const { address: datAddress } = await deployments.get(DAT_ID)
 
         const gigLibraries = await getGigLibraries()
         // Deploy account contract
@@ -48,23 +51,55 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             addressProviderAddress
         )
         let aclManager = await getACLManager()
+        let mUSDCInstance = await getMockUSDC(mUSDCAddress)
 
-        // 4. set the ACL_ADMIN
-        waitForTx(
-            await addressProviderInstance.addContract(GIG, gigArtifact.address)
-        )
+        let gig = (
+            await addressProviderInstance['getContract(bytes32)'](GIG)
+        ).toString()
+        let isAdded = gig === gigArtifact.address.toString()
+
+        if (!isAdded) {
+            console.log('adding GIG contract')
+            waitForTx(
+                await addressProviderInstance.addContract(
+                    GIG,
+                    gigArtifact.address
+                )
+            )
+            gig = (
+                await addressProviderInstance['getContract(bytes32)'](GIG)
+            ).toString()
+        }
         deployments.log(
             `[Deployments] GIG is registered to ${gigArtifact.address}`
         )
         let GigInstance = await getUser(gigArtifact.address)
+
+        let allowance = (
+            await mUSDCInstance.allowance(gigArtifact.address, datAddress)
+        ).toString()
+
+        if (allowance === '0') {
+            console.log("GIG approves MAX_UINT to mUSDC for DAT's address")
+            waitForTx(await GigInstance.approve(mUSDCAddress))
+            allowance = (
+                await mUSDCInstance.allowance(gigArtifact.address, datAddress)
+            ).toString()
+        }
         deployments.log(
-            `[Deployments] GIG approved MAX_UINT to mUSDC at ${gigArtifact.address}`
+            `[Deployments] GIG (${gigArtifact.address}) allowance ${allowance} mUSDC (${mUSDCAddress}) to DAT (${datAddress})`
         )
-        waitForTx(await GigInstance.approve(mUSDCAddress))
-        // give the XP_GIVER_ROLE
-        waitForTx(
-            await aclManager.grantRole(XP_GIVER_ROLE, gigArtifact.address)
-        )
+
+        let hasXPGiverRole = await aclManager.hasRole(XP_GIVER_ROLE, gig)
+
+        if (!hasXPGiverRole) {
+            console.log('adding XP_GIVER_ROLE to GIG')
+            waitForTx(
+                await aclManager.grantRole(XP_GIVER_ROLE, gigArtifact.address)
+            )
+            hasXPGiverRole = await aclManager.hasRole(XP_GIVER_ROLE, gig)
+        }
+
         deployments.log(`[Deployments] GIG has the role XP_GIVER_ROLE`)
     })
 }

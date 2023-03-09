@@ -1,0 +1,31 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "jurorWeight",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "weightOfCorrectVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "disputePrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "calcEarnedFromDisputeFees",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]

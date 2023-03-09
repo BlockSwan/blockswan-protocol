@@ -6,6 +6,7 @@
         "@types/prettyjson": "^0.0.30",
         "dotenv": "^16.0.3",
         "hardhat": "^2.12.5",
+        "hardhat-abi-exporter": "^2.10.1",
         "hardhat-contract-sizer": "^2.7.0",
         "hardhat-deploy": "^0.11.22",
         "kleur": "^4.1.5",
@@ -21,11 +22,17 @@
         "compile": "hardhat compile",
         "test": ". ./setup_test_env.sh && hardhat test",
         "aTest": "hardhat test",
-        "rampage": "hardhat test ./test/rampage.spec.ts",
-        "clean": "hardhat clean && rm -rf cache",
+        "test:rampage": "hardhat test ./test/rampage.spec.ts",
         "deploy": ". ./setup_test_env.sh && hardhat deploy",
+        "deploy:testnet": ". ./deploy_testnet.sh",
         "coverage": ". ./setup_test_env.sh && hardhat coverage",
-        "prettier": "prettier --write \"./contracts/**/*.sol\" \"./test/**/*.ts\" \"./scripts/**/*.ts\" \"./helpers/**/*.ts\" \"./deploy/**/*.ts\" \"./hardhat.config.ts\""
+        "prettier": "prettier --write \"./contracts/**/*.sol\" \"./test/**/*.ts\" \"./scripts/**/*.ts\" \"./helpers/**/*.ts\" \"./deploy/**/*.ts\" \"./hardhat.config.ts\"",
+        "export:abi": "hardhat export-abi",
+        "clean": "hardhat clean && rm -rf cache",
+        "clean:abi": "hardhat clear-abi && rm -rf ./abi",
+        "clean:deployments": "rm -rf deployments",
+        "clean:full": "npm run clear:abi && npm run clear:deployments",
+        "verify": "hardhat --network mumbai etherscan-verify --solc-input"
     },
     "dependencies": {
         "@nomicfoundation/hardhat-network-helpers": "^1.0.7"

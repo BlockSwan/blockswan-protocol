@@ -1,3 +1,4 @@
+import { Signer } from 'ethers'
 import { waitForTx } from './../../../utilities/tx'
 import { COMMON_DEPLOY_PARAMS } from '../../../helpers/envs'
 import { DeployFunction } from 'hardhat-deploy/types'
@@ -10,7 +11,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         const { deploy } = deployments
         const { deployer } = await getNamedAccounts()
 
-        let ParamsLogic = await deploy('ParamsLogic', {
+        await deploy('ParamsLogic', {
             from: deployer,
             ...COMMON_DEPLOY_PARAMS,
         })

@@ -3,6 +3,7 @@ import '@nomicfoundation/hardhat-toolbox'
 import '@nomicfoundation/hardhat-chai-matchers'
 import 'hardhat-deploy'
 import 'hardhat-contract-sizer'
+import 'hardhat-abi-exporter'
 
 const { accounts } = require('./test_wallets.js')
 import {
@@ -15,9 +16,22 @@ import {
     COINMARKETCAP_API_KEY,
     GAS_PRICE_API,
     POLYGONSCAN_API_KEY,
+    DEPLOYER_PRIVATE_KEY,
 } from './hardhat_config_helpers'
 
 const config: HardhatUserConfig = {
+    mocha: {
+        timeout: 100000,
+    },
+    abiExporter: {
+        path: './abi',
+        runOnCompile: true,
+        clear: true,
+        flat: true,
+        only: [],
+        spacing: 2,
+        format: 'json',
+    },
     typechain: {
         outDir: 'types',
         target: 'ethers-v5',
@@ -89,6 +103,20 @@ const config: HardhatUserConfig = {
             gasPrice: DEFAULT_GAS_PRICE,
             initialBaseFeePerGas: 7,
             gas: 'auto', // DEFAULT_BLOCK_GAS_LIMIT,
+        },
+        mumbai: {
+            url: 'https://rpc-mumbai.maticvigil.com',
+            accounts: [DEPLOYER_PRIVATE_KEY],
+            allowUnlimitedContractSize: true,
+            saveDeployments: true,
+            gas: 'auto',
+            blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
+            gasPrice: Number(DEFAULT_GAS_PRICE) * 50,
+            verify: {
+                etherscan: {
+                    apiKey: POLYGONSCAN_API_KEY,
+                },
+            },
         },
     },
     namedAccounts: {

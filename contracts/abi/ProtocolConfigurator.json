@@ -1,0 +1,1030 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "provider",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "ADDRESSES_PROVIDER",
+    "outputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ADDRESS_PROVIDER",
+    "outputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_UINT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "erc20",
+        "type": "address"
+      }
+    ],
+    "name": "approve",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_name",
+        "type": "bytes32"
+      }
+    ],
+    "name": "fetchContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "version",
+        "type": "uint256"
+      }
+    ],
+    "name": "getBuyerEntryParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeAdded",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "invitationEarned",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct DataTypes.EntryParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBuyerEntryParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeAdded",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "invitationEarned",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct DataTypes.EntryParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "version",
+        "type": "uint256"
+      }
+    ],
+    "name": "getDelayTimestamp",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "selfRefund",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "evidence",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "commit",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "vote",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "appeal",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.DelayTimestamp",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getDelayTimestamp",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "selfRefund",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "evidence",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "commit",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "vote",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "appeal",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.DelayTimestamp",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "version",
+        "type": "uint256"
+      }
+    ],
+    "name": "getDisputeParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "minStake",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "alpha",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "feePerJuror",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxVotes",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.DisputeParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getDisputeParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "minStake",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "alpha",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "feePerJuror",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxVotes",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.DisputeParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGigCreationParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.CreationParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "version",
+        "type": "uint256"
+      }
+    ],
+    "name": "getGigCreationParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.CreationParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getOrderCreationParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "flat",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "percent",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.FeeParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "version",
+        "type": "uint256"
+      }
+    ],
+    "name": "getOrderCreationParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "flat",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "percent",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.FeeParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "version",
+        "type": "uint256"
+      }
+    ],
+    "name": "getRetributionParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "affiliate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lvl0AffiliateShare",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.RetributionParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRetributionParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "affiliate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lvl0AffiliateShare",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.RetributionParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSellerEntryParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeAdded",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "invitationEarned",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct DataTypes.EntryParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "version",
+        "type": "uint256"
+      }
+    ],
+    "name": "getSellerEntryParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeAdded",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "invitationEarned",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct DataTypes.EntryParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSellerOrderFees",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "flat",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "percent",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.FeeParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "version",
+        "type": "uint256"
+      }
+    ],
+    "name": "getSellerOrderFees",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "flat",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "percent",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.FeeParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "hasProtocolRole",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "gigId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract IUser",
+        "name": "UserContract",
+        "type": "address"
+      }
+    ],
+    "name": "isGigOwner",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "isStillBuyer",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "isStillSeller",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "kill",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IAddressProvider",
+        "name": "_providerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setProvider",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeAdded",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "invitationEarned",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct DataTypes.EntryParams",
+        "name": "newParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateBuyerEntryParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "selfRefund",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "evidence",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "commit",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "vote",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "appeal",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.DelayTimestamp",
+        "name": "newParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateDelayTimestamp",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "minStake",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "alpha",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "feePerJuror",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxVotes",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.DisputeParams",
+        "name": "newParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateDisputeParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.CreationParams",
+        "name": "newParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateGigCreationParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "flat",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "percent",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.FeeParams",
+        "name": "newParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateOrderCreationParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "affiliate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lvl0AffiliateShare",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.RetributionParams",
+        "name": "newParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateRetributionParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "currencyValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timeAdded",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "xpEarned",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "invitationEarned",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct DataTypes.EntryParams",
+        "name": "newParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateSellerEntryParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "flat",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "percent",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.FeeParams",
+        "name": "newParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateSellerOrderFees",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
