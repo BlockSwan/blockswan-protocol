@@ -12,7 +12,7 @@ ______ _            _    _____
 This repository contains the smart contracts source code and marketplaces configuration for a Blockswan Protocol.
 
 <p align="center">
-  <img src="assets/images/protocolAnimation.gif" alt="logo">
+  <img src="assets/images/protocolAnimation.gif" width="100%" height="auto" alt="logo">
 </p>
 
 ## Table of Contents
