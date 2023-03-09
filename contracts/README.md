@@ -11,17 +11,18 @@ ______ _            _    _____
 
 This repository contains the smart contracts source code and marketplaces configuration for a Blockswan Protocol.
 
-    ```md
-    ![alt text](assets/images/protocolAnimation.gif)
-    ```
+<p align="center">
+  <img src="assets/images/protocolAnimation.gif" alt="logo">
+</p>
 
 ## Table of Contents
 
 - [Toolchain](#toolchain)
-- [Getting started](#getting_started)
-- [Repository structure](#repository_structure)
-- [Contracts](#contracts)
-- [Community](#connect_with_the_community)
+- [Getting started](#getting-started)
+- [Repository structure](#repository-structure)
+- [Scripts](#scripts)
+- [Contracts Addresses](#contracts)
+- [Connect with the community](#connect_with_the_community)
 
 ## Toolchain:
 
@@ -88,7 +89,7 @@ Each directory at the root of this repository contains code for each individual 
 * `npm run verify`: to verify the deployed smart-contracts.
 
 
-# Contracts
+## Contracts
 
 Blockswan Periphery and Protocol contracts are deployed on the Polygon Mumbai chain at the following address:
 
@@ -96,16 +97,16 @@ The following addresses may be out-of-date or out-of usage. To interact with Blo
 
 Just paste the address in the following [Blockchain Scan](https://mumbai.polygonscan.com) to track contracts.
 
-## Periphery 
+### Periphery 
 
 |           | Periphery contracts                           |
 | --------- | --------------------------------------------- |
 | DAT       | 0x59f613FbD69B21B9F5cBe51916e031aeF1b747bB    |
 | Mock USDC | 0x3A357e08C1218b95e65c13F38d9bd2D76A28c196    |
 
-## Protocol
+### Protocol
 
-### Configurators
+#### Configurators
 
 Smart-contracts responsible of the configuration of the blockswan protocol. (eg: containing params fees and access permissions between others)
 
@@ -116,7 +117,7 @@ Smart-contracts responsible of the configuration of the blockswan protocol. (eg:
 | ProtocolConfigurator  | 0x2522C919CaFf64eF49712Ffcf327fCc9cAe7e692 |
 | ProviderRegistry      | 0x9BB1034E13874d985ADAb6ACa4B6E98960eb68C2 |
 
-### Implementations
+#### Implementations
 
 Smart-contracts containing the core data storage and calling the libraries via calldata to manipulate data.
 
@@ -129,7 +130,7 @@ Smart-contracts containing the core data storage and calling the libraries via c
 | XP        | 0xF6fb18412a4a00BA8f522EB9942e6b1bD5B3A00C |
 | Jury      | 0x4429aBB56f7166FF9B16C9fe290400f8F277f830 |
 
-### Libraries
+#### Libraries
 
 Blockswan business logics libraries called by the implementations.
 
