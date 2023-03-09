@@ -7,11 +7,11 @@ ______ _            _    _____
 \____/|_|\___/ \___|_|\_\____/  \_/\_/ \__,_|_| |_|
 ```
 
-# Blockswan Protocol smart-contracts
-
 <p align="center">
   <img src="assets/images/protocolAnimation.gif" width="100%" height="auto" alt="logo">
 </p>
+
+# Blockswan Protocol smart-contracts
 
 This repository contains the smart contracts source code and marketplaces configuration for a Blockswan Protocol.
 
