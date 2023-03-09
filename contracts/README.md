@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/images/protocolAnimation.gif" width="100%" height="auto" alt="logo">
+</p>
+
 ```
 ______ _            _    _____
 | ___ \ |          | |  /  ___|
@@ -10,10 +14,6 @@ ______ _            _    _____
 # Blockswan Protocol smart-contracts
 
 This repository contains the smart contracts source code and marketplaces configuration for a Blockswan Protocol.
-
-<p align="center">
-  <img src="assets/images/protocolAnimation.gif" width="100%" height="auto" alt="logo">
-</p>
 
 ## Table of Contents
 
