@@ -14,6 +14,8 @@ import {
     ProtocolConfigurator,
     Dispute,
     Jury,
+    Faucet,
+    MinimalForwarder,
 } from '../types'
 
 type ValidInput = string | number | BigNumber
@@ -140,6 +142,54 @@ export type TestEnv = {
     Registry: ProviderRegistry
     ProtocolConfigurator: ProtocolConfigurator
     XP: XP
+    Faucet: Faucet
+    MinimalForwarder: MinimalForwarder
+}
+
+type BlockswanContractsAddresses = {
+    periphery: {
+        DAT: string
+        mUSDC: string
+        Faucet: string
+        MinimalForwarder: string
+    }
+
+    protocol: {
+        configurators: {
+            ACLManager: string
+            ProtocolConfigurator: string
+            AddressProvider: string
+            ProviderRegistry: string
+        }
+        implementations: {
+            Dispute: string
+            Gig: string
+            Jury: string
+            Order: string
+            User: string
+            XP: string
+        }
+        libraries: {
+            DisputeDataLogic: string
+            DisputeLogic: string
+            GigDataLogic: string
+            GigLogic: string
+            JuryDataLogic: string
+            JuryLogic: string
+            OrderDataLogic: string
+            OrderLogic: string
+            RoundDataLogic: string
+            RoundLogic: string
+            UserDataLogic: string
+            UserLogic: string
+            VoteDataLogic: string
+            VoteLogic: string
+            InviterLogic: string
+            InvoiceLogic: string
+            ParamsLogic: string
+            SortitionSumTreeFactory: string
+        }
+    }
 }
 
 type TrustData = {
@@ -274,4 +324,5 @@ export {
     DisputeParams,
     DisputeState,
     DisputeFees,
+    BlockswanContractsAddresses,
 }

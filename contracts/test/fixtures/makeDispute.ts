@@ -3,7 +3,6 @@ import {
     BUYER_ROLE,
     DELAYS_TIMESTAMP,
     DISPUTE_PARAMS,
-    EVIDENCE_TEST0,
     GIG_TEST0,
     ORDER_TEST0,
     SELLER_ROLE,
@@ -21,7 +20,7 @@ import {
     ValidInput,
     DisputeFees,
 } from '../../helpers/types'
-import { DataTypes, OutputTypes } from '../../types/interfaces/IDispute'
+import { DataTypes } from '../../types/interfaces/IDispute'
 import { calcTotalFeesForJurors } from '../../utilities/helpers'
 import { waitForTx } from '../../utilities/tx'
 import makeSuite from './makeSuite'

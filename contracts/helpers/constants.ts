@@ -1,7 +1,7 @@
 import { version } from '../package.json'
 import { utils } from 'ethers'
 import { BigNumber } from 'ethers'
-import { parseUnits } from 'ethers/lib/utils'
+import { parseUnits, parseEther } from 'ethers/lib/utils'
 import {
     Balance,
     CreationParams,
@@ -16,6 +16,7 @@ import {
     DisputeParams,
 } from './types'
 import { DataTypes } from '../types/interfaces/IDispute'
+import { Faucet } from '../types'
 
 // ----------------
 // UTILS
@@ -36,6 +37,7 @@ const TWO_THIRD_PERCENTAGE = BigNumber.from(ONE_THIRD_PERCENTAGE)
 const THREE_PERCENTAGE = BigNumber.from(ONE_PERCENTAGE).mul(3).toString()
 
 const ONE_ETH = parseUnits('1', 18)
+const HALF_ONE_ETH = parseEther('0.5')
 const ONE_USD = parseUnits('1', 6)
 const ONE_THOUSAND_USDC = parseUnits('1000', 6)
 const ONE_HUNDRED_USDC = parseUnits('100', 6)
@@ -81,6 +83,19 @@ const BUY_SLOPE_NUM = '1'
 const BUY_SLOPE_DEN = '100000000'
 const RESERVE_BASIS_POINTS = '5000' // 50%
 const COMMITMENT_BASIS_POINTS = '1000' // 10%
+
+// ----------------
+// FAUCET PARAMS
+// ----------------
+
+let FAUCET_DELAYS: Faucet.TokensStruct = {
+    native: TWO_DAYS,
+    erc20: TWO_DAYS,
+}
+let FAUCET_AMOUNTS: Faucet.TokensStruct = {
+    native: HALF_ONE_ETH,
+    erc20: Number(MIN_INVESTMENT) * 2,
+}
 
 // REGISTRY ADDRESSES
 const GIG = utils.formatBytes32String('GIG')
@@ -300,6 +315,7 @@ export {
     PROTOCOL_CONFIGURATOR,
     USER,
     ACL_MANAGER,
+    HALF_ONE_ETH,
     BUYER_ROLE,
     SELLER_ROLE,
     XP_GIVER_ROLE,
@@ -345,4 +361,6 @@ export {
     ONE_HUNDRED_USDC,
     EVIDENCE_TEST0,
     EVIDENCE_TEST1,
+    FAUCET_DELAYS,
+    FAUCET_AMOUNTS,
 }

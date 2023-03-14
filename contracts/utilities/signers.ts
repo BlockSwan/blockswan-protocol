@@ -1,3 +1,4 @@
+import { MinimalForwarder } from './../types/'
 import { Signer } from 'ethers'
 import hre, { ethers } from 'hardhat'
 import { SignerWithAddress } from '../helpers/types'
@@ -22,16 +23,20 @@ const getRandomSigners = (amount: number) => {
     return signers
 }
 
-const getRandomSigner = async (): Promise<SignerWithAddress> => {
+const getRandomSigner = async (
+    fundWallet: boolean = true
+): Promise<SignerWithAddress> => {
     let wallet = ethers.Wallet.createRandom()
     let addr1 = await getFirstSigner()
     // add the provider from Hardhat
     wallet = wallet.connect(ethers.provider)
     // send ETH to the new wallet so it can perform a tx
-    await addr1.sendTransaction({
-        to: wallet.address,
-        value: ethers.utils.parseEther('200000'),
-    })
+    if (fundWallet) {
+        await addr1.sendTransaction({
+            to: wallet.address,
+            value: ethers.utils.parseEther('200000'),
+        })
+    }
     let address = await wallet.getAddress()
     return {
         signer: wallet,

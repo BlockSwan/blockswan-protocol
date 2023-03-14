@@ -6,9 +6,9 @@ import {
    Badge,
    Typography,
    Stack,
-   Avatar,
    Button,
    Menu,
+   Avatar,
    MenuItem,
    useMediaQuery,
 } from '@mui/material'
@@ -17,10 +17,54 @@ import { OnlineBadge } from './atoms/Avatar'
 import { useState } from 'react'
 import { useWeb3Context } from '../hooks/useWeb3Context'
 import { useAppNavigation } from '../hooks/useAppNavigation'
+import CryptoIcon from './atoms/CryptoIcon'
+import ClaimMaticModal from '../elements/modals/ClaimMaticModal'
 
 export interface IHeader {
    onButtonClick: () => void
    isAuthenticated: boolean
+}
+
+function renderMenuItem({
+   isBorderBottom,
+   name,
+   onClick,
+   emoji,
+}: {
+   isBorderBottom: boolean
+   name: string
+   onClick: () => void
+   emoji: string | JSX.Element
+}) {
+   return (
+      <MenuItem
+         sx={{
+            px: 2,
+            py: 1,
+            borderBottom: isBorderBottom
+               ? ''
+               : (theme) => `1px solid ${theme.palette.divider}`,
+         }}
+         key={name}
+         onClick={(e) => {
+            onClick()
+         }}
+      >
+         {' '}
+         <Typography fontWeight={500} textAlign="start">
+            {emoji}
+         </Typography>
+         <Typography
+            sx={{
+               ml: 2,
+            }}
+            fontWeight={500}
+            textAlign="start"
+         >
+            {name}
+         </Typography>
+      </MenuItem>
+   )
 }
 
 export const Header = ({ onButtonClick, isAuthenticated }: IHeader) => {
@@ -47,6 +91,21 @@ export const Header = ({ onButtonClick, isAuthenticated }: IHeader) => {
       {
          name: 'Dashboard',
          emoji: '💹',
+         onClick: () => {},
+      },
+      {
+         name: 'Claim MATIC',
+         emoji: <CryptoIcon symbol="MATIC" />,
+         onClick: () => {},
+      },
+      {
+         name: 'Mint mUSDC',
+         emoji: <CryptoIcon symbol="USDC" />,
+         onClick: () => {},
+      },
+      {
+         name: 'Invest in BSWAN',
+         emoji: <CryptoIcon symbol="BSWAN" />,
          onClick: () => {},
       },
       {
@@ -148,7 +207,7 @@ export const Header = ({ onButtonClick, isAuthenticated }: IHeader) => {
                               borderColor: (theme) => theme.palette.divider,
                            },
                            style: {
-                              width: '200px',
+                              width: '250px',
 
                               borderTopRightRadius: 0,
                               borderTopLeftRadius: 0,
@@ -174,38 +233,32 @@ export const Header = ({ onButtonClick, isAuthenticated }: IHeader) => {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                      >
-                        {menus.map((setting, _index) => (
-                           <MenuItem
-                              sx={{
-                                 px: 2,
-                                 py: 1,
-                                 borderBottom:
-                                    _index === menus?.length - 1
-                                       ? ''
-                                       : (theme) =>
-                                            `1px solid ${theme.palette.divider}`,
-                              }}
-                              key={setting.name}
-                              onClick={(e) => {
-                                 handleCloseUserMenu()
-                                 setting.onClick()
-                              }}
-                           >
-                              {' '}
-                              <Typography fontWeight={500} textAlign="start">
-                                 {setting.emoji}
-                              </Typography>
-                              <Typography
-                                 sx={{
-                                    ml: 2,
-                                 }}
-                                 fontWeight={500}
-                                 textAlign="start"
-                              >
-                                 {setting.name}
-                              </Typography>
-                           </MenuItem>
-                        ))}
+                        {menus.map((setting, _index) =>
+                           setting.name === 'Claim MATIC' ? (
+                              <ClaimMaticModal
+                                 opener={renderMenuItem({
+                                    isBorderBottom:
+                                       _index === menus?.length - 1,
+                                    name: setting.name,
+                                    emoji: setting.emoji,
+                                    onClick: () => {
+                                       handleCloseUserMenu()
+                                       setting.onClick()
+                                    },
+                                 })}
+                              />
+                           ) : (
+                              renderMenuItem({
+                                 isBorderBottom: _index === menus?.length - 1,
+                                 name: setting.name,
+                                 emoji: setting.emoji,
+                                 onClick: () => {
+                                    handleCloseUserMenu()
+                                    setting.onClick()
+                                 },
+                              })
+                           )
+                        )}
                      </Menu>
                   </Box>
                </>

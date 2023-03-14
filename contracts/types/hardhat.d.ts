@@ -29,6 +29,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20__factory>;
     getContractFactory(
+      name: "ERC2771Context",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC2771Context__factory>;
+    getContractFactory(
       name: "IAccessControl",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IAccessControl__factory>;
@@ -48,6 +52,10 @@ declare module "hardhat/types/runtime" {
       name: "IERC20Metadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20Metadata__factory>;
+    getContractFactory(
+      name: "MinimalForwarder",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MinimalForwarder__factory>;
     getContractFactory(
       name: "Ownable",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -104,6 +112,10 @@ declare module "hardhat/types/runtime" {
       name: "IXP",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IXP__factory>;
+    getContractFactory(
+      name: "Faucet",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Faucet__factory>;
     getContractFactory(
       name: "MUSDC",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -230,6 +242,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ERC20>;
     getContractAt(
+      name: "ERC2771Context",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC2771Context>;
+    getContractAt(
       name: "IAccessControl",
       address: string,
       signer?: ethers.Signer
@@ -254,6 +271,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20Metadata>;
+    getContractAt(
+      name: "MinimalForwarder",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MinimalForwarder>;
     getContractAt(
       name: "Ownable",
       address: string,
@@ -324,6 +346,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IXP>;
+    getContractAt(
+      name: "Faucet",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Faucet>;
     getContractAt(
       name: "MUSDC",
       address: string,

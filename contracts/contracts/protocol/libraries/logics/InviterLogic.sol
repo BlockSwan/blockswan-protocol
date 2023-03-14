@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {EnumerableSet} from "../../../imports/openzeppelin/contracts/EnumerableSet.sol";
 import {PercentageMath} from "../../../imports/aave/contracts/PercentageMath.sol";

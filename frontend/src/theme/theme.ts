@@ -6,6 +6,15 @@ import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+import '@fontsource/saira/100.css'
+import '@fontsource/saira/200.css'
+import '@fontsource/saira/300.css'
+import '@fontsource/saira/400.css'
+import '@fontsource/saira/500.css'
+import '@fontsource/saira/600.css'
+import '@fontsource/saira/700.css'
+import '@fontsource/saira/800.css'
+import '@fontsource/saira/900.css'
 
 const theme = createTheme({
    typography: {
@@ -61,6 +70,13 @@ const theme = createTheme({
          },
       },
       MuiAvatar: {
+         styleOverrides: {
+            root: {
+               borderRadius: radius,
+            },
+         },
+      },
+      MuiModal: {
          styleOverrides: {
             root: {
                borderRadius: radius,

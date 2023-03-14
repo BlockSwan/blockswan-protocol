@@ -1,5 +1,5 @@
 import hre from 'hardhat'
-import { ContractReceipt } from 'ethers'
+import { Contract } from 'ethers'
 
 import { EvmAddress } from '../helpers/types'
 
@@ -12,7 +12,7 @@ export const waitForTx = async (tx: any): Promise<void> => await tx?.wait(1)
 export const getContract = async (
     id: string,
     address?: EvmAddress
-): Promise<unknown> => {
+): Promise<Contract> => {
     const artifact = await hre.deployments.getArtifact(id)
     return hre.ethers.getContractAt(
         artifact.abi,

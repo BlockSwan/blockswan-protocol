@@ -35,6 +35,8 @@
         "verify": "hardhat --network mumbai etherscan-verify --solc-input"
     },
     "dependencies": {
-        "@nomicfoundation/hardhat-network-helpers": "^1.0.7"
+        "@metamask/eth-sig-util": "^5.0.2",
+        "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
+        "defender-relay-client": "^1.39.0"
     }
 }

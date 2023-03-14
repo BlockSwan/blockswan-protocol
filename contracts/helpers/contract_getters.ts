@@ -11,6 +11,8 @@ import {
     ACLManager,
     Dispute,
     Jury,
+    Faucet,
+    MinimalForwarder,
 } from './../types'
 import hre from 'hardhat'
 import { getContract } from '../utilities/tx'
@@ -27,6 +29,7 @@ import {
     XP_ID,
 } from './deploy_ids'
 import {
+    BlockswanContractsAddresses,
     CreationParams,
     DelayTimestamp,
     DisputeParams,
@@ -124,6 +127,33 @@ const getJury = async (address?: string): Promise<Jury> =>
         'Jury',
         address || (await hre.deployments.get(JURY_IMPL_ID)).address
     ) as any
+const getFaucet = async (address?: string): Promise<Faucet> =>
+    getContract(
+        'Faucet',
+        address || (await hre.deployments.get('Faucet')).address
+    ) as any
+const getMinimalForwarder = async (
+    address?: string
+): Promise<MinimalForwarder> =>
+    getContract(
+        'MinimalForwarder',
+        address || (await hre.deployments.get('MinimalForwarder')).address
+    ) as any
+
+const getFaucetSettings = async (address?: string) => {
+    const faucet = await getFaucet(address)
+    let settings = await faucet.getSettings()
+    return {
+        delays: {
+            native: Number(settings[0].native),
+            erc20: Number(settings[0].erc20),
+        },
+        amounts: {
+            native: Number(settings[1].native),
+            erc20: Number(settings[1].erc20),
+        },
+    }
+}
 
 const getBuyerEntryParams = async (address?: string): Promise<EntryParams> => {
     const protocolConfig = await getProtocolConfigurator(address)
@@ -286,6 +316,55 @@ const getProtocolConfiguratorLibraries = async () => {
     }
 }
 
+const getBlockswanContractsAddresses =
+    async (): Promise<BlockswanContractsAddresses> => ({
+        periphery: {
+            DAT: (await getDAT()).address,
+            mUSDC: (await getMockUSDC()).address,
+            Faucet: (await getFaucet()).address,
+            MinimalForwarder: (await getMinimalForwarder()).address,
+        },
+        protocol: {
+            configurators: {
+                ACLManager: (await getACLManager()).address,
+                ProtocolConfigurator: (await getProtocolConfigurator()).address,
+                AddressProvider: (await getAddressProvider()).address,
+                ProviderRegistry: (await getProviderRegistry()).address,
+            },
+            implementations: {
+                Dispute: (await getDispute()).address,
+                Gig: (await getGig()).address,
+                Jury: (await getJury()).address,
+                Order: (await getOrder()).address,
+                User: (await getUser()).address,
+                XP: (await getXP()).address,
+            },
+            libraries: {
+                DisputeDataLogic: (await getContract('DisputeDataLogic'))
+                    .address,
+                DisputeLogic: (await getContract('DisputeLogic')).address,
+                GigDataLogic: (await getContract('GigDataLogic')).address,
+                GigLogic: (await getContract('GigLogic')).address,
+                JuryDataLogic: (await getContract('JuryDataLogic')).address,
+                JuryLogic: (await getContract('JuryLogic')).address,
+                OrderDataLogic: (await getContract('OrderDataLogic')).address,
+                OrderLogic: (await getContract('OrderLogic')).address,
+                RoundDataLogic: (await getContract('RoundDataLogic')).address,
+                RoundLogic: (await getContract('RoundLogic')).address,
+                UserDataLogic: (await getContract('UserDataLogic')).address,
+                UserLogic: (await getContract('UserLogic')).address,
+                VoteDataLogic: (await getContract('VoteDataLogic')).address,
+                VoteLogic: (await getContract('VoteLogic')).address,
+                InviterLogic: (await getContract('InviterLogic')).address,
+                InvoiceLogic: (await getContract('InvoiceLogic')).address,
+                ParamsLogic: (await getContract('ParamsLogic')).address,
+                SortitionSumTreeFactory: (
+                    await getContract('SortitionSumTreeFactory')
+                ).address,
+            },
+        },
+    })
+
 export {
     getDAT,
     getProtocolConfigurator,
@@ -314,4 +393,8 @@ export {
     getJury,
     getJuryLibrairies,
     getDisputeParams,
+    getFaucet,
+    getFaucetSettings,
+    getMinimalForwarder,
+    getBlockswanContractsAddresses,
 }

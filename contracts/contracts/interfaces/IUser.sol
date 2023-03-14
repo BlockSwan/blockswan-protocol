@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {IAddressProvider} from "./IAddressProvider.sol";
 import {DataTypes} from "../protocol/libraries/types/DataTypes.sol";

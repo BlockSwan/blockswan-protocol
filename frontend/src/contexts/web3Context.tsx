@@ -29,113 +29,103 @@ export const Web3ContextProvider = ({ children }: Web3ContextProviderProps) => {
    const clientId =
       'BDY29ZodgKnnyrsKgwXlgcE58KL17B0DCUkqXnmpZtuT0m6GU6czH-jWO5xgY__7QdSMgIF_gQlqo58VQI0tBws'
 
-   useEffect(() => {
-      const init = async () => {
-         try {
-            const web3auth = new Web3Auth({
+   const init = async () => {
+      try {
+         const web3auth = new Web3Auth({
+            clientId,
+            chainConfig: {
+               // this is ethereum chain config, change if other chain(Solana, Polygon)
+               chainNamespace: CHAIN_NAMESPACES.EIP155,
+               chainId: '0x13881',
+               rpcTarget: 'https://rpc.ankr.com/polygon_mumbai',
+               displayName: 'Polygon Mainnet',
+               blockExplorer: 'https://mumbai.polygonscan.com/',
+               ticker: 'MATIC',
+               tickerName: 'Matic',
+            },
+            uiConfig: {
+               theme: 'light',
+               loginMethodsOrder: [
+                  'twitter',
+                  'discord',
+                  'google',
+                  'apple',
+                  'linkedin',
+                  'github',
+                  'facebook',
+               ],
+               defaultLanguage: 'en',
+
+               appLogo: 'https://testnet.blockswan.app/img/glyph.svg', // Your App Logo Here
+            },
+         })
+
+         const openloginAdapter = new OpenloginAdapter({
+            loginSettings: {
+               mfaLevel: 'optional',
+            },
+            adapterSettings: {
                clientId,
-               chainConfig: {
-                  // this is ethereum chain config, change if other chain(Solana, Polygon)
-                  chainNamespace: CHAIN_NAMESPACES.EIP155,
-                  chainId: '0x13881',
-                  rpcTarget: 'https://rpc.ankr.com/polygon_mumbai',
-                  displayName: 'Polygon Mainnet',
-                  blockExplorer: 'https://mumbai.polygonscan.com/',
-                  ticker: 'MATIC',
-                  tickerName: 'Matic',
-               },
-               uiConfig: {
-                  theme: 'light',
-                  loginMethodsOrder: [
-                     'twitter',
-                     'discord',
-                     'google',
-                     'apple',
-                     'linkedin',
-                     'github',
-                     'facebook',
-                  ],
+               network: 'testnet',
+               uxMode: 'popup',
+               whiteLabel: {
+                  name: 'Blockswan',
+                  logoLight: 'https:testnet.blockswan.app/img/glyph.svg',
+                  logoDark: 'https:testnet.blockswan.app/img/glyph.svg',
                   defaultLanguage: 'en',
-
-                  appLogo: 'https://testnet.blockswan.app/img/glyph.svg', // Your App Logo Here
+                  dark: false,
                },
-            })
+            },
+         })
+         web3auth.configureAdapter(openloginAdapter)
 
-            const openloginAdapter = new OpenloginAdapter({
-               loginSettings: {
-                  mfaLevel: 'optional',
-               },
-               adapterSettings: {
-                  clientId,
-                  network: 'testnet',
-                  uxMode: 'popup',
-                  whiteLabel: {
-                     name: 'Blockswan',
-                     logoLight: 'https:testnet.blockswan.app/img/glyph.svg',
-                     logoDark: 'https:testnet.blockswan.app/img/glyph.svg',
-                     defaultLanguage: 'en',
-                     dark: false,
-                  },
-               },
-            })
-            web3auth.configureAdapter(openloginAdapter)
+         // const coinbaseAdapter = new CoinbaseAdapter({
+         //    clientId,
+         // })
+         // web3auth.configureAdapter(coinbaseAdapter)
 
-            // const coinbaseAdapter = new CoinbaseAdapter({
-            //    clientId,
-            // })
-            // web3auth.configureAdapter(coinbaseAdapter)
+         // // adding wallet connect v1 adapter
 
-            // // adding wallet connect v1 adapter
+         // const walletConnectV1Adapter =
+         //    new WalletConnectV1Adapter({
+         //       adapterSettings: {
+         //          bridge:
+         //             'https://bridge.walletconnect.org',
+         //       },
+         //       clientId,
+         //    })
 
-            // const walletConnectV1Adapter =
-            //    new WalletConnectV1Adapter({
-            //       adapterSettings: {
-            //          bridge:
-            //             'https://bridge.walletconnect.org',
-            //       },
-            //       clientId,
-            //    })
+         // web3auth.configureAdapter(
+         //    walletConnectV1Adapter
+         // )
 
-            // web3auth.configureAdapter(
-            //    walletConnectV1Adapter
-            // )
+         // // adding metamask adapter
 
-            // // adding metamask adapter
+         // const metamaskAdapter = new MetamaskAdapter({
+         //    clientId,
+         // })
 
-            // const metamaskAdapter = new MetamaskAdapter({
-            //    clientId,
-            // })
+         // // it will add/update  the metamask adapter in to web3auth class
+         // web3auth.configureAdapter(metamaskAdapter)
 
-            // // it will add/update  the metamask adapter in to web3auth class
-            // web3auth.configureAdapter(metamaskAdapter)
+         // const torusWalletAdapter =
+         //    new TorusWalletAdapter({
+         //       clientId,
+         //    })
 
-            // const torusWalletAdapter =
-            //    new TorusWalletAdapter({
-            //       clientId,
-            //    })
+         // // it will add/update  the torus-evm adapter in to web3auth class
+         // web3auth.configureAdapter(torusWalletAdapter)
 
-            // // it will add/update  the torus-evm adapter in to web3auth class
-            // web3auth.configureAdapter(torusWalletAdapter)
+         setWeb3auth(web3auth)
 
-            setWeb3auth(web3auth)
-
-            // await web3auth.initModal()
-            // if (web3auth.provider) {
-            //    setProvider(web3auth.provider)
-            // }
-         } catch (error) {
-            console.error(error)
-         }
+         // await web3auth.initModal()
+         // if (web3auth.provider) {
+         //    setProvider(web3auth.provider)
+         // }
+      } catch (error) {
+         console.error(error)
       }
-
-      init()
-   }, [])
-
-   useEffect(() => {
-      alert('getting balance')
-      getBalance()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [provider])
+   }
 
    const authenticateUser = async () => {
       if (!web3auth) {
@@ -191,7 +181,7 @@ export const Web3ContextProvider = ({ children }: Web3ContextProviderProps) => {
       }
       const rpc = new RPC(provider)
       const balance = await rpc.getBalance()
-      setBalances({ ...balances, native: balance })
+      setBalances({ ...balances, native: Number(balance) })
       uiConsole(balance)
    }
 
@@ -226,12 +216,13 @@ export const Web3ContextProvider = ({ children }: Web3ContextProviderProps) => {
    }
 
    const login = async () => {
+      init()
       if (!web3auth) {
+         alert('a')
          uiConsole('web3auth not initialized yet')
-         return
       }
-      await web3auth.initModal()
-      const web3authProvider = await web3auth.connect()
+      await web3auth?.initModal()
+      const web3authProvider = await web3auth?.connect()
       if (web3authProvider) {
          const rpc = new RPC(web3authProvider)
          const address = await rpc.getAccounts()
@@ -250,14 +241,23 @@ export const Web3ContextProvider = ({ children }: Web3ContextProviderProps) => {
             _userInfo?.profileImage || '',
             _userInfo?.email || '',
             _userInfo?.name || 'Anon'
-         ).then(async (data: any) => {
-            console.log(data)
-            setUserData(data?._doc)
-            setEvmAddress(address)
-            setProvider(web3authProvider)
-            setUserInfo(_userInfo)
-            uiConsole('Logged in Successfully!')
-         })
+         )
+            .then(async (data: any) => {
+               console.log(data)
+               setUserData(data?._doc)
+               setEvmAddress(address)
+               setProvider(web3authProvider)
+               setUserInfo(_userInfo)
+               uiConsole('Logged in Successfully!')
+            })
+            .catch((err: any) => {
+               console.log(err)
+               setUserData(null)
+               setEvmAddress(null)
+               setProvider(null)
+               setUserInfo(null)
+               uiConsole('Login Failed!')
+            })
       }
    }
 
@@ -268,6 +268,16 @@ export const Web3ContextProvider = ({ children }: Web3ContextProviderProps) => {
          el.innerHTML = JSON.stringify(args || {}, null, 2)
       }
    }
+
+   useEffect(() => {
+      init()
+   }, [])
+
+   useEffect(() => {
+      alert('getting balance')
+      getBalance()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [provider])
 
    return (
       <Web3Context.Provider

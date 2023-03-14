@@ -1,5 +1,6 @@
 import { HardhatUserConfig } from 'hardhat/config'
 import '@nomicfoundation/hardhat-toolbox'
+import '@nomiclabs/hardhat-ethers'
 import '@nomicfoundation/hardhat-chai-matchers'
 import 'hardhat-deploy'
 import 'hardhat-contract-sizer'
@@ -20,6 +21,19 @@ import {
 } from './hardhat_config_helpers'
 
 const config: HardhatUserConfig = {
+    solidity: {
+        version: '0.8.9',
+        settings: {
+            optimizer: {
+                enabled: true,
+                runs: 200,
+                details: {
+                    yul: true,
+                },
+            },
+            viaIR: false,
+        },
+    },
     mocha: {
         timeout: 100000,
     },
@@ -41,19 +55,7 @@ const config: HardhatUserConfig = {
         runOnCompile: false,
         disambiguatePaths: false,
     },
-    solidity: {
-        version: '0.8.0',
-        settings: {
-            optimizer: {
-                enabled: true,
-                runs: 200,
-                details: {
-                    yul: true,
-                },
-            },
-            viaIR: false,
-        },
-    },
+
     gasReporter: {
         enabled: GAS_REPORTER_ENABLED,
         noColors: false,
@@ -111,7 +113,7 @@ const config: HardhatUserConfig = {
             saveDeployments: true,
             gas: 'auto',
             blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
-            gasPrice: Number(DEFAULT_GAS_PRICE) * 50,
+            gasPrice: Number(DEFAULT_GAS_PRICE),
             verify: {
                 etherscan: {
                     apiKey: POLYGONSCAN_API_KEY,

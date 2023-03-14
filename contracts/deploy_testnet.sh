@@ -15,3 +15,6 @@ echo "[BASH] Deploying contracts to testnet and exporting abi to ./abi/abi.json"
 
 npx hardhat deploy --network mumbai --export ./abi/abi.json
 
+echo "[BASH] Contracts deployed to testnet and abi exported to ./abi/abi.json"
+
+

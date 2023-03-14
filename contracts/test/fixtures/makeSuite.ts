@@ -13,6 +13,8 @@ import {
     getUser,
     getXP,
     getJury,
+    getFaucet,
+    getMinimalForwarder,
 } from '../../helpers/contract_getters'
 import { SignerWithAddress, TestEnv } from '../../helpers/types'
 import {
@@ -49,6 +51,8 @@ const makeSuite = deployments.createFixture(
         testEnv.ACLManager = await getACLManager()
         testEnv.Registry = await getProviderRegistry()
         testEnv.ProtocolConfigurator = await getProtocolConfigurator()
+        testEnv.Faucet = await getFaucet()
+        testEnv.MinimalForwarder = await getMinimalForwarder()
         return testEnv
     }
 )
