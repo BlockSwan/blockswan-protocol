@@ -1,8 +1,6 @@
 import { Signer } from 'ethers'
 import { ethers } from 'hardhat'
 import { getMinimalForwarder } from '../helpers/contract_getters'
-import { MinimalForwarder } from '../types'
-import { signTypedData as ethSigTypedData } from '@metamask/eth-sig-util'
 
 type Input = {
     from: string

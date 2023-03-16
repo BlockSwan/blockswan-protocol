@@ -1,0 +1,228 @@
+import { Provider } from "@ethersproject/providers";
+import { BigNumber, Contract, providers, Signer } from "ethers";
+import { BaseService } from "./index";
+import { EvmAddress, EvmTxType, ProtocolAction } from "../types";
+import { DEFAULT_NULL_VALUE_ON_TX } from "../utils";
+
+class Test__factory {
+  static connect(
+    address: EvmAddress,
+    signerOrProvider: Signer | Provider
+  ): Contract {
+    return new Contract(address, [], signerOrProvider);
+  }
+}
+
+jest.mock("../gas-station", () => {
+  return {
+    __esModule: true,
+    estimateGasByNetwork: jest
+      .fn()
+      .mockImplementation(async () => Promise.resolve(BigNumber.from(1))),
+  };
+});
+
+describe("BaseService", () => {
+  const provider = new providers.JsonRpcProvider();
+  jest
+    .spyOn(provider, "getGasPrice")
+    .mockImplementation(async () => Promise.resolve(BigNumber.from(1)));
+
+  describe("Initialisation", () => {
+    it("Expects to initialize the BaseService class correctly", () => {
+      expect(
+        () =>
+          new BaseService({
+            provider,
+            contractFactory: Test__factory,
+          })
+      ).not.toThrow();
+    });
+  });
+  describe("getContractInstance", () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+    it("Expects to initialize new instance", () => {
+      const spy = jest.spyOn(Test__factory, "connect");
+      const baseService = new BaseService({
+        provider,
+        contractFactory: Test__factory,
+      });
+      const address = "0x0000000000000000000000000000000000000001";
+      const instance = baseService.getContractInstance(address);
+      expect(instance instanceof Contract).toEqual(true);
+      expect(spy).toHaveBeenCalled();
+    });
+    it("Expects to use an already initialized instance", () => {
+      const spy = jest.spyOn(Test__factory, "connect");
+      const baseService = new BaseService({
+        provider,
+        contractFactory: Test__factory,
+      });
+      const address = "0x0000000000000000000000000000000000000001";
+      const instance = baseService.getContractInstance(address);
+      const instance2 = baseService.getContractInstance(address);
+
+      expect(instance instanceof Contract).toEqual(true);
+      expect(instance2).toEqual(instance);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe("generateTxCallback", () => {
+    const baseService = new BaseService({
+      provider,
+      contractFactory: Test__factory,
+    });
+    const from = "0x0000000000000000000000000000000000000001";
+    const value = "1";
+    const gasSurplus = 10;
+    const action = ProtocolAction.RELAY_TX;
+    const rawTxMethod = async () => ({});
+
+    it("Expects a tx object with specified value", async () => {
+      const txCallback = baseService.generateTxCallback({
+        rawTxMethod,
+        from,
+        value,
+        gasSurplus,
+      });
+      const tx = await txCallback();
+      expect(tx.from).toEqual(from);
+      expect(tx.value).toEqual(value);
+      expect(tx.gasLimit).toEqual(BigNumber.from(1));
+    });
+    it("Expects a tx object with default value", async () => {
+      const txCallback = baseService.generateTxCallback({
+        rawTxMethod,
+        from,
+      });
+      const tx = await txCallback();
+      expect(tx.from).toEqual(from);
+      expect(tx.value).toEqual(DEFAULT_NULL_VALUE_ON_TX);
+      expect(tx.gasLimit).toEqual(BigNumber.from(1));
+    });
+    it("Expects a tx object with recommended gas limit", async () => {
+      const txCallback = baseService.generateTxCallback({
+        rawTxMethod,
+        from,
+        action,
+      });
+      const tx = await txCallback();
+      expect(tx.from).toEqual(from);
+      expect(tx.value).toEqual(DEFAULT_NULL_VALUE_ON_TX);
+      expect(tx.gasLimit).toEqual(BigNumber.from(300000));
+    });
+  });
+  describe("generateTxPriceEstimation", () => {
+    const baseService = new BaseService({
+      provider,
+      contractFactory: Test__factory,
+    });
+    const action = ProtocolAction.RELAY_TX;
+    const txCallback = async () => ({
+      gasLimit: BigNumber.from(1),
+      gasPrice: BigNumber.from(2),
+    });
+    it("Expects to get gasPrice when pending approvals", async () => {
+      const txs = [
+        {
+          txType: EvmTxType.ERC20_APPROVAL,
+          tx: txCallback,
+          gas: async () => null,
+        },
+        {
+          txType: EvmTxType.DAT_ACTION,
+          tx: txCallback,
+          gas: async () => null,
+        },
+      ];
+      const gasObj = baseService.generateTxPriceEstimation(
+        txs,
+        txCallback,
+        action
+      );
+      const gas = await gasObj();
+      expect(gas?.gasLimit).toEqual("300000");
+      expect(gas?.gasPrice).toEqual("1");
+    });
+    it("Expects to get gasPrice when no pending txs", async () => {
+      const txs = [
+        {
+          txType: EvmTxType.DAT_ACTION,
+          tx: txCallback,
+          gas: async () => null,
+        },
+      ];
+      const gasObj = baseService.generateTxPriceEstimation(
+        txs,
+        txCallback,
+        action
+      );
+      const gas = await gasObj();
+      expect(gas?.gasLimit).toEqual("1");
+      expect(gas?.gasPrice).toEqual("2");
+    });
+    it("Expects to get gasPrice when no pending txs and no gas price passed", async () => {
+      const txCallback = async () => ({
+        gasLimit: BigNumber.from(1),
+      });
+      const txs = [
+        {
+          txType: EvmTxType.DAT_ACTION,
+          tx: txCallback,
+          gas: async () => null,
+        },
+      ];
+      const gasObj = baseService.generateTxPriceEstimation(
+        txs,
+        txCallback,
+        action
+      );
+      const gas = await gasObj();
+      expect(gas?.gasLimit).toEqual("1");
+      expect(gas?.gasPrice).toEqual("1");
+    });
+    it("Expects to get gasPrice when forcing", async () => {
+      const txs = [
+        {
+          txType: EvmTxType.ERC20_APPROVAL,
+          tx: txCallback,
+          gas: async () => null,
+        },
+        {
+          txType: EvmTxType.DAT_ACTION,
+          tx: txCallback,
+          gas: async () => null,
+        },
+      ];
+      const gasObj = baseService.generateTxPriceEstimation(
+        txs,
+        txCallback,
+        action
+      );
+      const gas = await gasObj(true);
+      expect(gas?.gasLimit).toEqual("1");
+      expect(gas?.gasPrice).toEqual("2");
+    });
+
+    it("Expects to fail when no gas limit", async () => {
+      const txCallback = async () => ({});
+      const txs = [
+        {
+          txType: EvmTxType.DAT_ACTION,
+          tx: txCallback,
+          gas: async () => Promise.reject(new Error("Some error")),
+        },
+      ];
+      const gasObj = baseService.generateTxPriceEstimation(
+        txs,
+        txCallback,
+        action
+      );
+      await expect(async () => gasObj()).rejects.toThrowError(
+        "Transaction calculation error"
+      );
+    });
+  });
+});
