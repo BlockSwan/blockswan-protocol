@@ -7,9 +7,13 @@
   "scripts": {
     "clean": "rm -rf dist cache",
     "test": "jest",
-    "build": "tsc",
-    "typechain": "cp -r ../../contracts/abi/ tmp && rm ./tmp/abi.json && typechain --target=ethers-v5 --out-dir=./src/typechain/ './tmp/**/*.json' && rm -rf tmp"
+    "build": "rm -rf dist && tsc",
+    "typechain": "cp -r ../../contracts/abi/ tmp && rm ./tmp/abi.json && typechain --target=ethers-v5 --out-dir=./src/typechain/ './tmp/**/*.json' && rm -rf tmp",
+    "prepublishOnly": "npm run clean && npm run typechain && npm run build"
   },
+  "files": [
+    "dist"
+  ],
   "author": "blockswan",
   "license": "MIT",
   "devDependencies": {

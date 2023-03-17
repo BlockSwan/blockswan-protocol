@@ -274,7 +274,6 @@ export const Web3ContextProvider = ({ children }: Web3ContextProviderProps) => {
    }, [])
 
    useEffect(() => {
-      alert('getting balance')
       getBalance()
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [provider])

@@ -18,15 +18,14 @@
     "resolveJsonModule": true,
   },
   "include": [
-    "./src",
-  ],
-  "files": [
-    "./hardhat.config.ts"
+    "src/",
   ],
   "exclude": [
     "node_modules",
-    "./src/**/*.test.ts",
-    "./src/**/_mocks.ts",
-    "./dist"
+    "**/*.test.ts",
+    "**/*/_mocks.ts",
+    "./dist",
+    "*.config",
+    "./hardhat.config.ts"
   ]
 }
