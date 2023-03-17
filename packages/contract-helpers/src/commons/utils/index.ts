@@ -1,7 +1,35 @@
-import { BigNumber } from "ethers";
+import { BigNumber, constants } from "ethers";
+import { BigNumber as BigNumberJs } from "bignumber.js";
 import { GasRecommendationType, ProtocolAction } from "../types";
 
 export const DEFAULT_NULL_VALUE_ON_TX = BigNumber.from(0).toHexString();
+export const DEFAULT_APPROVE_AMOUNT = constants.MaxUint256.toString();
+
+export const MAX_UINT_AMOUNT =
+  "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+
+export const SUPER_BIG_ALLOWANCE_NUMBER =
+  "11579208923731619542357098500868790785326998466564056403945758400791";
+
+export const valueToWei = (args: {
+  value: string;
+  decimals: number;
+}): string => {
+  const { value, decimals } = args;
+  return new BigNumberJs(value).shiftedBy(decimals).toFixed(0);
+};
+
+export const canBeEnsAddress = (ensAddress: string): boolean => {
+  return ensAddress.toLocaleLowerCase().endsWith(".eth");
+};
+
+export const decimalsToCurrencyUnit = (args: {
+  value: string;
+  decimals: number;
+}): string => {
+  const { value, decimals } = args;
+  return new BigNumberJs(value).shiftedBy(-1 * decimals).toFixed();
+};
 
 export const gasLimitRecommendations: GasRecommendationType = {
   [ProtocolAction.DEFAULT]: {

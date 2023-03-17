@@ -217,3 +217,12 @@ export type MetaTxTypeData = {
   types: { [key: string]: any[] };
   primaryType: string;
 };
+
+export type FaucetTokensType = {
+  native: BigNumber;
+  erc20: BigNumber;
+};
+export type FaucetConfigType = {
+  mintDelays: FaucetTokensType;
+  mintAmounts: FaucetTokensType;
+};

@@ -1,19 +1,32 @@
 {
-	"compilerOptions": {
-		"target": "es6",
-		"module": "commonjs",
-		"outDir": "dist",
-		"strict": true,
-		"esModuleInterop": true,
-		"declaration": true,
-		"declarationDir": "dist/types"
-	},
-	"include": [
-		"src/**/*"
-	],
-	"exclude": [
-		"node_modules",
-		"./src/**/*.test.ts",
-		"./src/**/_mocks.ts"
-	]
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "emitDecoratorMetadata": true,
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "resolveJsonModule": true,
+  },
+  "include": [
+    "./src",
+  ],
+  "files": [
+    "./hardhat.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./src/**/*.test.ts",
+    "./src/**/_mocks.ts",
+    "./dist"
+  ]
 }

@@ -7,7 +7,7 @@ import {
   ChainId,
 } from "../commons";
 import { EIP712Domain, ForwardRequest } from "../commons/utils";
-import { providers, Contract } from "ethers";
+import { providers, Contract, Signer } from "ethers";
 import { MinimalForwarder__factory } from "../commons/typechain";
 import {
   EvmTransactionTypeExtended,
@@ -24,9 +24,10 @@ export interface ForwarderInterface {
     request: MetaTxRequest;
     signature: string;
   }) => EvmTransactionTypeExtended[];
-  signMetaTxRequest: (
-    input: MetaTxInput
-  ) => Promise<{ signature: string; request: MetaTxRequest }>;
+  signMetaTxRequest: (args: {
+    input: MetaTxInput;
+    signer: providers.JsonRpcSigner;
+  }) => Promise<{ signature: string; request: MetaTxRequest }>;
   relay: (args: {
     request: MetaTxRequest;
     signature: string;
@@ -92,19 +93,22 @@ export class ForwarderService
     ];
   }
 
-  public async signMetaTxRequest(
-    input: MetaTxInput
-  ): Promise<{ signature: string; request: MetaTxRequest }> {
-    console.log("before request");
+  public async signMetaTxRequest(args: {
+    input: MetaTxInput;
+    signer: providers.JsonRpcSigner;
+  }): Promise<{
+    signature: string;
+    request: MetaTxRequest;
+  }> {
+    let { input, signer } = args;
+    if (!signer) throw new Error("Signer is required");
     const request = await this.buildRequest(input);
-    console.log("request", JSON.stringify(request));
     const toSign = await this.buildTypedData(request);
-    console.log("toSign", JSON.stringify(toSign));
     const signature = await this.signTypedData({
       from: input.from,
       data: toSign,
+      signer: signer,
     });
-    console.log("signature", signature);
     return { signature, request };
   }
 
@@ -152,24 +156,19 @@ export class ForwarderService
   private async signTypedData({
     from,
     data,
+    signer,
   }: {
     from: EvmAddress;
     data: MetaTxTypeData & {
       message: MetaTxRequest;
     };
-  }) {
-    let signature: string = await (this.provider as providers.Web3Provider)
-      .send("eth_signTypedData_v4", [from, JSON.stringify(data)])
-      .then((res) => {
-        signature = res;
-        console.log("signature", signature);
-        return signature;
-      })
-      .catch((err) => {
-        console.log("err", err);
-        throw err;
-      });
-
+    signer: providers.JsonRpcSigner;
+  }): Promise<string> {
+    let signature: string;
+    signature = await signer.provider.send("eth_signTypedData_v4", [
+      from,
+      JSON.stringify(data),
+    ]);
     return signature;
   }
 
