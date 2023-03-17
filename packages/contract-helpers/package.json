@@ -27,5 +27,6 @@
   },
   "dependencies": {
     "bignumber.js": "^9.1.1"
-  }
+  },
+  "gitHead": "205289eaea3017813c633abc0f5b08c01ec93e71"
 }
