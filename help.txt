@@ -1,3 +1,0 @@
-1- Node js to the latest version
-2- ipfs node config
-

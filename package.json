@@ -1,6 +1,9 @@
 {
 	"name": "root",
 	"private": true,
+	"scripts": {
+	  "blockswan": "docker-compose up"
+	},
 	"workspaces": [
 		"packages/*"
 	],

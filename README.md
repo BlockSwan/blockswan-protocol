@@ -7,42 +7,49 @@ ______ _            _    _____
 \____/|_|\___/ \___|_|\_\____/  \_/\_/ \__,_|_| |_|
 ```
 
-# Blockswan protocol (Still in development)
+# Blockswan protocol
 
-A dockerized application to run a blockswan node for a decentralised and non-custodial digital services marketplace. The node is composed of:
+The Blockswan Protocol is a decentralized and non-custodial digital services marketplace, still in development. It is composed of a dockerized application to run a Blockswan node, which consists of a NodeJS, Express backend running the API and an IPFS node connected to the Blockswan cluster, replicating data to a MongoDB instance, as well as a React client interface.
 
-- NodeJS, Express backend running the API and a IPFS node connected to the blockswan cluster, replicating data to a MongoDB instance.
-- React client interface
 
-## HOW TO USE
+## Repository structure
 
-Once you cloned the protocol repository, go to the frontend folder and create a `.env` file from the `.env.example` and open it.
+* `backend/`: Contains the NodeJS, Express backend that runs the API and the IPFS node that is connected to the Blockswan cluster. This replicates data to a MongoDB instance and sync blockchain events.
+* `contracts/`: Contains the smart contracts used by the Blockswan Protocol.
+* `frontend/`: Contains the React client interface for the Blockswan Protocol.
+* `packages/`: Contains the multiple packages managed by Lerna.
 
-```
+## Usage
+
+To use the Blockswan Protocol, follow the instructions below:
+
+1.	Clone the Blockswan Protocol repository.
+2.	Navigate to the `frontend/` folder and create a `.env` file from the `.env.example` file.
+
+```shell
 cd frontend
 cp .env.example .env
 vim .env
 ```
 
-Setup the frontend environment variables:
+Set up the frontend environment variables by modifying the `.env` file as follows:
 
-```
+```shell
 REACT_APP_BACKEND_IP=127.0.0.1
 REACT_APP_BACKEND_PORT=4000
 REACT_APP_BACKEND_HOST=http://
 ```
 
-Go to the backend repository and repeat the process:
+3.	Navigate to the backend folder and create a `.env` file from the `.env.example` file:
 
-```
+```shell
 cd ../backend
 cp .env.example .env
 vim .env
 ```
+	Set the backend environment variables as follows:
 
-Setup the backend environment variables:
-
-```
+```shell
 IP=127.0.0.1
 HOST=http://
 PORT=4000
@@ -50,11 +57,10 @@ LOG_IPFS=false
 MONGODB_URI=your-backup-mongodb-uri
 ```
 
-Go to the root directory and start the docker containers
+4.	Navigate back to the root directory and start the docker containers:
 
-```
-cd ..
-docker-compose up
+```shell
+npm run blockswan
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the react interface in your browser.
