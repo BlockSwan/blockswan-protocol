@@ -2,12 +2,14 @@
 	"name": "root",
 	"private": false,
 	"scripts": {
-	  "blockswan": "docker-compose up"
+		"blockswan": "docker-compose up"
 	},
-	"workspaces": [
-		"packages/*"
-	],
+	"workspaces": ["packages/*"],
 	"devDependencies": {
 		"lerna": "^6.5.1"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
 	}
 }
