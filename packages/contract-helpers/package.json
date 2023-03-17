@@ -28,5 +28,9 @@
   "dependencies": {
     "bignumber.js": "^9.1.1"
   },
-  "gitHead": "e3380745203285b3d7b22467b90fad92bc968392"
+  "gitHead": "3a6585fb2fb3610243cd095b175edda7fcc74162",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
