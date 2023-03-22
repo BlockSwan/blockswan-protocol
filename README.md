@@ -47,7 +47,7 @@ cd ../backend
 cp .env.example .env
 vim .env
 ```
-	Set the backend environment variables as follows:
+Set the backend environment variables as follows:
 
 ```shell
 IP=127.0.0.1

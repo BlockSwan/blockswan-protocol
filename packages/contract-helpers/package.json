@@ -8,8 +8,7 @@
     "clean": "rm -rf dist cache",
     "test": "jest",
     "build": "rm -rf dist && tsc",
-    "get:addresses": "cp ../../contracts/abi/contracts.json ./src/json/contracts.json",
-    "typechain": "cp -r ../../contracts/abi/ tmp && rm ./tmp/abi.json && typechain --target=ethers-v5 --out-dir=./src/typechain/ './tmp/**/*.json' && rm -rf tmp",
+    "typechain": "cp -r ../../contracts/abi/ tmp && rm ./tmp/abi.json && mv ./tmp/contracts.json ./src/json/contracts.json && typechain --target=ethers-v5 --out-dir=./src/typechain/ './tmp/**/*.json' && rm -rf ./tmp",
     "prepublishOnly": "npm run clean && npm run typechain && npm run build"
   },
   "files": [
@@ -33,7 +32,7 @@
   "dependencies": {
     "bignumber.js": "^9.1.1"
   },
-  "gitHead": "3a6585fb2fb3610243cd095b175edda7fcc74162",
+  "gitHead": "f70d4cdd010bffa0213e060bb88161e0357382a0",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
