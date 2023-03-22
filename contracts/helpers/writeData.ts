@@ -1,37 +1,14 @@
-import { DeployFunction } from 'hardhat-deploy/types'
-import { HardhatRuntimeEnvironment } from 'hardhat/types'
-import makeDeployment from '../../helpers/makeDeployment'
-import { PRETTYJSON } from '../../helpers/constants'
-import { render } from 'prettyjson'
-import {
-    getACLManager,
-    getAddressProvider,
-    getBlockswanContractsAddresses,
-    getDAT,
-    getDispute,
-    getFaucet,
-    getGig,
-    getJury,
-    getMinimalForwarder,
-    getMockUSDC,
-    getOrder,
-    getProtocolConfigurator,
-    getProviderRegistry,
-    getUser,
-    getXP,
-} from '../../helpers/contract_getters'
-import { BlockswanContractsAddresses } from '../../helpers/types'
-import { getContract } from '../../utilities/tx'
+import { BlockswanContractsAddresses } from './types'
 import fs from 'fs'
 import path from 'path'
-import { checkRequiredNetwork } from '../../helpers/marketPlaceConfigHelpers'
-
-const FILE_NAME = 'README.md'
-
-const link = (contractAddress: string) =>
+export const link = (contractAddress: string) =>
     `[${contractAddress}](https://mumbai.polygonscan.com/address/${contractAddress})`
 
-function appendContractAddressesToFile(addresses: BlockswanContractsAddresses) {
+export function appendContractAddressesToReadMe(args: {
+    addresses: BlockswanContractsAddresses
+    fileName: string
+}) {
+    const { addresses, fileName } = args
     const content = `### Periphery
 
 | Contract          | Address                                   |
@@ -142,27 +119,29 @@ You can join at the [Discord](https://discord.com/invite/JtUtDDP9yh) channel or 
 `
 
     try {
-        const readmePath = path.join(__dirname, '../../', FILE_NAME)
+        const readmePath = path.join(__dirname, '../', fileName)
         console.log(`Writing to file: ${readmePath}`)
         fs.appendFileSync(readmePath, content, 'utf-8')
     } catch (err) {
         console.log('Error appending data to file in sync mode', err)
     }
 }
-const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-    await makeDeployment(func.id, async () => {
-        let blockswanContracts: BlockswanContractsAddresses =
-            await getBlockswanContractsAddresses()
-        console.log(render(blockswanContracts, PRETTYJSON))
-        appendContractAddressesToFile(blockswanContracts)
-        console.log('Contract addresses written to file')
-    })
-}
 
-func.id = 'writeFiles'
-func.tags = ['end', 'writeFiles']
-func.skip = async () =>
-    checkRequiredNetwork({
-        requiredNetwork: 'mumbai',
-    })
-export default func
+export function writeContractAddressesToJSON(args: {
+    addresses: BlockswanContractsAddresses
+    fileName: string
+}) {
+    const { addresses, fileName } = args
+    const directory = './abi'
+    const path = `${directory}/${fileName}`
+
+    // Ensure that the Abi directory exists
+    if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory)
+    }
+
+    // Write the contractAddresses object to a file in the Abi directory
+    fs.writeFileSync(path, JSON.stringify(addresses, null, 2))
+
+    console.log(`Created ${path}`)
+}

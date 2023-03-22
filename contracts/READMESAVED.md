@@ -7,70 +7,98 @@ ______ _            _    _____
 \____/|_|\___/ \___|_|\_\____/  \_/\_/ \__,_|_| |_|
 ```
 
-# Blockswan protocol
+<p align="center">
+  <img src="assets/images/protocolAnimation.gif" width="100%" height="auto" alt="logo">
+</p>
 
-The Blockswan Protocol is a decentralized and non-custodial digital services marketplace, still in development. It is composed of a dockerized application to run a Blockswan node, which consists of a NodeJS, Express backend running the API and an IPFS node connected to the Blockswan cluster, replicating data to a MongoDB instance, as well as a React client interface.
+# Blockswan Protocol smart-contracts
 
+This repository contains the smart contracts source code and marketplaces configuration for a Blockswan Protocol.
+
+## Table of Contents
+
+- [Toolchain](#toolchain)
+- [Getting started](#getting-started)
+- [Repository structure](#repository-structure)
+- [Scripts](#scripts)
+- [Contracts Addresses](#contracts)
+- [Connect with the community](#connect-with-the-community)
+
+## Toolchain:
+
+* Solidity 0.8 
+* Hardhat
+* Ethers
+* Typescript
+* Node 18
+* NPM
+
+This protocol leverages contracts from Openzeppelin, Aave and Kleros repositories.
+
+![Solidity](https://img.shields.io/badge/Solidity-%23363636.svg?style=for-the-badge&logo=solidity&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
+
+## Getting started
+
+### Install dependencies
+
+```shell
+npm install  
+```
+
+### Environment variables
+
+Copy the `.env.example` file into a `.env` and fill the corresponding variable:
+
+```
+MARKETPLACE_NAME=Test0
+GAS_REPORTER_ENABLED=true
+WITH_RAMPAGE=false
+LOG_ACTIONS=false
+COINMARKETCAP_API_KEY=
+POLYGONSCAN_API_KEY=
+DEPLOYER_PRIVATE_KEY=
+```
 
 ## Repository structure
 
-* `backend/`: Contains the NodeJS, Express backend that runs the API and the IPFS node that is connected to the Blockswan cluster. This replicates data to a MongoDB instance and sync blockchain events.
-* `contracts/`: Contains the smart contracts used by the Blockswan Protocol.
-* `frontend/`: Contains the React client interface for the Blockswan Protocol.
-* `packages/`: Contains the multiple packages managed by Lerna.
+Each directory at the root of this repository contains code for each individual part that enables this integration:
 
-## Usage
+* `abi/`: Contains the smart contracts binary application interfaces defining their methods.
+* `contracts/`: Smart contracts running Blockswan Periphery and Protocol.
+* `deploy/`: Scripts to deploy Blockswan Periphery and Protocol contracts.
+* `deployments/`: Latest deployments by network name.
+* `helpers/`: Constants and functions facilitating the deployment and testing process.
+* `test/`: Test suite for the Blockswan Periphery and Protocol contracts.
+* `types/`: Typechain-generated types for blockchain calls.
+* `utilities/`: Methods for testings and deployments process. 
 
-To use the Blockswan Protocol, follow the instructions below:
+## Scripts
 
-1.	Clone the Blockswan Protocol repository.
-2.	Navigate to the `frontend/` folder and create a `.env` file from the `.env.example` file.
+* `npm run size`: to get the size (KiB) of each contracts
+* `npm run compile`: to compile Blockswan Protocol and Periphery contracts 
+* `npm run test`: to run the full test suite
+* `npm run test [file/path/*.spec.ts]`: to run a specific test or an entire folder
+* `npm run deploy`: to deploy to hardhat chain
+* `npm run deploy:testnet`: to deploy to Polygon Mumbai
+* `npm run coverage`: to run the test suite with coverage report
+* `npm run prettier`: to apply prettier to the project
+* `npm run export:abi`: to export the protocol ABI.
+    Notice: that abi is automatically exported via hardhat-deploy
+* `npm run clean`: to clean hardhat caches and types
+* `npm run clean:abi`: to clean the ./abi repository
+* `npm run clean:deployments`: to clean the deployments folder
+   Notice: this will loose the information of previous deployments
+* `npm run verify`: to verify the deployed smart-contracts.
 
-```shell
-cd frontend
-cp .env.example .env
-vim .env
-```
 
-Set up the frontend environment variables by modifying the `.env` file as follows:
+## Contracts
 
-```shell
-REACT_APP_BACKEND_IP=127.0.0.1
-REACT_APP_BACKEND_PORT=4000
-REACT_APP_BACKEND_HOST=http://
-```
+Blockswan Periphery and Protocol contracts are deployed on the Polygon Mumbai chain at the following address:
 
-3.	Navigate to the backend folder and create a `.env` file from the `.env.example` file:
+The following addresses may be out-of-date or out-of usage. To interact with Blockswan contracts, we recommand using directly the [client interface](https://testnet.blockswan.app)
 
-```shell
-cd ../backend
-cp .env.example .env
-vim .env
-```
-	Set the backend environment variables as follows:
+Just paste the address in the following [Blockchain Scan](https://mumbai.polygonscan.com) to track contracts.
 
-```shell
-IP=127.0.0.1
-HOST=http://
-PORT=4000
-LOG_IPFS=false
-MONGODB_URI=your-backup-mongodb-uri
-```
-
-4.	Navigate back to the root directory and start the docker containers:
-
-```shell
-npm run blockswan
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the react interface in your browser.
-Open [http://localhost:4000/api](http://localhost:4000/api) to get an API answer
-
-## [Official links](https://resources.blockswan.app/)
-
-## Connect with the community
-
-You can join us in the [Discord]() or at the [Twitter](). Feel free to ask any questions about the protocol, talk about Blockswan, or exchange about the weather.
 ### Periphery
 
 | Contract          | Address                                   |

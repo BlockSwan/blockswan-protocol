@@ -226,3 +226,7 @@ export type FaucetConfigType = {
   mintDelays: FaucetTokensType;
   mintAmounts: FaucetTokensType;
 };
+
+export type ABI = {
+  [key: string]: any;
+};

@@ -1,4 +1,7 @@
+import React from 'react'
+
 import { createContext, ReactNode } from 'react'
+import { AddressModel } from '@blockswan/contract-helpers'
 
 export const ProtocolContext = createContext<any>(null!)
 
@@ -9,6 +12,8 @@ interface ProtocolContextProviderProps {
 export const ProtocolContextProvider = ({
    children,
 }: ProtocolContextProviderProps) => {
+   const [addresses, setAddresses] = React.useState<AddressModel | null>(null)
+
    const noTrialFees = 0.04
    const trialFees = 0.08
 
